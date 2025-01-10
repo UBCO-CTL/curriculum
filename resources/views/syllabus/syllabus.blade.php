@@ -55,7 +55,7 @@
                         </button>
                 </span>
             </div>
-    
+
             @if (!empty($syllabus))
                 @include('modals.syllabusCollabsModal', ['syllabus' => $syllabus, 'user' => $user])
                 <div class="col-2" style="max-width:10%">
@@ -67,7 +67,7 @@
                         </button>
                     </span>
                 </div>
-        
+
                 @include('modals.duplicateModal', ['syllabus' => $syllabus])
                 <div class="col-2" style="max-width:10%">
                     <span data-bs-toggle="modal" data-bs-target="#duplicateConfirmation">
@@ -78,7 +78,7 @@
                         </button>
                     </span>
                 </div>
-        
+
                 @include('modals.deleteModal', ['syllabus' => $syllabus])
                 <div class="col-2" style="max-width:10%">
                     <span data-bs-toggle="modal" data-bs-target="#deleteSyllabusConfirmation">
@@ -91,23 +91,23 @@
             @endif
         </div>
     </div>
-    
-    
-    
+
+
+
     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
         <div>
-            To assist faculty and instructors in preparing their syllabi, this generator follows the policies and templates provided by the <a target="_blank" rel="noopener noreferrer" href="https://senate.ubc.ca/okanagan/policies/policy-o-130-content-and-distribution-of-course-syllabi-2/">UBC Okanagan</a> and <a target="_blank" rel="noopener noreferrer" href="https://senate.ubc.ca/policies-resources-support-student-success">UBC Vancouver</a> Senates. 
+            To assist faculty and instructors in preparing their syllabi, this generator follows the policies and templates provided by the <a target="_blank" rel="noopener noreferrer" href="https://senate.ubc.ca/okanagan/policies/policy-o-130-content-and-distribution-of-course-syllabi-2/">UBC Okanagan</a> and <a target="_blank" rel="noopener noreferrer" href="https://senate.ubc.ca/policies-resources-support-student-success">UBC Vancouver</a> Senates.
         </div>
     </div>
 
     @if(empty($syllabus))
         <div class="alert alert-warning">
             <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
-            <button type="button" class="close" data-dismiss="alert">×</button>  
+            <button type="button" class="close" data-dismiss="alert">×</button>
             <div>
                 {!! $inputFieldDescriptions['saveWarning']!!}
-            </div>  
+            </div>
         </div>
     @endif
 
@@ -132,7 +132,7 @@
                 Please enter the course code.
             </div>
         </div>
-        
+
         <div class="col-3">
             <label for="courseNumber">Course Number<span class="requiredField"> *</span></label>
             <input id = "courseNumber" name = "courseNumber" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="3" class ="form-control" type="number" placeholder="E.g. 310" value="{{ !empty($syllabus) ? $syllabus->course_num : '' }}">
@@ -141,8 +141,8 @@
             </div>
         </div>
 
-        
-        
+
+
                <!--
              <input class="form-check-input " id="crossListed" type="checkbox" name="crossListed" value="1" checked>
                     <div id="crossListedCode" class="col-3">
@@ -160,8 +160,8 @@
                         </div>
                     </div>
             -->
-        
-            
+
+
                 @if(!empty($syllabus))
                     @if($syllabus->cross_listed_code && $syllabus->cross_listed_num)
                 <div class="col-6">
@@ -193,24 +193,24 @@
                 </div>
                 <div id="crossListedCode" class="col-3"></div>
                 <div id="crossListedNumber" class="col-3"></div>
-                    @endif 
+                    @endif
                 @else
                 <div class="col-6">
                     <div class="col-12">
                     <input class="form-check-input " id="crossListed" type="checkbox" name="crossListed" value="1">
-                    <label class="form-check-label mb-2" for="crossListed">{!! $inputFieldDescriptions['crossListed'] !!}</label> 
+                    <label class="form-check-label mb-2" for="crossListed">{!! $inputFieldDescriptions['crossListed'] !!}</label>
                     </div>
                 </div>
                 <div id="crossListedCode" class="col-3"></div>
             <div id="crossListedNumber" class="col-3"></div>
                 @endif
-    
-        
-        
-        
 
 
-        
+
+
+
+
+
 
 
         <div class="col-3">
@@ -221,7 +221,7 @@
                 <option value="V">UBC Vancouver</option>
             </select>
         </div>
-        
+
         <div class="col-3">
             <label for="faculty" class="form-label">Faculty</label>
             <select class="form-select" id="faculty" name="faculty" form="sylabusGenerator" disabled onchange="setDepartments(this.selectedOptions[0].getAttribute('name'))">
@@ -242,7 +242,7 @@
             <label for="startTime">Class Start Time</label>
             <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="20" id = "startTime" name = "startTime" class ="form-control" type="text" placeholder="E.g. 1:00 PM" value="{{ !empty($syllabus) ? $syllabus->class_start_time : ''}}">
         </div>
-        
+
         <div class="col-3">
             <label for="endTime">Class End Time</label>
             <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="20" id = "endTime" name = "endTime" class ="form-control" type="text" placeholder="E.g. 2:00 PM" value="{{ !empty($syllabus) ? $syllabus->class_end_time : ''}}" >
@@ -252,12 +252,12 @@
             <label for="courseLocation">Course Location</label>
             <input id = "courseLocation" name = "courseLocation" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="150" class ="form-control" type="text" placeholder="E.g. WEL 140" value="{{ !empty($syllabus) ? $syllabus->course_location : ''}}">
         </div>
-        
+
         <div id="officeLocation" class="col-3"></div>
 
                 <!-- Okanagan Course Section -->
                 <div class="col-3"id="courseSectionOK"></div>
-                
+
         <div class="col-3">
             <label for="courseYear">Course Year <span class="requiredField">*</span></label>
             <select id="courseYear" class="form-select" name="courseYear" required>
@@ -293,7 +293,7 @@
             </div>
         </div>
 
-        
+
         <div id="courseSemesterOther" class="col-3">
             @if (!empty($syllabus))
                 @if ($syllabus->course_term != 'W1' && $syllabus->course_term != 'W2' && $syllabus->course_term != 'S1' && $syllabus->course_term != 'S2')
@@ -324,7 +324,7 @@
                     <input id="monday" type="checkbox" name="schedule[]" value="Mon" class="form-check-input">
                     <label for="monday" class="mr-2 form-check-label" >Monday</label>
                 </div>
-                
+
                 <div class="form-check form-check-inline">
                     <input id="tuesday" type="checkbox" name="schedule[]" value="Tue" class="form-check-input">
                     <label for="tuesday" class="mr-2 form-check-label">Tuesday</label>
@@ -344,7 +344,7 @@
                     <input id="friday" type="checkbox" name="schedule[]" value="Fri" class="form-check-input">
                     <label for="friday" class="mr-2 form-check-label">Friday</label>
                 </div>
-                
+
                 <div class="form-check form-check-inline">
                     <input id="saturday" type="checkbox" name="schedule[]" value="Sat" class="form-check-input">
                     <label for="saturday" class="mr-2 form-check-label">Saturday</label>
@@ -360,10 +360,10 @@
             <label for="endTime">Corequisites</label><span class="requiredBySenateOK"></span>
             <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id = "corequisites" name = "corequisites" class ="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->corequisites : ''}}" >
         </div>
-        
+
         <!-- Land Acknowledgement Statement -->
         <div class="col-12" id="landAcknowledgement"></div>
-        
+
         <div class="col-12">
             <label for="officeHour"> <h5 class="fw-bold">Office Hours</h5></label><span class="requiredBySenateOK"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['officeHours']}}"></i>
@@ -399,8 +399,8 @@
                 <button type="button" class="btn btn-danger col" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete instructor" onclick="delInstructor(this)"><i class="bi bi-trash-fill"></i> Delete</button>
             </div>
         </div>
-    @endforeach 
-@else 
+    @endforeach
+@else
     <div class="instructor row g-3 align-items-end m-0 p-0">
         <div class="col-5">
             <label for="courseInstructor">Name<span class="requiredField"> *</span></label>
@@ -449,7 +449,7 @@
         </div>
 
         <div class="alert alert-info">
-        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>  
+        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
             <button type="button" class="close" data-dismiss="alert">×</button>
                 <a target="_blank" rel="noopener noreferrer" href="https://ctlt-inclusiveteaching.sites.olt.ubc.ca/files/2019/08/inclusive-syllabus-digital.pdf">Guidelines to write an inclusive syllabus</a>.
         </div>
@@ -460,7 +460,7 @@
         <div class="col-12" id="courseFormat"></div>
         <!-- Course Overview -->
         <div class="col-12" id="courseOverview"></div>
-        
+
         <!-- Course Structure -->
         <div class="col-12" id="courseStructure"></div>
 
@@ -502,7 +502,7 @@
                             <span class="iconify-inline ml-1" data-icon="clarity:view-columns-line" data-rotate="90deg"></span>
                         </i>
                         <p style="font-size:12px" class="text-muted m-0">ADD ROW BOTTOM</p>
-                    </button>                    
+                    </button>
                 </span>
 
                 <span title="Column Limit Reached!" data-bs-trigger="manual" data-bs-toggle="popover"
@@ -512,14 +512,14 @@
                             <span class="iconify-inline ml-1" data-icon="clarity:view-columns-line" data-rotate="180deg"></span>
                         </i>
                         <p style="font-size:12px" class="text-muted m-0">ADD COLUMN LEFT</p>
-                    </button>  
+                    </button>
 
                     <button type="button" class="col-2 addCol btn m-0 p-0" style="background:none;border:none" data-side="right" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add column on left">
                         <i class="btn btn-light rounded-pill m-2 text-secondary bi bi-plus">
                             <span class="iconify-inline ml-1" data-icon="clarity:view-columns-line"></span>
                         </i>
                         <p style="font-size:12px" class="text-muted m-0">ADD COLUMN RIGHT</p>
-                    </button>  
+                    </button>
                 </span>
 
                 <button id="delCols" type="button" class="col-2 btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete column(s)">
@@ -529,14 +529,14 @@
                     <p style="font-size:12px" class="text-muted m-0">DELETE COLUMN(S)</p>
                 </button>
 
-                
+
                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Table" class="col-2">
                     <button id="delTable" type="button" class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="modal" data-bs-target="#delCourseScheduleTbl">
                         <i class="btn btn-danger rounded-pill m-2 bi bi-trash-fill">
                             <span class="iconify-inline" data-icon="fluent:table-48-filled"></span>
                         </i>
                         <p style="font-size:12px" class="text-muted m-0">DELETE TABLE</p>
-                    </button>                    
+                    </button>
                 </span>
             </div>
         </div>
@@ -590,18 +590,18 @@
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningOutcomes']}}"></i>
             <p class="inputFieldDescription"><i>Upon successful completion of this course, students will be able to ...</i></p>
             <div id="formatCLOs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-            </div>                                            
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
             <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="17500" id = "learningOutcome" data-formatnoteid="formatCLOs" placeholder="E.g. Define ... &#10;E.g. Classify ..." name = "learningOutcome" class ="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_outcomes : ''}}</textarea>
         </div>
-        
+
         <div class="col-12">
             <label for="learningActivities"><h5 class="fw-bold">Learning Activities</h5></label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningActivities']}}"></i>
             <div id="formatActivities" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-            </div>                                            
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
             <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="52431" id = "learningActivities" data-formatnoteid="formatActivities" placeholder="E.g. Class participation consists of clicker questions, group discussions ... &#10;E.g. Students are expected to complete class pre-readings ..."name = "learningActivities" class ="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_activities : ''}}</textarea>
         </div>
         <!-- Course Learning Materials -->
@@ -618,35 +618,35 @@
                 id="learningMaterials" name="learningMaterials" class="form-control" type="date" form="sylabusGenerator"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_materials : ''}}</textarea>
         </div>
-        
-    
+
+
         <div class="col-12">
             <label for="learningAssessments"><h5 class="fw-bold">Methods of Assessment</h5></label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningAssessments']}}"></i>
             <div id="formatAssessments" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-            </div>                                            
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
             <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id = "learningAssessments" data-formatnoteid="formatAssessments" placeholder="E.g. Presentation, 25%, Dec 1, ... &#10;E.g. Midterm Exam, 25%, Sept 31, ..." name = "learningAssessments" class ="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_assessments : ''}}</textarea>
         </div>
 
-       
+
 
         <!-- Course Structure -->
         <div class="col-12" id="courseStructure"></div>
-        
+
 
 
         @if (isset($courseAlignment))
-            <div class="p-0 m-0" id="courseAlignment"> 
+            <div class="p-0 m-0" id="courseAlignment">
                 <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
-                    Course Alignment                                     
+                    Course Alignment
                     <button id="removeCourseAlignment" type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                     <input hidden name="import_course_settings[courseId]" value="{{$syllabus->course_id}}">
                     <input hidden name="import_course_settings[importCourseAlignment]" value="{{$syllabus->course_id}}">
-                    
 
-                </h5>            
+
+                </h5>
                 <div class="col-12" id="courseAlignmentTable">
                     <table class="table table-light table-bordered table " >
                         <thead>
@@ -665,33 +665,33 @@
                                     </td>
                                     <td>{{$clo->assessmentMethods->implode('a_method', ', ')}}</td>
                                     <td>{{$clo->learningActivities->implode('l_activity', ', ')}}</td>
-                                </tr>   
-                            @endforeach                 
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-        @else 
-            <div class="p-0 m-0" id="courseAlignment"></div>    
+        @else
+            <div class="p-0 m-0" id="courseAlignment"></div>
         @endif
 
         @if (isset($outcomeMaps))
-            <div class="p-0 m-0" id="outcomeMapsDiv">  
+            <div class="p-0 m-0" id="outcomeMapsDiv">
                 @foreach ($outcomeMaps as $programId => $outcomeMap)
-                    <div class="p-0 m-0" id="outcomeMapsDiv"> 
+                    <div class="p-0 m-0" id="outcomeMapsDiv">
                         <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
-                            {{$outcomeMap["program"]->program}}                 
+                            {{$outcomeMap["program"]->program}}
                             <button type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                             <input hidden name="import_course_settings[programs][]" value="{{$programId}}">
-                        </h5>  
+                        </h5>
 
                         @if ($outcomeMap['program']->mappingScaleLevels->count() < 1)
                             <div class="col-12">
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.                  
+                                    <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.
                                 </div>
                             </div>
-                        @else 
+                        @else
                             <div class="col-12">
                                 <table class="table table-bordered table-light">
                                     <thead>
@@ -732,13 +732,13 @@
                                                 <th></th>
                                                 @foreach ($outcomeMap['program']->ploCategories as $category)
                                                     @if ($category->plos->count() > 0)
-                                                        <th class="table-active w-auto" colspan="{{$category->plos->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{$category->plo_category}}</th>  
-                                                    @endif          
+                                                        <th class="table-active w-auto" colspan="{{$category->plos->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{$category->plo_category}}</th>
+                                                    @endif
                                                 @endforeach
                                                 @if ($outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null)->count() > 0)
                                                     <th class="table-active w-auto text-center" colspan="{{$outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null)->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Uncategorized PLOs</th>
                                                 @endif
-                                            </tr> 
+                                            </tr>
                                             <tr>
                                                 <td></td>
                                                 @foreach ($outcomeMap['program']->ploCategories as $category)
@@ -747,7 +747,7 @@
                                                             <td style="height:0; text-align: left;">
                                                                 @if ($plo->plo_shortphrase)
                                                                     {{$plo->plo_shortphrase}}
-                                                                @else 
+                                                                @else
                                                                     {{$plo->pl_outcome}}
                                                                 @endif
                                                             </td>
@@ -759,19 +759,19 @@
                                                         <td style="height:0; text-align: left;">
                                                             @if ($uncategorizedPLO->plo_shortphrase)
                                                                 {{$uncategorizedPLO->plo_shortphrase}}
-                                                            @else 
+                                                            @else
                                                                 {{$uncategorizedPLO->pl_outcome}}
                                                             @endif
                                                         </td>
                                                     @endforeach
                                                 @endif
                                             </tr>
-                                            @foreach ($outcomeMap['clos'] as $clo) 
+                                            @foreach ($outcomeMap['clos'] as $clo)
                                                 <tr>
-                                                    <td class="w-auto"> 
+                                                    <td class="w-auto">
                                                         @if (isset($clo->clo_shortphrase))
                                                             {{$clo->clo_shortphrase}}
-                                                        @else 
+                                                        @else
                                                             {{$clo->l_outcome}}
                                                         @endif
                                                     </td>
@@ -780,10 +780,10 @@
                                                             @foreach ($category->plos as $plo)
                                                                 @if (!array_key_exists($plo->pl_outcome_id, $outcomeMap['outcomeMap']))
                                                                     <td></td>
-                                                                @else 
+                                                                @else
                                                                     @if (!array_key_exists($clo->l_outcome_id, $outcomeMap['outcomeMap'][$plo->pl_outcome_id]))
                                                                         <td></td>
-                                                                    @else 
+                                                                    @else
                                                                         <td class="text-center align-middle" style="background-color:{{$outcomeMap['outcomeMap'][$plo->pl_outcome_id][$clo->l_outcome_id]->colour}}">{{$outcomeMap['outcomeMap'][$plo->pl_outcome_id][$clo->l_outcome_id]->abbreviation}}</td>
                                                                     @endif
                                                                 @endif
@@ -794,33 +794,33 @@
                                                         @foreach ($outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null) as $uncategorizedPLO)
                                                             @if (!array_key_exists($uncategorizedPLO->pl_outcome_id, $outcomeMap['outcomeMap']))
                                                                 <td></td>
-                                                            @else 
+                                                            @else
                                                                 @if (!array_key_exists($clo->l_outcome_id, $outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id]))
                                                                     <td></td>
-                                                                @else 
+                                                                @else
                                                                     <td class="text-center align-middle" style="background-color:{{$outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id][$clo->l_outcome_id]->colour}}">{{$outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id][$clo->l_outcome_id]->abbreviation}}</td>
                                                                 @endif
                                                             @endif
                                                         @endforeach
-                                                    @endif                                
+                                                    @endif
                                                 </tr>
-                                            @endforeach 
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        @else 
+                        @else
                             <div class="col-12">
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.                 
+                                    <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.
                                 </div>
                             </div>
                         @endif
                     </div>
                 @endforeach
-            </div>  
-        @else 
-            <div class="p-0 m-0" id="outcomeMapsDiv"></div>    
+            </div>
+        @else
+            <div class="p-0 m-0" id="outcomeMapsDiv"></div>
         @endif
 
         <!-- learning analytics and learning resources OK -->
@@ -833,7 +833,7 @@
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry
                     on a new line for the best formatting
                     results.</span>
-                </div> 
+                </div>
             <textarea data-formatnoteid="formatLR" style="height:125px" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30000"
                 id="learningResources" name="learningResources" class="form-control" form="sylabusGenerator"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_resources : ''}}</textarea>
@@ -866,7 +866,7 @@
                     <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry
                         on a new line for the best formatting
                         results.</span>
-                    </div> 
+                    </div>
                 <textarea data-formatnoteid="formatME" style="height:125px" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="missingExam"
                     name="missingExam" class="form-control" type="date" form="sylabusGenerator"
                     spellcheck="true">{{ !empty($syllabus) ? $syllabus->missed_exam_policy : ''}}</textarea>
@@ -898,7 +898,7 @@
                     name="passingCriteria" class="form-control" type="date" form="sylabusGenerator"
                     spellcheck="true">{{ !empty($syllabus) ? $syllabus->passing_criteria : ''}}</textarea>
             </div>
-        
+
             <br>
              <!-- learning analytics -->
             <div class="col-12" id="learningAnalytics"></div>
@@ -907,8 +907,8 @@
         <!-- Additional Course-Specific Information-->
         <div class="col-12">
             <h5 class="fw-bold">Additional Course-Specific Information</h5></label>
-            <p class="inputFieldDescription">{{$inputFieldDescriptions['customResource']}}</p> 
-                    <textarea data-formatnoteid="formatCS" style="height:25px;overflow:hidden;resize:none" oninput="validateMaxlength()" onpaste="validateMaxlength()" resize="none" maxlength="10000" id="customResourceTitle" 
+            <p class="inputFieldDescription">{{$inputFieldDescriptions['customResource']}}</p>
+                    <textarea data-formatnoteid="formatCS" style="height:25px;overflow:hidden;resize:none" oninput="validateMaxlength()" onpaste="validateMaxlength()" resize="none" maxlength="10000" id="customResourceTitle"
                     name="customResourceTitle" class="form-control" type="date" form="sylabusGenerator"
                         spellcheck="true" placeholder="Title of Custom Section">{{ !empty($syllabus) ? $syllabus->custom_resource_title : ''}}</textarea>
                     <br>
@@ -917,7 +917,7 @@
                         on a new line for the best formatting
                         results.</span>
                     </div>
-                    <textarea data-formatnoteid="formatCS" style="height:125px" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="customResource" 
+                    <textarea data-formatnoteid="formatCS" style="height:125px" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="customResource"
                     name="customResource" class="form-control" type="date" form="sylabusGenerator"
                         spellcheck="true" placeholder="Body Content of Custom Section">{{ !empty($syllabus) ? $syllabus->custom_resource : ''}}</textarea>
         </div>
@@ -931,7 +931,7 @@
 
         <div class="col-12" id="statementUBCValues"></div>
 
-        
+
         <!-- Statement of Student Support -->
 
         <div class="col-12" id="statementStudentSupport"></div>
@@ -942,9 +942,9 @@
 
         <!-- Copyright Statement -->
         <div class="col-12" id="crStatement"></div>
-        
+
         <!-- Creative Commons -->
-        
+
         <div class="col-12">
         <label for="creativeCommons"><h5 class="fw-bold">Copyright Statement</h5></label>
             <p class="inputFieldDescription">
@@ -968,14 +968,14 @@
                         <label>Include a Copyright Statement</label>
                         <div id="copyrightEx">
                             <blockquote> All materials of this course (course handouts, lecture slides, assessments, course readings, etc.) are the intellectual property of the Course Instructor or licensed to be used in this course by the copyright owner. Redistribution of these materials by any means without permission of the copyright holder(s) constitutes a breach of copyright and may lead to academic discipline.</blockquote>
-                        </div> 
+                        </div>
                         @else
                         <input type="radio" id="yesCopyright" name="copyright" value="1" style="margin-right: 8px" form="sylabusGenerator"/>
                         <label>Include a Copyright Statement</label>
-                        
+
                         <div id="copyrightEx"></div>
                         @endif
-        
+
                     @if(!empty($syllabus))
                         @if($syllabus->campus == "O")
                             @if($syllabus->copyright==1 || !isset($syllabus->cc_license))
@@ -984,10 +984,10 @@
                                 <input type="radio" id="noCopyright" name="copyright" value="0" style="margin-right: 8px" form="sylabusGenerator" checked/>
                             @endif
                         <label>Include a Creative Commons Open Copyright License</label>
-                        <div> 
+                        <div>
                         <div class="col-12">
                             <br>
-                        
+
                             <div id="creativeCommonsInput" class="col-12">
                         @if(isset($syllabus->cc_license))
                             <h6><strong><u>Select a Creative Commons License:</u></strong></h6>
@@ -1004,7 +1004,7 @@
                                         <td>
                                             <div class="col-12">
                                                 <strong>Attribution: </strong>
-                                                <strong>CC BY </strong> 
+                                                <strong>CC BY </strong>
                                                 <br>
                                                 This license lets others distribute, remix, adapt, and build upon your work, even commercially, as long as they credit you for the original creation. This is the most accommodating of licenses offered. Recommended for maximum dissemination and use of licensed materials.
                                                 <br>
@@ -1115,13 +1115,13 @@
                                 </table>
                                 @endif
                                 </div>
-                            
+
                         </div>
-                        
+
             </div>
             @endif
         @endif
-                        
+
                     @else
                         <input type="radio" id="noneCopyright" name="copyright" value="2" style="margin-right: 8px" form="sylabusGenerator" checked/>
                         <label>None</label>
@@ -1136,10 +1136,10 @@
                                     <div id="creativeCommonsInput" class="col-12">
                                         </div>
                                 </div>
-                
+
                     @endif
         </div>
-          
+
         <!-- Land Acknowledgement Statement -->
         <div class="col-12" id="landAcknowledgement"></div>
     </form>
@@ -1180,7 +1180,7 @@
                         </button>
                 </span>
             </div>
-    
+
             @if (!empty($syllabus))
                 <div class="col-2" style="max-width:10%">
                     <span data-bs-toggle="modal" data-bs-target="#addSyllabusCollaboratorsModal{{$syllabus->id}}">
@@ -1191,7 +1191,7 @@
                         </button>
                     </span>
                 </div>
-        
+
                 @include('modals.duplicateModal', ['syllabus' => $syllabus])
                 <div class="col-2" style="max-width:10%">
                     <span data-bs-toggle="modal" data-bs-target="#duplicateConfirmation">
@@ -1202,7 +1202,7 @@
                         </button>
                     </span>
                 </div>
-        
+
                 @include('modals.deleteModal', ['syllabus' => $syllabus])
                 <div class="col-2" style="max-width:10%">
                     <span data-bs-toggle="modal" data-bs-target="#deleteSyllabusConfirmation">
@@ -1214,11 +1214,11 @@
                 </div>
             @endif
         </div>
-    </div>  
+    </div>
 </div>
 
 <script type="application/javascript">
-    
+
     var syllabus = <?php echo json_encode($syllabus);?>;
     var faculties = <?php echo json_encode($faculties);?>;
 
@@ -1240,7 +1240,7 @@
 
 
         // event listener on select term dropdown
-        $('#courseSemester').on('change', function(event) { 
+        $('#courseSemester').on('change', function(event) {
             // insert a text input if user selects other
             if ($('#courseSemester').val() == 'O') {
                 $('#courseSemesterOther').html(`
@@ -1260,7 +1260,7 @@
         $('#crossListed').on('change', function() {
             if(this.checked){
                 $('#crossListedCode').html(`
-                
+
                 <label for="courseCodeCL">Cross-Listed Course Code<span class="requiredField"></span></label>
             <input id = "courseCodeCL" pattern="[A-Za-z]+" minlength="1" name = "courseCodeCL" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="4" class ="form-control" type="text" placeholder="E.g. CPSC" required value="{{ !empty($syllabus) ? $syllabus->cross_listed_code : '' }}">
             <div class="invalid-tooltip">
@@ -1286,13 +1286,13 @@
             $('#copyrightEx').html(``);
             $('#creativeCommonsInput').html(``);
         });
-        
+
         $('#yesCopyright').on('click', function(event) {
             //mankey
-            $('#copyrightEx').html(` 
+            $('#copyrightEx').html(`
             <div>
                 <blockquote> All materials of this course (course handouts, lecture slides, assessments, course readings, etc.) are the intellectual property of the Course Instructor or licensed to be used in this course by the copyright owner. Redistribution of these materials by any means without permission of the copyright holder(s) constitutes a breach of copyright and may lead to academic discipline.</blockquote>
-            </div> 
+            </div>
             `);
             $('#creativeCommonsInput').html(``);
 
@@ -1388,7 +1388,7 @@
                                     <tr>
                                         <td>
                                             <input type="radio" id="creativeCommons" name="creativeCommons" value="CC BY-NC-ND" style="margin-right: 8px" form="sylabusGenerator"/>
-                
+
                                         </td>
                                         <td>
                                             <div class="col-12">
@@ -1406,12 +1406,12 @@
                                  `);
 
             $('#copyrightEx').html(``);
-            
+
         });
-        
-    
+
+
         // event listener on create course schedule submit form button
-        $('#createCourseScheduleTblForm').on('submit', function(event) { 
+        $('#createCourseScheduleTblForm').on('submit', function(event) {
             // prevent default submit procedure
             event.preventDefault();
             event.stopPropagation();
@@ -1420,7 +1420,7 @@
             var courseScheduleTblDiv = document.getElementById('courseScheduleTblDiv');
             // create table if it doesn't exist
             if (!document.getElementById('courseScheduleTbl')) {
-                // get num rows 
+                // get num rows
                 var numRows = event.target.elements.numRows.value;
                 // get num cols
                 var numCols = event.target.elements.numCols.value;
@@ -1432,7 +1432,7 @@
                 var tblHead = document.createElement('thead');
                 // create <tbody> element
                 var tblBody = document.createElement('tbody');
-                // iterate over rows 
+                // iterate over rows
                 for (let rowIndex = 0; rowIndex < parseInt(numRows) + 1; rowIndex++) {
                     // create <row> element
                     var row = document.createElement('tr');
@@ -1440,7 +1440,7 @@
                     // iterate over cols
 
                     for (let colIndex = 0; colIndex < parseInt(numCols) + 1; colIndex++) {
-                        
+
                         // create <textarea>
                         var inputCell = document.createElement('textarea');
                         inputCell.setAttribute('form', 'sylabusGenerator');
@@ -1462,10 +1462,10 @@
                                 // put inputCell in <th>
                                 headerCell.appendChild(inputCell);
                             }
-                            // put <th> in <row>                           
+                            // put <th> in <row>
                             row.appendChild(headerCell);
                         } else {
-                            // create <td> element 
+                            // create <td> element
                             var cell = document.createElement('td');
                             if (colIndex == 0) {
                                 cell.setAttribute('class', 'align-middle fs-5 draggable');
@@ -1473,7 +1473,7 @@
                                 cell.innerHTML = "↕";
                             } else {
                                 // set input attributes for data cells
-                                inputCell.setAttribute('placeholder', 'Data here ...');                        
+                                inputCell.setAttribute('placeholder', 'Data here ...');
                                 inputCell.setAttribute('name', 'courseScheduleTblRows[]');
                                 // put inputCell in <td>
                                 cell.appendChild(inputCell);
@@ -1493,7 +1493,7 @@
                         // style delete action icon
                         delAction.setAttribute('class', 'bi bi-x-circle-fill text-danger fs-4 btn');
                         // add on click listener to del row
-                        delAction.onclick = delCourseScheduleRow;                        
+                        delAction.onclick = delCourseScheduleRow;
                         // put <i> in <td>
                         actionsCell.appendChild(delAction);
                         // put actions cell in <row>
@@ -1511,7 +1511,7 @@
                 }
                 // put <thead> in <table>
                 tbl.appendChild(tblHead);
-                // put <tbody> in <table> 
+                // put <tbody> in <table>
                 tbl.appendChild(tblBody);
                 // put <table> in course schedule table div
                 courseScheduleTblDiv.appendChild(tbl);
@@ -1528,7 +1528,7 @@
         // event listener on delete course schedule button
         $('#delCourseScheduleBtn').on('click', function(event) {
             var courseScheduleTblDiv = document.getElementById('courseScheduleTblDiv');
-            // remove all child nodes 
+            // remove all child nodes
             $(courseScheduleTblDiv).empty();
             // show create a course schedule table button
             $('#createTableBtn').removeAttr('hidden');
@@ -1541,17 +1541,17 @@
 
 
         // event listener on add col buttons
-        $('.addCol').on('click', function (event) { 
-            // get the course schedule table 
+        $('.addCol').on('click', function (event) {
+            // get the course schedule table
             var courseScheduleTbl = document.getElementById('courseScheduleTbl');
             // if course schedule table exists, add col to the side indicated by the button clicked
             if (courseScheduleTbl) {
-                // get which side to add the col to 
+                // get which side to add the col to
                 var side = event.currentTarget.dataset.side;
-                // get the num of cols in the tbl 
+                // get the num of cols in the tbl
                 var numCols = courseScheduleTbl.rows[0].cells.length;
                 // add col if there are less than 6 cols
-                if (numCols < parseInt($('#courseScheduleTblColsCount').attr('max')) + 2) {  
+                if (numCols < parseInt($('#courseScheduleTblColsCount').attr('max')) + 2) {
                     // add a new <td> to each <row>
                     Array.from(courseScheduleTbl.rows).forEach((row, rowIndex) => {
                         // create a <textarea>
@@ -1568,7 +1568,7 @@
                             inputCell.setAttribute('placeholder', 'Column heading here ...');
                             inputCell.setAttribute('name', 'courseScheduleTblHeadings[]');
                         } else {
-                            inputCell.setAttribute('placeholder', 'Data here ...');                        
+                            inputCell.setAttribute('placeholder', 'Data here ...');
                             inputCell.setAttribute('name', 'courseScheduleTblRows[]');
                         }
                         // add column on the correct side
@@ -1585,7 +1585,7 @@
                                     newCell.appendChild(inputCell);
                                 }
                                 break;
-                            case 'right': 
+                            case 'right':
                                 // put <td> in <row> at the back (insert col on the right)
                                 newCell = row.insertCell(numCols - 1);
                                 // if header row, make sure new cell has <th> tags
@@ -1597,7 +1597,7 @@
                         }
                     });
                 } else {
-                    // 
+                    //
                     var popover = bootstrap.Popover.getInstance(event.currentTarget.parentNode);
                     popover.show();
                     // hide popover after 3 seconds
@@ -1609,9 +1609,9 @@
         // event listener on delete column(s) button in course schedule table toolbar
         // updates the delCols confirmation modal with info about the columns
         $('#delCols').on('click', function (event) {
-            // get the course schedule table 
+            // get the course schedule table
             var courseScheduleTbl = document.getElementById('courseScheduleTbl');
-            // if table exists, update and show delCols confirmation modal 
+            // if table exists, update and show delCols confirmation modal
             if (courseScheduleTbl) {
                 // get modal for deleting cols
                 var delColsModalEl = document.getElementById('delColsModal');
@@ -1622,7 +1622,7 @@
                 $(courseScheduleTblColsListDiv).empty();
                 // get the column cells from the first row
                 var cols = courseScheduleTbl.rows[0].cells;
-                // foreach col create a checkbox with label and place it in the delColsModal 
+                // foreach col create a checkbox with label and place it in the delColsModal
                 Array.from(cols).forEach((col, colIndex) => {
                     // only add relevant col headers to del cols modal
                     if (colIndex < cols.length - 1 && colIndex > 0) {
@@ -1630,7 +1630,7 @@
                         var colDiv = document.createElement('div');
                         // add bootstrap form elements styling
                         colDiv.setAttribute('class', 'form-check form-check-inline');
-                        // create, style and set attributes for <input> 
+                        // create, style and set attributes for <input>
                         var colCheckbox = document.createElement('input');
                         colCheckbox.setAttribute('id', 'col-heading-' + (colIndex + 1).toString());
                         colCheckbox.setAttribute('type', 'checkbox');
@@ -1644,12 +1644,12 @@
                         var colLabel = document.createElement('label');
                         colLabel.setAttribute('for', 'col-heading-' + (colIndex + 1).toString());
                         colLabel.setAttribute('class', 'form-check-label');
-                        colLabel.innerHTML = (col.firstElementChild.value.length === 0) ? 'Column #' + (colIndex).toString() : col.firstElementChild.value; 
+                        colLabel.innerHTML = (col.firstElementChild.value.length === 0) ? 'Column #' + (colIndex).toString() : col.firstElementChild.value;
                         // put <input> in <div>
                         colDiv.appendChild(colCheckbox);
                         // put <label> in <div>
                         colDiv.appendChild(colLabel);
-                        // put inner <div> in outer <div> 
+                        // put inner <div> in outer <div>
                         courseScheduleTblColsListDiv.appendChild(colDiv);
                     }
                 });
@@ -1661,39 +1661,39 @@
         $('#delColsForm').on('submit', function (event) {
             // prevent default submit procedure
             event.preventDefault();
-            event.stopPropagation(); 
-            // get del cols confirmation modal   
-            var delColsModal = bootstrap.Modal.getInstance(document.getElementById('delColsModal'));   
-            // get the columns to delete from the del cols confirmation form 
+            event.stopPropagation();
+            // get del cols confirmation modal
+            var delColsModal = bootstrap.Modal.getInstance(document.getElementById('delColsModal'));
+            // get the columns to delete from the del cols confirmation form
             var colsToDelete = $(this).serializeArray().map((input, index) => {
                 return input.value;
             });
-            // sort colsToDelete in descending order to ensure cols with the greatest positions are deleted first. 
+            // sort colsToDelete in descending order to ensure cols with the greatest positions are deleted first.
             colsToDelete.sort(function(a, b) {return b - a});
-            // get the course schedule table 
+            // get the course schedule table
             var courseScheduleTbl = document.getElementById('courseScheduleTbl');
             // if table exists, del specified cols
             if (courseScheduleTbl) {
-                // iterate over table rows 
+                // iterate over table rows
                 Array.from(courseScheduleTbl.rows).forEach((row, rowIndex) => {
                     // iterate over columns to delete
                     colsToDelete.forEach((colToDelete) => {
                         // delete cells from every row
                         row.deleteCell(colToDelete);
-                        
+
                     });
                 });
             }
             delColsModal.hide();
         });
 
-        $('.addRow').on('click', function (event) { 
-            // get the course schedule table 
+        $('.addRow').on('click', function (event) {
+            // get the course schedule table
             var courseScheduleTbl = document.getElementById('courseScheduleTbl');
 
-            // if course schedule table has been created 
+            // if course schedule table has been created
             if (courseScheduleTbl) {
-                // get which side to add the row to 
+                // get which side to add the row to
                 var side = event.currentTarget.dataset.side;
                 // get the number of cols in the tbl
                 var numCols = courseScheduleTbl.rows[0].cells.length;
@@ -1718,13 +1718,13 @@
                             let topRow = courseScheduleTbl.tBodies[0].insertRow(0);
                             // add a cell for each col to the new row
                             for (let colIndex = 0; colIndex < numCols - 1; colIndex++) {
-                                // create  <td> element 
+                                // create  <td> element
                                 var cell = document.createElement('td');
                                 if (colIndex == 0) {
                                     cell.setAttribute('class', 'align-middle fs-5 draggable');
                                     cell.addEventListener('mousedown', mouseDownHandler);
                                     cell.innerHTML = "↕";
-                                } else { 
+                                } else {
                                     // put inputCell in <td>
                                     cell.appendChild(inputCell.cloneNode());
                                 }
@@ -1740,7 +1740,7 @@
                             // style delete action icon
                             delAction.setAttribute('class', 'bi bi-x-circle-fill text-danger fs-4 btn');
                             // add on click listener to del row
-                            delAction.onclick = delCourseScheduleRow;                        
+                            delAction.onclick = delCourseScheduleRow;
                             // put <i> in <td>
                             actionsCell.appendChild(delAction);
                             // put actions cell in <row>
@@ -1758,7 +1758,7 @@
                                     cell.setAttribute('class', 'align-middle fs-5 draggable');
                                     cell.addEventListener('mousedown', mouseDownHandler);
                                     cell.innerHTML = "↕";
-                                } else { 
+                                } else {
                                     // put inputCell in <td>
                                     cell.appendChild(inputCell.cloneNode());
                                 }
@@ -1773,14 +1773,14 @@
                             // style delete action icon
                             delAction.setAttribute('class', 'bi bi-x-circle-fill text-danger fs-4 btn');
                             // add on click listener to del row
-                            delAction.onclick = delCourseScheduleRow;                        
+                            delAction.onclick = delCourseScheduleRow;
                             // put <i> in <td>
                             actionsCell.appendChild(delAction);
                             // put actions cell in <row>
                             bottomRow.appendChild(actionsCell);
                             break;
                         default:
-                            let row = courseScheduleTbl.insertRow();                
+                            let row = courseScheduleTbl.insertRow();
                     }
                 } else {
                     var popover = bootstrap.Popover.getInstance(event.currentTarget.parentNode);
@@ -1791,11 +1791,11 @@
             }
         });
 
-        // add on change event listener to campus select 
+        // add on change event listener to campus select
         $('#campus').change(function(){
             onChangeCampus();
             });
-        
+
         // use custom bootstrap input validation
         $('#sylabusGenerator').submit(function(event){
             var invalidFields = $('#sylabusGenerator :invalid');
@@ -1811,7 +1811,7 @@
                 $(this).removeClass('was-validated');
             }
         });
-        
+
         // add on click event listener to import course info button
         $('#importButton').click(importCourseInfo);
         // trigger campus dropdown change based on saved syllabus
@@ -1855,10 +1855,10 @@
                 if (isCollapsed) {
                     expandSection(note);
                     note.setAttribute('data-collapsed', 'false');
-                } 
+                }
             }
         });
-        
+
         // use event delegation to hide format note on focus out
         document.getElementById("sylabusGenerator").addEventListener('focusout', function (event) {
             var formatNoteId = event.target.dataset.formatnoteid;
@@ -1913,7 +1913,7 @@
                     Please enter the instructors email.
                 </div>
             </div>
-            
+
             <div class="col-2">
                 <button type="button" class="btn btn-danger col" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete instructor" onclick="delInstructor(this)"><i class="bi bi-trash-fill"></i> Delete</button>
             </div>
@@ -1938,7 +1938,7 @@
             type: "GET",
             url: "/syllabusGenerator/import/course",
             data: {
-                course_id : course_id, 
+                course_id : course_id,
                 importCourseSettings: importCourseSettings
             },
             headers: {
@@ -1998,17 +1998,17 @@
     function getProgramOutcomeMapSectionHTML(clos, program) {
         headerHTML = `
             <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
-                ${program['programTitle']}                                    
+                ${program['programTitle']}
                 <button id="" type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                 <input hidden name="import_course_settings[programs][]" value="${program['programId']}">
             </h5>
         `;
         mappingScalesHTML = getMappingScalesHTML(program['mappingScales']);
         // return early without outcome map if no mapping scale has been set for this program
-        // if (program['mappingScales'].length < 1) 
+        // if (program['mappingScales'].length < 1)
         //     return `<div class="mb-4">${headerHTML + mappingScalesHTML}</div>`;
 
-        
+
         outcomeMapHTML = getProgramOutcomeMapHTML(program['programLearningOutcomes'], program['categories'], program['uncategorizedPlos'], clos, program['outcomeMap']);
 
         return `<div class="mb-4">${headerHTML + mappingScalesHTML + outcomeMapHTML}</div>`;
@@ -2016,20 +2016,20 @@
 
     function getProgramOutcomeMapHTML(plos, categories, uncategorizedPLOs, clos, outcomeMap) {
         if (outcomeMap.length == 0)
-            return `    
+            return `
                 <div class="col-12">
                     <div class="alert alert-warning wizard">
-                        <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.                 
+                        <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.
                     </div>
                 </div>`;
-        
+
         categoryHeaderCells = ``;
         categorizedPLOCells = ``;
         categorizedOutcomeMapCells = [];
         categories.forEach((category, categoryIndex) => {
             if (category['plos'].length > 0) {
                 th = `
-                    <th class="table-active w-auto" colspan="${category['plos'].length}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${category['plo_category']}</th>            
+                    <th class="table-active w-auto" colspan="${category['plos'].length}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${category['plo_category']}</th>
                 `;
                 categoryHeaderCells += th;
                 category['plos'].forEach((plo, index) => {
@@ -2050,7 +2050,7 @@
                         if (!categorizedOutcomeMapCells[clo['l_outcome_id']])
                             categorizedOutcomeMapCells[clo['l_outcome_id']] = '';
 
-                        if (outcomeMap.length < 1) 
+                        if (outcomeMap.length < 1)
                             categorizedOutcomeMapCells[clo['l_outcome_id']] += '<td></td>'
                         else {
                             mappingScale = outcomeMap[plo['pl_outcome_id']][clo['l_outcome_id']];
@@ -2061,9 +2061,9 @@
                                 mapTd = `<td></td>`;
                                 categorizedOutcomeMapCells[clo['l_outcome_id']] += mapTd;
                             }
-                        }                            
+                        }
                     });
-                    
+
                     categorizedPLOCells += td;
                 })
             }
@@ -2094,7 +2094,7 @@
                     if (!uncategorizedOutcomeMapCells[clo['l_outcome_id']])
                         uncategorizedOutcomeMapCells[clo['l_outcome_id']] = '';
 
-                    if (outcomeMap.length < 1) 
+                    if (outcomeMap.length < 1)
                         uncategorizedOutcomeMapCells[clo['l_outcome_id']] += '<td></td>'
                     else {
                         if (!(plo['pl_outcome_id'] in outcomeMap)) {
@@ -2137,7 +2137,7 @@
         clos.forEach((clo, index) => {
             if (clo['clo_shortphrase'])
                 cloCellText = clo["clo_shortphrase"];
-            else 
+            else
                 cloCellText = clo["l_outcome"];
 
             if (!categorizedOutcomeMapCells[clo['l_outcome_id']])
@@ -2148,7 +2148,7 @@
 
             tr = `
                 <tr>
-                    <td class="w-auto"> 
+                    <td class="w-auto">
                         ${cloCellText}
                     </td>
                     ${categorizedOutcomeMapCells[clo['l_outcome_id']]}
@@ -2214,13 +2214,13 @@
                         </tbody>
                     </table>
                 </div>
-            `; 
+            `;
             return mappingScalesTableHTML;
         } else {
             noMappingScalesHTML = `
                 <div class="col-12">
                     <div class="alert alert-warning wizard">
-                        <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.                  
+                        <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.
                     </div>
                 </div>`;
             return noMappingScalesHTML;
@@ -2233,17 +2233,17 @@
         tbody = ``;
         courseAlignment.forEach(function(learningOutcome){
             // create comma separated string of asssessment methods
-            assessmentMethodsText = learningOutcome["assessment_methods"].reduce(function (acc, assessmentMethod, index) { 
-                if (index == 0) 
+            assessmentMethodsText = learningOutcome["assessment_methods"].reduce(function (acc, assessmentMethod, index) {
+                if (index == 0)
                     return acc + assessmentMethod['a_method'];
-                else 
+                else
                     return acc + ', ' + assessmentMethod['a_method']
             }, '');
             // create comma separated string of learning activities
-            learningActivitiesText = learningOutcome["learning_activities"].reduce(function (acc, learningActivity, index) { 
-                if (index == 0) 
+            learningActivitiesText = learningOutcome["learning_activities"].reduce(function (acc, learningActivity, index) {
+                if (index == 0)
                     return acc + learningActivity['l_activity'];
-                else 
+                else
                     return acc + ', ' + learningActivity['l_activity']
             }, '');
         // course alignment table row
@@ -2266,11 +2266,11 @@
         // course alignment section
         return `
             <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
-                Course Alignment                                     
+                Course Alignment
                 <button id="removeCourseAlignment" type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                 <input hidden name="import_course_settings[importCourseAlignment]" value="${courseId}">
 
-            </h5>            
+            </h5>
             <div class="col-12" id="courseAlignmentTable">
                 <table class="table table-light table-bordered table " >
                     <thead>
@@ -2295,7 +2295,7 @@
     function expandSection(element) {
         // get the height of the element's inner content, regardless of its actual size
         var sectionHeight = element.scrollHeight;
-        
+
         // have the element transition to the height of its inner content
         element.style.height = sectionHeight + 'px';
 
@@ -2303,11 +2303,11 @@
         element.addEventListener('transitioned', function(e) {
             // remove this event listener so it only gets triggered once
             element.removeEventListener('transitioned', arguments.callee);
-            
+
             // remove "height" from the element's inline styles, so it can return to its initial value
             element.style.height = null;
         });
-        
+
         // mark the section as "currently not collapsed"
         element.setAttribute('data-collapsed', 'false');
     }
@@ -2319,21 +2319,21 @@
         // temporarily disable all css transitions
         var elementTransition = element.style.transition;
         element.style.transition = '';
-        
+
         // on the next frame (as soon as the previous style change has taken effect),
-        // explicitly set the element's height to its current pixel height, so we 
+        // explicitly set the element's height to its current pixel height, so we
         // aren't transitioning out of 'auto'
         requestAnimationFrame(function() {
             element.style.height = sectionHeight + 'px';
             element.style.transition = elementTransition;
-            
+
             // on the next frame (as soon as the previous style change has taken effect),
             // have the element transition to height: 0
             requestAnimationFrame(function() {
             element.style.height = 0 + 'px';
             });
         });
-        
+
         // mark the section as "currently collapsed"
         element.setAttribute('data-collapsed', 'true');
     }
@@ -2344,13 +2344,13 @@
         $('.courseInfo').tooltip(
             {
                 selector: '.has-tooltip'
-            }     
+            }
         );
 
-       
+
         //different statements for each campus
         var okanaganCourseDescription = `
-            
+
                 <label for="courseDescription"><h5 class="fw-bold">Course Description</h5></label><span class="requiredBySenateOK"></span>
                 <p class="inputFieldDescription">{!! $inputFieldDescriptions['okanaganCourseDescription'] !!}</p>
                 <div id="formatDesc" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
@@ -2359,15 +2359,15 @@
                     results.</span>
                 </div>
                 <textarea style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  name = "courseDesc" class ="form-control" type="date" data-formatnoteid="formatDesc" form="sylabusGenerator">{{isset($okanaganSyllabus) ? $okanaganSyllabus->course_description : ''}}</textarea>`;
-                
 
-        
+
+
         var vancouverOptionalListDesc = `
             <p class="inputFieldDescription">
                 The below are suggested sections to include in your syllabus which communicate various resources on campus that support student success.
                 <a href="https://senate.ubc.ca/policies-resources-support-student-success/" target="_blank" rel="noopener noreferrer">Language taken from the UBC Vancouver senate website.</a>
             </p>`;
-        
+
         var okanaganOptionalListDesc = `
             <p class="inputFieldDescription">
                 The below are suggested sections to include in your syllabus which communicate various resources on campus that support student success.
@@ -2376,18 +2376,18 @@
 
          // list of vancouver syllabus resources
         var vancouverOptionalList = `
-            @if (!isset($selectedVancouverSyllabusResourceIds)) 
+            @if (!isset($selectedVancouverSyllabusResourceIds))
                 @foreach($vancouverSyllabusResources as $index => $vSyllabusResource)
                     <div class="col-6">
                         <input class="form-check-input " id="{{$vSyllabusResource->id_name}}" type="checkbox" name="vancouverSyllabusResources[{{$vSyllabusResource->id}}]" value="{{$vSyllabusResource->id_name}}" checked>
-                        <label class="form-check-label mb-2" for="{{$vSyllabusResource->id_name}}">{{$vSyllabusResource->title}}</label>   
+                        <label class="form-check-label mb-2" for="{{$vSyllabusResource->id_name}}">{{$vSyllabusResource->title}}</label>
                     </div>
                 @endforeach
             @else
                 @foreach($vancouverSyllabusResources as $index => $vSyllabusResource)
                     <div class="col-6">
                         <input class="form-check-input" id="{{$vSyllabusResource->id_name}}" type="checkbox" name="vancouverSyllabusResources[{{$vSyllabusResource->id}}]" value="{{$vSyllabusResource->id_name}}" {{in_array($vSyllabusResource->id, $selectedVancouverSyllabusResourceIds) ? 'checked' : ''}}>
-                        <label class="form-check-label  mb-2" for="{{$vSyllabusResource->id_name}}">{{$vSyllabusResource->title}}</label>   
+                        <label class="form-check-label  mb-2" for="{{$vSyllabusResource->id_name}}">{{$vSyllabusResource->title}}</label>
                     </div>
                 @endforeach
             @endif
@@ -2395,18 +2395,18 @@
             `;
         // list of okanagan syllabus resources
         var okanaganOptionalList = `
-            @if (!isset($selectedOkanaganSyllabusResourceIds)) 
+            @if (!isset($selectedOkanaganSyllabusResourceIds))
                 @foreach($okanaganSyllabusResources as $index => $oSyllabusResource)
                     <div class="col-6">
                         <input class="form-check-input " id="{{$oSyllabusResource->id_name}}" type="checkbox" name="okanaganSyllabusResources[{{$oSyllabusResource->id}}]" value="{{$oSyllabusResource->id_name}}" checked>
-                        <label class="form-check-label mb-2" for="{{$oSyllabusResource->id_name}}">{{$oSyllabusResource->title}}</label>   
+                        <label class="form-check-label mb-2" for="{{$oSyllabusResource->id_name}}">{{$oSyllabusResource->title}}</label>
                     </div>
                 @endforeach
             @else
                 @foreach($okanaganSyllabusResources as $index => $oSyllabusResource)
                     <div class="col-6 ">
                         <input class="form-check-input " id="{{$oSyllabusResource->id_name}}" type="checkbox" name="okanaganSyllabusResources[{{$oSyllabusResource->id}}]" value="{{$oSyllabusResource->id_name}}" {{in_array($oSyllabusResource->id, $selectedOkanaganSyllabusResourceIds) ? 'checked' : ''}}>
-                        <label class="form-check-label mb-2" for="{{$oSyllabusResource->id_name}}">{{$oSyllabusResource->title}}</label>   
+                        <label class="form-check-label mb-2" for="{{$oSyllabusResource->id_name}}">{{$oSyllabusResource->title}}</label>
                     </div>
                 @endforeach
             @endif
@@ -2419,7 +2419,7 @@
                 Please enter the course course credits.
             </div>
             `;
-        
+
         var officeLocation = `
             <label for="officeLocation">Office Location <span class="requiredField">*</span></label>
             <i class="bi bi-info-circle-fill has-tooltip"  data-bs-placement="right" title="{{$inputFieldDescriptions['officeLocation']}}"></i>
@@ -2431,11 +2431,11 @@
             `;
 
         var courseDescription = `
-            
+
                 <label for="courseDescription">Course Description</label>
                 <i class="bi bi-info-circle-fill has-tooltip"  data-bs-placement="right" title="{{$inputFieldDescriptions['courseDescription']}}"></i>
                 <textarea maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  name = "courseDescription" class ="form-control" type="date" form="sylabusGenerator">{{isset($vancouverSyllabus) ? $vancouverSyllabus->course_description : ''}}</textarea>
-            
+
 
             `;
 
@@ -2444,8 +2444,8 @@
             <span class="requiredBySenate"></span>
             <p class="inputFieldDescription">{{$inputFieldDescriptions['courseContacts']}}</p>
             <div id="formatContacts" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-            </div>                                            
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
             <textarea style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  id="courseContacts" data-formatnoteid="formatContacts" name = "courseContacts" placeholder="E.g. Professor, Jane Doe, jane.doe@ubc.ca, +1 234 567 8900, ... &#10;Teaching Assistant, John Doe, john.doe@ubc.ca, ..."class ="form-control" type="date" form="sylabusGenerator">{{isset($vancouverSyllabus) ? $vancouverSyllabus->course_contacts : ''}}</textarea>
             `;
 
@@ -2454,8 +2454,8 @@
                 <span class="requiredBySenate"></span>
                 <p class="inputFieldDescription">{{$inputFieldDescriptions['coursePrereqs']}}</p>
                 <div id="formatPrereqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                    <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-                </div>                                            
+                    <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+                </div>
                 <textarea style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  id="coursePrereqs" data-formatnoteid="formatPrereqs"name = "coursePrereqs" placeholder="E.g. CPSC 210 or EECE 210 or CPEN 221 &#10;E.g. CPSC 121 or MATH 220"class ="form-control" type="text" form="sylabusGenerator" >{{isset($vancouverSyllabus) ? $vancouverSyllabus->course_prereqs : ''}}</textarea>
             `;
 
@@ -2464,8 +2464,8 @@
                 <span class="requiredBySenate"></span>
                 <p class="inputFieldDescription">{{$inputFieldDescriptions['courseCoreqs']}}</p>
                 <div id="formatCoreqs"class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false" >
-                    <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>                                        
-                </div>                                            
+                    <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+                </div>
                 <textarea style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  id = "courseCoreqs" data-formatnoteid="formatCoreqs"placeholder="E.g. CPSC 107 or CPSC 110 &#10;E.g. CPSC 210" name = "courseCoreqs" class ="form-control" type="text" form="sylabusGenerator">{{isset($vancouverSyllabus) ? $vancouverSyllabus->course_coreqs : ''}}</textarea>
             `;
         var courseInstructorBio = `
@@ -2475,11 +2475,11 @@
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each paragraph
                     on a new line for the best formatting
                     results.</span>
-                </div> 
+                </div>
             <textarea data-formatnoteid="formatCIB" style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  id = "courseInstructorBio" name = "courseInstructorBio" class ="form-control" form="sylabusGenerator" spellcheck="true">{{isset($vancouverSyllabus) ? $vancouverSyllabus->instructor_bio : ''}}</textarea>
-            
-            `;     
-        
+
+            `;
+
         var courseStructure = `
                 <label for="courseStructure"><h5 class="fw-bold">Course Structure</h5></label>
                 <span class="requiredBySenate"></span>
@@ -2499,7 +2499,7 @@
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry
                     on a new line for the best formatting
                     results.</span>
-                </div> 
+                </div>
                 <textarea data-formatnoteid="formatLAnal" style="height:125px" maxlength="7500" oninput="validateMaxlength()" onpaste="validateMaxlength()"  id="learningAnalytics" name = "learningAnalytics" class ="form-control" type="text" form="sylabusGenerator">{{isset($vancouverSyllabus) ? $vancouverSyllabus->learning_analytics : ''}}</textarea>
             `;
         var courseFormat = `
@@ -2524,19 +2524,19 @@
 
         var requiredBySenateLabel = `
             <span class="d-inline-block has-tooltip ml-2 mr-2" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="This section is required in your syllabus under Vancouver Senate policy V-130">
-                <button type="button" class="btn btn-danger btn-sm mb-2 disabled" style="font-size:10px;">Required by policy</button> 
+                <button type="button" class="btn btn-danger btn-sm mb-2 disabled" style="font-size:10px;">Required by policy</button>
             </span>
             `;
 
         var requiredBySenateLabelOK = `
             <span class="d-inline-block has-tooltip ml-2 mr-2" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="This section is required in your syllabus under Okanagan Senate policy">
-                <button type="button" class="btn btn-danger btn-sm mb-2 disabled" style="font-size:10px;">Required by policy</button> 
+                <button type="button" class="btn btn-danger btn-sm mb-2 disabled" style="font-size:10px;">Required by policy</button>
             </span>
             `;
         var uniPolicyVan = `
             <label for="learningMaterials"><h5 class="fw-bold">University Policies</h5></label>
             <span class="requiredBySenate"></span>
-            <p class="inputFieldDescription">{!! $inputFieldDescriptions['uniPolicy'] !!}</p> 
+            <p class="inputFieldDescription">{!! $inputFieldDescriptions['uniPolicy'] !!}</p>
             <br>
             <div class="col-12">
             <blockquote> UBC provides resources to support student learning and to maintain healthy lifestyles but recognizes that sometimes crises arise and so there are additional resources to access including those for survivors of sexual violence. UBC values respect for the person and ideas of all members of the academic community. Harassment and discrimination are not tolerated nor is suppression of academic freedom. UBC provides appropriate accommodation for students with disabilities and for religious observances. UBC values academic honesty and students are expected to acknowledge the ideas generated by others and to uphold the highest academic standards in all of their actions.
@@ -2556,7 +2556,7 @@
                     @else
                         <input class="form-check-input " id="copyright" type="checkbox" name="copyright" value="1">
                     @endif
-                    <label class="form-check-label mb-2" for="copyright">Include in Syllabus</label>   
+                    <label class="form-check-label mb-2" for="copyright">Include in Syllabus</label>
                 @endif
                 </div>
             </div>
@@ -2574,10 +2574,10 @@
                     @else
                         <input class="form-check-input " id="landAck" type="checkbox" name="landAck" value="1">
                     @endif
-                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>  
+                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>
                 @else
                     <input class="form-check-input " id="landAck" type="checkbox" name="landAck" value="1">
-                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>  
+                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>
                 @endif
                 </div>
             </div>
@@ -2595,10 +2595,10 @@
                     @else
                         <input class="form-check-input " id="landAck" type="checkbox" name="landAck" value="1">
                     @endif
-                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>  
+                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>
                 @else
                     <input class="form-check-input " id="landAck" type="checkbox" name="landAck" value="1">
-                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>  
+                    <label class="form-check-label mb-2" for="landAck">Include in Syllabus</label>
                 @endif
                 </div>
             </div>
@@ -2611,7 +2611,7 @@
                     <div id="optionalSyllabusDesc"></div>
                 @else
                     <p class="inputFieldDescription"> You may choose to add the below statements to your syllabi to clarify expectations in your course. For additional language available visit <a href="https://academicintegrity.ubc.ca/generative-ai-syllabus/">UBC's Academic Integrity website</a>.
-                        
+
                     </p>
                 @endif
             <div class="form-check m-4">
@@ -2619,7 +2619,7 @@
             </div>
             `;
             var statementUBCValues =`
-            
+
             <label for="statementUBCValues"><h5 class="fw-bold">Statement of UBC Values</h5></label><span class="requiredBySenateOK"></span>
             <br>
             <div class="col-12">
@@ -2628,7 +2628,7 @@
             `;
 
             var statementStudentSupport =`
-            
+
             <label for="statementStudentSupport"><h5 class="fw-bold">Statement regarding Resources to Support Student Success</h5></label><span class="requiredBySenateOK"></span>
             <br>
             <div class="col-12">
@@ -2637,7 +2637,7 @@
             `;
 
             var policiesAndRegulations =`
-            
+
             <label for="policiesAndRegulations"><h5 class="fw-bold">Statement on Policies and Regulations</h5></label><span class="requiredBySenateOK"></span>
             <br>
             <div class="col-12">
@@ -2648,7 +2648,7 @@
         var courseSectionOK =  `
             <label for="endTime">Course Section</label>
             <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="20" id = "courseSection" name = "courseSection" class ="form-control" type="text" placeholder="E.g. 001" value="{{ !empty($syllabus) ? $syllabus->course_section : ''}}" >`;
-        
+
         // get campus select element
         var campus = $('#campus');
         // check if its value is 'V'
@@ -2674,7 +2674,10 @@
             //$('#crStatement').html(crStatement);
             $('#landAcknowledgement').html(landAcknowledgementV);
             $('.requiredBySenate').html(requiredBySenateLabel);
-           
+
+            // hide the creative commons radio button from the Copyright Statement section
+            $('#noCopyright').css('display', 'none');
+            $('#noCopyright').next('label').css('display', 'none');
 
             // remove data specific to okanangan campus
             $('#courseFormat').empty();
@@ -2690,7 +2693,7 @@
             $('#policiesAndRegulations').empty();
             // update faculty dropdown
             setFaculties('Vancouver');
-        }   
+        }
         else
         {
             // add data specific to okanagan campus
@@ -2707,6 +2710,10 @@
             $('#statementStudentSupport').html(statementStudentSupport);
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
+
+            // show the creative commons radio button from the Copyright Statement section
+            $('#noCopyright').css('display', '');
+            $('#noCopyright').next('label').css('display', '');
 
             // remove data specific to vancouver campus
             $('#courseCredit').empty();
@@ -2750,7 +2757,7 @@
 
         placeholderFaculty = `<option value="" class="text-muted" > -- Faculty -- </option>`;
         placeholderDept = `<option value="" class="text-muted"> -- Department -- </option>`;
-        
+
         $('#faculty').append(placeholderFaculty);
         $('#department').append(placeholderDept);
 
@@ -2794,7 +2801,7 @@
 
         });
     }
-    
+
     //This method is used to make sure that the proper amount of characters are entered so it doesn't exceed the max character limits
     function validateMaxlength(e){
         //Whitespaces are counted as 1 but character wise are 2 (\n).
@@ -2802,11 +2809,11 @@
         var currentLength = event.target.value.length;
         var whiteSpace = event.target.value.split(/\n/).length;
         if((currentLength+(whiteSpace))>MAX_LENGTH)
-        { 
+        {
             //Goes to MAX_LENGTH-(whiteSpace)+1 because it starts at 1
-            event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);	        
+            event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);
         }
-    } 
+    }
 </script>
 <!-- Include script to reorder table rows-->
 <script src="{{ asset('js/drag_drop_tbl_row.js') }}"></script>
