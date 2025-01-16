@@ -23,7 +23,7 @@
 
                 <div class="card-body">
                     <div class="alert alert-primary d-flex align-items-center ml-3 mr-3" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div class="ml-2">
                             <div class="mt-2 mb-2">
                                 <li class="m-0 p-0">Add required and non-required courses to the program.</li>
@@ -38,7 +38,7 @@
                     <ul class="mr-2">
                         <li class="my-2"><b>Button - Map Course:</b> You will see this button if you are the owner or editor of the course to complete the course to program mapping.</li>
                     </ul>
-                    
+
                     <div class="row mb-2">
                         <div class="col">
                             <button type="button" class="btn btn-primary btn-md col-2 mt-2 float-right" data-toggle="modal" data-target="#createCourseModal" style="background-color:#002145;color:white;"><i class="bi bi-plus pr-2"></i>New Course</button>
@@ -51,9 +51,9 @@
                             <div class="col">
                                 @if ($programCourses->count() < 1)
                                     <div class="alert alert-warning wizard">
-                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.</div>                    
+                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.</div>
                                     </div>
-                                @else 
+                                @else
                                     <table class="table table-light table-bordered" >
                                         <tr class="table-primary">
                                             <th class="w-25">Course Title</th>
@@ -71,14 +71,14 @@
                                                     <br>
                                                     <p class="mb-0 form-text text-muted">
                                                         @if($programCourse->pivot->course_required == 1)
-                                                            Required 
+                                                            Required
                                                         @elseif($programCourse->pivot->course_required == 0)
-                                                            Not Required 
+                                                            Not Required
                                                         @endif
                                                     </p>
                                                     <p class="form-text text-muted">
-                                                        <b>Note: </b>{{$programCourse->pivot->note}}   
-                                                    </p>                                    
+                                                        <b>Note: </b>{{$programCourse->pivot->note}}
+                                                    </p>
                                                 </td>
                                             @else
                                                 <td>
@@ -86,11 +86,11 @@
                                                     <br>
                                                     <p class="form-text text-muted">
                                                         @if($programCourse->pivot->course_required == 1)
-                                                            Required 
+                                                            Required
                                                         @elseif($programCourse->pivot->course_required == 0)
-                                                            Not Required 
+                                                            Not Required
                                                         @endif
-                                                    </p>                                   
+                                                    </p>
                                                 </td>
                                             @endif
                                             <td>
@@ -152,7 +152,7 @@
                                                         @endif
                                                     @endforeach
                                                 @endif
-                                                
+
                                                 <!-- Delete Confirmation Modal -->
                                                 <div class="modal fade" id="deleteConfirmationCourse{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationCourse" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
@@ -181,7 +181,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <!-- Edit Course Required Modal -->
                                                 <div class="modal fade" id="editCourseModal{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg" role="document">
@@ -250,7 +250,7 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     <input type="hidden" class="form-input" name="course_id" value="{{$programCourse->course_id}}">
                                                                     <input type="hidden" class="form-input" name="program_id" value="{{$program->program_id}}">
                                                                     <input type="hidden" class="form-check-input" name="user_id" value="{{Auth::id()}}">
@@ -264,7 +264,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </td>                                        
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </table>
@@ -312,10 +312,10 @@
 
                                         <div class="form-group row">
                                             <label for="course_num" class="col-md-3 col-form-label text-md-right">Course Number</label>
-            
+
                                             <div class="col-md-8">
                                                 <input id="course_num" type="text" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30" class="form-control @error('course_num') is-invalid @enderror" name="course_num" autofocus>
-            
+
                                                 @error('course_num')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -348,7 +348,7 @@
                                                 <select id="course_semester" class="form-control @error('course_semester') is-invalid @enderror"
                                                     name="course_semester" required autofocus>
                                                     <option value="W1">Winter Term 1</option>
-                                                    <option value="W2">Winter Term 2</option>
+                                                    <option value="W2" selected >Winter Term 2</option>
                                                     <option value="S1">Summer Term 1</option>
                                                     <option value="S2">Summer Term 2</option>
 
@@ -369,9 +369,9 @@
                                                     <option value="2027">2027</option>
                                                     <option value="2026">2026</option>
                                                     <option value="2025">2025</option>
-                                                    <option value="2024">2024</option>
+                                                    <option value="2024" selected >2024</option>
                                                     <option value="2023">2023</option>
-                                                    <option value="2022" selected>2022</option>
+                                                    <option value="2022">2022</option>
                                                     <option value="2021">2021</option>
                                                     <option value="2020">2020</option>
                                                     <option value="2019">2019</option>
@@ -412,9 +412,9 @@
                                             <div class="col-md-3 float-right">
                                                 <select id="delivery_modality" class="form-control @error('delivery_modality') is-invalid @enderror"
                                                 name="delivery_modality" required autofocus>
-                                                    <option value="O">online</option>
-                                                    <option value="I">in-person</option>
-                                                    <option value="B">hybrid</option>
+                                                    <option value="O">Online</option>
+                                                    <option value="I">In-person</option>
+                                                    <option value="B">Hybrid</option>
                                                     <option value="M">Multi-Access</option>
 
                                                 @error('delivery_modality')
@@ -510,7 +510,7 @@
                                 </div>
                                 @if (count($userCoursesNotInProgram) < 1)
                                     <div class="alert alert-warning wizard">
-                                        <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses to assign.                    
+                                        <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses to assign.
                                     </div>
                                 @else
                                     <div class="modal-body">
@@ -543,13 +543,13 @@
                                                     <td>
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input ml-0" name="require{{$course->course_id}}" type="checkbox" id="flexSwitchCheck{{$course->course_id}}">
-                                                        </div>                                           
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 @endforeach
                                             </table>
                                         </form>
-                                    </div> 
+                                    </div>
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
@@ -590,11 +590,11 @@
     });
 </script>
 
-<style> 
+<style>
 .tooltip-inner {
     text-align: left;
     max-width: 600px;
-    width: auto; 
+    width: auto;
 }
 </style>
 @endsection
