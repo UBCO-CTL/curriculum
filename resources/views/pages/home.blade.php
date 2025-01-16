@@ -1501,8 +1501,8 @@
                                 <select id="course_semester" class="form-control @error('course_semester') is-invalid @enderror"
                                         name="course_semester" required autofocus>
                                     <option value="W1">Winter Term 1</option>
-                                    <option value="W2">Winter Term 2</option>
-                                    <option value="S1" selected >Summer Term 1</option>
+                                    <option value="W2" selected >Winter Term 2</option>
+                                    <option value="S1">Summer Term 1</option>
                                     <option value="S2">Summer Term 2</option>
 
                                     @error('course_semester')
@@ -1521,8 +1521,8 @@
                                     <option value="2028">2028</option>
                                     <option value="2027">2027</option>
                                     <option value="2026">2026</option>
-                                    <option value="2025" selected >2025</option>
-                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024" selected >2024</option>
                                     <option value="2023">2023</option>
                                     <option value="2022">2022</option>
                                     <option value="2021">2021</option>
