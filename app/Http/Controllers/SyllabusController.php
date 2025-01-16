@@ -1600,11 +1600,13 @@ class SyllabusController extends Controller
                 }
 
                 // tell template processor to include other course staff if user completed the field(s)
+
                 if ($syllabus->other_instructional_staff) {
                     $otherCourseStaffArr = explode("\n", $syllabus->other_instructional_staff);
                     $i = 0;
                     if ($ext == 'pdf') {
                         foreach ($otherCourseStaffArr as $index => $otherCourseStaff) {
+                            $templateProcessor->cloneBlock('NoOtherInstructionalStaffDesc', 0);
                             $templateProcessor->cloneBlock('NoOtherInstructionalStaff');
                             $templateProcessor->setValue('otherInstructionalStaff'.$i, $otherCourseStaff.'</w:t><w:br/><w:t>');
                             $i++;
@@ -1614,6 +1616,7 @@ class SyllabusController extends Controller
                             $templateProcessor->setValue('otherInstructionalStaff'.$i, '');
                         }
                     } else {
+                        $templateProcessor->cloneBlock('NoOtherInstructionalStaffDesc', 0);
                         $templateProcessor->cloneBlock('NoOtherInstructionalStaff');
                         $templateProcessor->setValue('otherInstructionalStaff0', str_replace("\n", '</w:t><w:br/><w:t>', $syllabus->other_instructional_staff));
                         $i++;
@@ -1623,8 +1626,11 @@ class SyllabusController extends Controller
                     }
 
                 } else {
+                    $templateProcessor->cloneBlock('NoOtherInstructionalStaffDesc');
                     $templateProcessor->cloneBlock('NoOtherInstructionalStaff', 0);
                 }
+                
+                
                 // tell template processor to include course location if user completed the field(s)
                 if ($courseLocation = $syllabus->course_location) {
                     $templateProcessor->cloneBlock('NoCourseLocation');
