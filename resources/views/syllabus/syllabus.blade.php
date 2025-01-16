@@ -2704,10 +2704,20 @@
             $('#courseDescription').html(courseDescription);
             $('#learningAnalytics').html(learningAnalytics);
             $('#uniPolicy').html(uniPolicyVan);
-            //$('#crStatement').html(crStatement);
             $('#landAcknowledgement').html(landAcknowledgementV);
             $('.requiredBySenate').html(requiredBySenateLabel);
 
+            // hide the creative commons radio button and clear the licenses section
+            $('#noCopyright').css('display', 'none');
+            $('#noCopyright').next('label').css('display', 'none');
+            $('#creativeCommonsInput').empty();
+
+            // If creative commons was selected, switch to none
+            if ($('#noCopyright').is(':checked')) {
+                $('#noneCopyright').prop('checked', true);
+                $('#copyrightEx').html('');
+                $('#creativeCommonsInput').html('');
+            }
 
             // remove data specific to okanangan campus
             $('#courseFormat').empty();
@@ -2743,6 +2753,10 @@
             $('#statementStudentSupport').html(statementStudentSupport);
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
+
+            // show the creative commons radio button from the Copyright Statement section
+            $('#noCopyright').css('display', '');
+            $('#noCopyright').next('label').css('display', '');
 
             // remove data specific to vancouver campus
             $('#courseCredit').empty();
