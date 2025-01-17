@@ -354,42 +354,42 @@
 
         <div class="col-6">
             <label for="prerequisites">Prerequisites</label><span class="requiredBySenateOK"></span>
-            <div id="formatPrereqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+            <div id="formatPrereqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden; transition:height 0.3s ease-out; height:auto; font-size:0.5rem;">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
-                <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+                <span style="font-size:0.80rem;">Place each entry on a new line for the best formatting results.</span>
             </div>
             <textarea
                 data-formatnoteid="formatPrereqs"
-                oninput="validateMaxlength()"
+                oninput="autoResize(this)"
                 onpaste="validateMaxlength()"
                 maxlength="7500"
                 id="prerequisites"
                 name="prerequisites"
                 class="form-control"
-                style="height:125px;"
-                type="text"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
                 form="sylabusGenerator"
-                placeholder="E.g. COSC 111 or COSC 123&#10;MATH 221&#10;PSYO 111"
+                placeholder="E.g. COSC 111 or COSC 123"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}</textarea>
         </div>
         <div class="col-6">
             <label for="corequisites">Corequisites</label><span class="requiredBySenateOK"></span>
-            <div id="formatCoreqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+            <div id="formatCoreqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden; transition:height 0.3s ease-out; height:auto; font-size:0.5rem;">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
-                <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+                <span style="font-size:0.80rem;">Place each entry on a new line for the best formatting results.</span>
             </div>
             <textarea
                 data-formatnoteid="formatCoreqs"
-                oninput="validateMaxlength()"
+                oninput="autoResize(this)"
                 onpaste="validateMaxlength()"
                 maxlength="7500"
                 id="corequisites"
                 name="corequisites"
                 class="form-control"
-                style="height:125px;"
-                type="text"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
                 form="sylabusGenerator"
-                placeholder="E.g. COSC 111&#10;COSC 123"
+                placeholder="E.g. COSC 111"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->corequisites : ''}}</textarea>
         </div>
 
@@ -1291,6 +1291,12 @@
     });
     var departments = <?php echo json_encode($departments); ?>;
 
+    function autoResize(textarea) {
+        validateMaxlength();
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
     $(document).ready(function() {
 
         $(function() {
@@ -1467,6 +1473,39 @@
                                  `);
 
             $('#copyrightEx').html(``);
+
+            // Initialize textareas
+            ['prerequisites', 'corequisites'].forEach(id => {
+                const textarea = document.getElementById(id);
+                if (textarea) {
+                    textarea.addEventListener('input', function() {
+                        autoResize(this);
+                    });
+
+                    // Initial resize if there's content
+                    if (textarea.value) {
+                        autoResize(textarea);
+                    }
+                }
+            });
+
+
+            // If campus is already selected (viewing existing syllabus)
+            if ($('#campus').val()) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                const coreqsTextarea = document.getElementById('corequisites');
+
+                setTimeout(() => {
+                    if (prereqsTextarea && prereqsTextarea.value) {
+                        prereqsTextarea.style.height = 'auto';
+                        prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                    }
+                    if (coreqsTextarea && coreqsTextarea.value) {
+                        coreqsTextarea.style.height = 'auto';
+                        coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                    }
+                }, 100);
+            }
 
         });
 
@@ -2799,6 +2838,23 @@
             // Show prerequisites and corequisites inputs for Okanagan
             $('#prerequisites').closest('.col-6').show();
             $('#corequisites').closest('.col-6').show();
+
+            // Force resize of textareas if they contain content
+            if (syllabus && syllabus.prerequisites) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                if (prereqsTextarea) {
+                    prereqsTextarea.style.height = 'auto';
+                    prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                }
+            }
+
+            if (syllabus && syllabus.corequisites) {
+                const coreqsTextarea = document.getElementById('corequisites');
+                if (coreqsTextarea) {
+                    coreqsTextarea.style.height = 'auto';
+                    coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                }
+            }
 
             // update faculty dropdown
             setFaculties('Okanagan');
