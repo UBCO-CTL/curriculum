@@ -353,12 +353,44 @@
         </div>
 
         <div class="col-6">
-            <label for="endTime">Prerequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="prerequisites" name="prerequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}">
+            <label for="prerequisites">Prerequisites</label><span class="requiredBySenateOK"></span>
+            <div id="formatPrereqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
+                <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
+            <textarea
+                data-formatnoteid="formatPrereqs"
+                oninput="validateMaxlength()"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="prerequisites"
+                name="prerequisites"
+                class="form-control"
+                style="height:125px;"
+                type="text"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111 or COSC 123&#10;MATH 221&#10;PSYO 111"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}</textarea>
         </div>
         <div class="col-6">
-            <label for="endTime">Corequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="corequisites" name="corequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->corequisites : ''}}">
+            <label for="corequisites">Corequisites</label><span class="requiredBySenateOK"></span>
+            <div id="formatCoreqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
+                <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
+            <textarea
+                data-formatnoteid="formatCoreqs"
+                oninput="validateMaxlength()"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="corequisites"
+                name="corequisites"
+                class="form-control"
+                style="height:125px;"
+                type="text"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111&#10;COSC 123"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->corequisites : ''}}</textarea>
         </div>
 
         <!-- Land Acknowledgement Statement -->
