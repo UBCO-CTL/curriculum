@@ -354,10 +354,6 @@
 
         <div class="col-6">
             <label for="prerequisites">Prerequisites</label><span class="requiredBySenateOK"></span>
-            <div id="formatPrereqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden; transition:height 0.3s ease-out; height:auto; font-size:0.5rem;">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
-                <span style="font-size:0.80rem;">Place each entry on a new line for the best formatting results.</span>
-            </div>
             <textarea
                 data-formatnoteid="formatPrereqs"
                 oninput="autoResize(this)"
@@ -369,15 +365,11 @@
                 style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
                 rows="1"
                 form="sylabusGenerator"
-                placeholder="E.g. COSC 111 or COSC 123"
+                placeholder="E.g. COSC 111, COSC 123"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}</textarea>
         </div>
         <div class="col-6">
             <label for="corequisites">Corequisites</label><span class="requiredBySenateOK"></span>
-            <div id="formatCoreqs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden; transition:height 0.3s ease-out; height:auto; font-size:0.5rem;">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i>
-                <span style="font-size:0.80rem;">Place each entry on a new line for the best formatting results.</span>
-            </div>
             <textarea
                 data-formatnoteid="formatCoreqs"
                 oninput="autoResize(this)"
