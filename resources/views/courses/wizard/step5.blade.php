@@ -62,17 +62,14 @@
                                         <div class="accordion" id="programAccordion{{$courseProgram->program_id}}">
                                             <div class="accordion-item mb-2">
                                                 <!-- Program accordion header -->
-                                                <h2 class="accordion-header fs-2" id="programAccordionHeader{{$courseProgram->program_id}}">
-                                                    <button class="accordion-button collapsed program white-arrow" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProgramAccordion{{$courseProgram->program_id}}" aria-expanded="false" aria-controls="collapseProgramAccordion{{$courseProgram->program_id}}">
-                                                        <span class="d-flex align-items-center">
-                                                            <b>{{$index + 1}}</b>. {{$courseProgram->program}}
-                                                            <a href="{{ route('programWizard.step3', $courseProgram->program_id) }}"
-                                                            class="btn btn-outline-primary btn-sm ms-3 program-back-btn"
-                                                            style="text-decoration: none;">
-                                                                <i class="bi bi-arrow-left"></i> Back to Program
-                                                            </a>
-                                                        </span>
+                                                <h2 class="accordion-header fs-2 d-flex align-items-center" id="programAccordionHeader{{$courseProgram->program_id}}" style="background-color: #002145;">
+                                                    <button class="accordion-button collapsed program white-arrow flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProgramAccordion{{$courseProgram->program_id}}" aria-expanded="false" aria-controls="collapseProgramAccordion{{$courseProgram->program_id}}">
+                                                        <b>{{$index + 1}}</b>. {{$courseProgram->program}}
                                                     </button>
+                                                    <a href="{{ route('programWizard.step3', $courseProgram->program_id) }}" class="btn btn-outline-primary btn-sm mx-3"
+                                                    style="text-decoration: none; z-index: 100; min-width: 135px;">
+                                                        <i class="bi bi-arrow-left"></i> Back to Program
+                                                    </a>
                                                 </h2>
                                                 <!-- Program Accordion body -->
                                                 <div id="collapseProgramAccordion{{$courseProgram->program_id}}" class="accordion-collapse collapse" aria-labelledby="programAccordionHeader{{$courseProgram->program_id}}" data-bs-parent="programAccordion{{$courseProgram->program_id}}">
@@ -389,23 +386,15 @@
             container.append(element);
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-    // Get all program back buttons
-    const backButtons = document.querySelectorAll('.program-back-btn');
-
-    backButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.location.href = this.href;
-        }, true);
-    });
-});
-
 </script>
 <style>
     h3 span{width:32%;display:inline-block;}
     h3 span:last-child { text-align:right }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        outline: none;
+    }
 </style>
 
 
