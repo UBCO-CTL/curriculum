@@ -17,7 +17,7 @@
                             @include('layouts.guide')
                         </div>
                     </h3>
-                    
+
                     <!-- Add CLO Modal: Bloom’s Taxonomy of Learning Modal -->
                     <div class="modal fade" data-backdrop="static" data-keyboard="false" id="addLearningOutcomeModal" tabindex="-1" role="dialog"
                         aria-labelledby="addLearningOutcomeModalLabel" aria-hidden="true">
@@ -37,7 +37,7 @@
                                                         <b>Course Learning Outcome (CLO)</b>
                                                         <div><small class="form-text text-muted" style="font-size:12px"><a href="https://tips.uark.edu/using-blooms-taxonomy/" target="_blank" rel="noopener noreferrer"><b><i class="bi bi-box-arrow-up-right"></i> Click here</b></a> for tips to write effective CLOs.</small></div>
                                                     </label>
-                
+
                                                     <textarea id="l_outcome" class="form-control" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30000" name="l_outcome" required autofocus placeholder="E.g. Develop..." style="resize:none"></textarea>
                                                     <div class="invalid-tooltip">
                                                         You must input a course learning outcome or competency.
@@ -48,7 +48,7 @@
                                                         <b>Short Phrase</b>
                                                         <div><small class="form-text text-muted" style="font-size:12px"><b><i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="left" title="Having a short phrase helps with visualizing your course summary at the end of the mapping process"></i> 50 character limit.</b></small></div>
                                                     </label>
-                                                    <textarea id="title" class="form-control" name="title" autofocus placeholder="E.g Experimental Design..." maxlength="50" style="resize:none"></textarea> 
+                                                    <textarea id="title" class="form-control" name="title" autofocus placeholder="E.g Experimental Design..." maxlength="50" style="resize:none"></textarea>
                                                 </div>
                                                 <div class="col-2">
                                                     <button id="addCLOBtn" type="submit" class="btn btn-primary col mb-1">Add</button>
@@ -60,7 +60,7 @@
                                             <div class="col-8">
                                                 <hr>
                                             </div>
-                                        </div>                
+                                        </div>
 
                                         <div class="row m-1">
                                             <table id="addCLOTbl" class="table table-light table-borderless">
@@ -75,7 +75,7 @@
                                                     @foreach($l_outcomes as $index => $l_outcome)
                                                         <tr>
                                                             <td>
-                                                                <textarea name="current_l_outcome[{{$l_outcome->l_outcome_id}}]" value="{{$l_outcome->l_outcome}}" id="l_outcome{{$l_outcome->l_outcome_id}}" 
+                                                                <textarea name="current_l_outcome[{{$l_outcome->l_outcome_id}}]" value="{{$l_outcome->l_outcome}}" id="l_outcome{{$l_outcome->l_outcome_id}}"
                                                                 class="form-control @error('l_outcome') is-invalid @enderror" form="saveCLOChanges" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30000" required>{{$l_outcome->l_outcome}}</textarea>
                                                             </td>
                                                             <td>
@@ -96,6 +96,7 @@
                                     @csrf
                                         <div class="modal-footer">
                                             <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveCLOChanges">
+                                            <button id="deleteAllCLOs" type="button" class="btn btn-danger col-3">Delete All</button>
                                             <button id="cancel" type="button" class="btn btn-secondary col-3" data-dismiss="modal">Cancel</button>
                                             <button type="submit" class="btn btn-success col-3">Save Changes</button>
                                         </div>
@@ -110,16 +111,16 @@
 
                 <div class="card-body">
                     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div>
                             <a href="https://ctl.ok.ubc.ca/teaching-development/classroom-practices/learning-outcomes/" target="_blank" rel="noopener noreferrer" class="alert-link">
                                 <i class="bi bi-box-arrow-up-right"></i> Course Learning Outcomes (CLOs)
-                            </a> 
-                            or 
+                            </a>
+                            or
                             <a href="https://sph.uth.edu/content/uploads/2012/01/Competencies-and-Learning-Objectives.pdf" target="_blank" rel="noopener noreferrer" class="alert-link">
                                 <i class="bi bi-box-arrow-up-right"></i> Competencies
-                            </a> 
-                            are the knowledge, skills and attributes that students are expected to attain by the end of a course. Add, edit and delete CLOs below. 
+                            </a>
+                            are the knowledge, skills and attributes that students are expected to attain by the end of a course. Add, edit and delete CLOs below.
                             You may use an excel spreadsheet to import multiple CLOs (use row 1 for headers and begin list of CLOs on row 2). Follow the template provided below to save them on your computer first, and then upload them to this page.
 
                         </div>
@@ -149,7 +150,7 @@
                     <div id="clo">
                         @if(count($l_outcomes)<1)
                             <div class="alert alert-warning wizard">
-                                <i class="bi bi-exclamation-circle-fill"></i>There are no course learning outcomes set for this course.                    
+                                <i class="bi bi-exclamation-circle-fill"></i>There are no course learning outcomes set for this course.
                             </div>
                         @else
                             <form action="{{route('courses.loReorder', $course->course_id)}}" method="POST">
@@ -163,7 +164,7 @@
                                     </tr>
                                         @foreach($l_outcomes as $index => $l_outcome)
                                         <tr>
-                                            <td class="text-center fw-bold" style="width:5%" >↕</td>                                                
+                                            <td class="text-center fw-bold" style="width:5%" >↕</td>
                                             <td>
                                                 <b>{{$l_outcome->clo_shortphrase}}</b><br>
                                                 {{$l_outcome->l_outcome}}
@@ -213,7 +214,7 @@
                                 </div>
                             </div>
 
-                        @endif      
+                        @endif
                     </div>
                 </div>
 
@@ -225,18 +226,24 @@
                             <button class="btn btn-sm btn-primary col-3 float-right">Student Assessment Methods <i class="bi bi-arrow-right mr-2"></i></button>
                         </a>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script type="application/javascript">
-    
+
     $(document).ready(function () {
         // Enables functionality of tool tips
         $('[data-bs-toggle="tooltip"]').tooltip({html:true});
 
+        // To Delete All CLOs
+        $('#deleteAllCLOs').click(function() {
+            if (confirm('Are you sure you want to delete all CLOs? This cannot be undone.')) {
+                $('#addCLOTbl tbody').empty();
+            }
+        });
 
         $('#addCLOForm').submit(function (event) {
             // prevent default form submission handling
@@ -245,14 +252,14 @@
             // check if input fields contain data
             if ($('#l_outcome').val().length != 0) {
                 addCLO();
-                // reset form 
+                // reset form
                 $(this).trigger('reset');
                 $(this).removeClass('was-validated');
             } else {
                 // mark form as validated
                 $(this).addClass('was-validated');
             }
-            // readjust modal's position 
+            // readjust modal's position
             document.querySelector('#addLearningOutcomeModal').handleUpdate();
         });
 
@@ -261,7 +268,7 @@
                 @foreach($l_outcomes as $index => $l_outcome)
                     <tr>
                         <td>
-                            <textarea name="current_l_outcome[{{$l_outcome->l_outcome_id}}]" value="{{$l_outcome->l_outcome}}" id="l_outcome{{$l_outcome->l_outcome_id}}" 
+                            <textarea name="current_l_outcome[{{$l_outcome->l_outcome_id}}]" value="{{$l_outcome->l_outcome}}" id="l_outcome{{$l_outcome->l_outcome_id}}"
                             class="form-control @error('l_outcome') is-invalid @enderror" form="saveCLOChanges" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30000" required>{{$l_outcome->l_outcome}}</textarea>
                         </td>
                         <td>
@@ -272,7 +279,7 @@
                             <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteCLO(this)"></i>
                         </td>
                     </tr>
-                @endforeach 
+                @endforeach
             `);
         });
     });
@@ -294,7 +301,7 @@
                 <td class="text-center">
                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteCLO(this)"></i>
                 </td>
-            </tr>        
+            </tr>
         `);
     }
 </script>
