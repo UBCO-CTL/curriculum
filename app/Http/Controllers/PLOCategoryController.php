@@ -92,7 +92,6 @@ class PLOCategoryController extends Controller
             $program->last_modified_user = $user->name;
             $program->save();
             $request->session()->flash('success', 'Your PLO categories were updated successfully!');
-
         } catch (Throwable $exception) {
             $request->session()->flash('error', 'There was an error updating your PLO Categories');
         } finally {
@@ -182,5 +181,27 @@ class PLOCategoryController extends Controller
         }
 
         return redirect()->route('programWizard.step1', $request->input('program_id'));
+    }
+
+    public function destroyAll(Request $request, $programId): RedirectResponse
+    {
+        $program = Program::find($programId);
+
+        try {
+            // Delete all categories for this program
+            PLOCategory::where('program_id', $programId)->delete();
+
+            // Update program's last modified user
+            $user = User::find(Auth::id());
+            $program->last_modified_user = $user->name;
+            $program->touch();
+            $program->save();
+
+            $request->session()->flash('success', 'All PLO categories have been deleted');
+        } catch (Throwable $exception) {
+            $request->session()->flash('error', 'There was an error deleting the PLO categories');
+        }
+
+        return redirect()->route('programWizard.step1', $programId);
     }
 }
