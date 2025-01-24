@@ -137,6 +137,7 @@ Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->n
 Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])->name('program.outcomes.import');
 Route::delete('/plo/{program}/delete', [ProgramLearningOutcomeController::class, 'destroy'])->name('plo.destroy');
 Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('plo.update');
+Route::delete('/program/{program}/plos/deleteAll', [ProgramLearningOutcomeController::class, 'destroyAll'])->name('program.plo.destroyAll');
 
 Route::resource('/la', LearningActivityController::class);
 Route::post('/la/store', [LearningActivityController::class, 'store'])->name('la.store');
@@ -163,6 +164,7 @@ Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'u
 Route::resource('/ploCategory', PLOCategoryController::class);
 Route::post('/ploCategory/store', [PLOCategoryController::class, 'store'])->name('program.category.store');
 Route::delete('/ploCategory/{program}/delete', [PLOCategoryController::class, 'destroy'])->name('program.category.destroy');
+Route::delete('/program/{program}/categories/deleteAll', [PLOCategoryController::class, 'destroyAll'])->name('program.category.destroyAll');
 Route::post('/ploCategory/{program}/update', [PLOCategoryController::class, 'update'])->name('program.category.update');
 
 Route::resource('/programUser', ProgramUserController::class);
