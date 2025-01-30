@@ -335,8 +335,12 @@
                         </div>
                     </div>
 
+                    <div class="mx-4 my-5">
+                        <hr class="border-1 border-secondary border-dashed opacity-10">
+                    </div>
+
                     <!-- Program Learning Outcomes -->
-                    <div class="card m-3">
+                    <div class="card m-3 mt-5">
                         <h5 class="card-header wizard text-start">
                             Program Learning Outcomes (PLOs)
                             <div class="float-right">
