@@ -131,7 +131,7 @@
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="checkPLOsModalLabel">Warning</h5>
+                                                                        <h5 class="modal-title" id="checkPLOsModalLabel">Caution</h5>
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>
@@ -145,7 +145,7 @@
                                                                             No Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
                                                                         @endif
                                                                         <br><br>
-                                                                        Would you still like to continue to "{{$programCourse->course_title}}"?
+                                                                        Would you still like to continue to <b>{{$programCourse->course_title}}</b>?
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -181,7 +181,7 @@
                                                                 <div class="modal-dialog" role="document">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
-                                                                            <h5 class="modal-title" id="checkPLOsModalLabel">Warning</h5>
+                                                                            <h5 class="modal-title" id="checkPLOsModalLabel">Caution</h5>
                                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                                 <span aria-hidden="true">&times;</span>
                                                                             </button>
@@ -195,7 +195,7 @@
                                                                                 No Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
                                                                             @endif
                                                                             <br><br>
-                                                                            Would you still like to continue to "{{$programCourse->course_title}}"?
+                                                                            Would you still like to continue to <b>{{$programCourse->course_title}}</b>?
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
