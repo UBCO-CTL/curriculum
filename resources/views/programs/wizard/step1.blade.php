@@ -226,9 +226,6 @@
                         <h5 class="card-header wizard text-start">
                             Categories (Can be used to group PLOs)
                             <div class="float-right">
-                                <button type="button" class="btn btn-danger btn-sm mr-2" style="width:180px" data-bs-toggle="modal" data-bs-target="#deleteAllCategoriesModal">
-                                    Delete All Categories
-                                </button>
                                 <button type="button" class="btn bg-primary text-white btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#addPLOCategoryModal">
                                     <i class="bi bi-plus pr-2"></i>PLO Category
                                 </button>
@@ -331,6 +328,11 @@
                                 </table>
                             @endif
                         </div>
+                        <div class="card-footer text-end">
+                            <button type="button" class="btn btn-danger btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#deleteAllCategoriesModal">
+                                Delete All Categories
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Program Learning Outcomes -->
@@ -338,9 +340,6 @@
                         <h5 class="card-header wizard text-start">
                             Program Learning Outcomes (PLOs)
                             <div class="float-right">
-                                <button type="button" class="btn btn-danger btn-sm mr-2" style="width:180px" data-bs-toggle="modal" data-bs-target="#deleteAllPLOsModal">
-                                    Delete All PLOs
-                                </button>
                                 <button type="button" class="btn bg-primary text-white btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#addPLOModal">
                                     <i class="bi bi-plus pr-2"></i>PLO
                                 </button>
@@ -599,6 +598,11 @@
                                     </tbody>
                                 </table>
                             @endif
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="button" class="btn btn-danger btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#deleteAllPLOsModal">
+                                Delete All PLOs
+                            </button>
                         </div>
                     </div>
                     <!-- End Program Learning Outcomes -->
