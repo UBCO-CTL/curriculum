@@ -216,6 +216,7 @@
                                                                 <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Map Course</a>
                                                             @endif
                                                         @endif
+
                                                     @endif
                                                 @endforeach
 
@@ -414,7 +415,7 @@
                                                 <select id="course_semester" class="form-control @error('course_semester') is-invalid @enderror"
                                                     name="course_semester" required autofocus>
                                                     <option value="W1">Winter Term 1</option>
-                                                    <option value="W2">Winter Term 2</option>
+                                                    <option value="W2" selected >Winter Term 2</option>
                                                     <option value="S1">Summer Term 1</option>
                                                     <option value="S2">Summer Term 2</option>
 
@@ -435,9 +436,9 @@
                                                     <option value="2027">2027</option>
                                                     <option value="2026">2026</option>
                                                     <option value="2025">2025</option>
-                                                    <option value="2024">2024</option>
+                                                    <option value="2024" selected >2024</option>
                                                     <option value="2023">2023</option>
-                                                    <option value="2022" selected>2022</option>
+                                                    <option value="2022">2022</option>
                                                     <option value="2021">2021</option>
                                                     <option value="2020">2020</option>
                                                     <option value="2019">2019</option>
@@ -478,9 +479,9 @@
                                             <div class="col-md-3 float-right">
                                                 <select id="delivery_modality" class="form-control @error('delivery_modality') is-invalid @enderror"
                                                 name="delivery_modality" required autofocus>
-                                                    <option value="O">online</option>
-                                                    <option value="I">in-person</option>
-                                                    <option value="B">hybrid</option>
+                                                    <option value="O">Online</option>
+                                                    <option value="I">In-person</option>
+                                                    <option value="B">Hybrid</option>
                                                     <option value="M">Multi-Access</option>
 
                                                 @error('delivery_modality')

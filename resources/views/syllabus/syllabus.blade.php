@@ -353,12 +353,36 @@
         </div>
 
         <div class="col-6">
-            <label for="endTime">Prerequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="prerequisites" name="prerequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}">
+            <label for="prerequisites">Prerequisites</label><span class="requiredBySenateOK"></span>
+            <textarea
+                data-formatnoteid="formatPrereqs"
+                oninput="autoResize(this)"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="prerequisites"
+                name="prerequisites"
+                class="form-control"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111, COSC 123"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}</textarea>
         </div>
         <div class="col-6">
-            <label for="endTime">Corequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="corequisites" name="corequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->corequisites : ''}}">
+            <label for="corequisites">Corequisites</label><span class="requiredBySenateOK"></span>
+            <textarea
+                data-formatnoteid="formatCoreqs"
+                oninput="autoResize(this)"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="corequisites"
+                name="corequisites"
+                class="form-control"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->corequisites : ''}}</textarea>
         </div>
 
         <!-- Land Acknowledgement Statement -->
@@ -1259,6 +1283,12 @@
     });
     var departments = <?php echo json_encode($departments); ?>;
 
+    function autoResize(textarea) {
+        validateMaxlength();
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
     $(document).ready(function() {
 
         $(function() {
@@ -1435,6 +1465,39 @@
                                  `);
 
             $('#copyrightEx').html(``);
+
+            // Initialize textareas
+            ['prerequisites', 'corequisites'].forEach(id => {
+                const textarea = document.getElementById(id);
+                if (textarea) {
+                    textarea.addEventListener('input', function() {
+                        autoResize(this);
+                    });
+
+                    // Initial resize if there's content
+                    if (textarea.value) {
+                        autoResize(textarea);
+                    }
+                }
+            });
+
+
+            // If campus is already selected (viewing existing syllabus)
+            if ($('#campus').val()) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                const coreqsTextarea = document.getElementById('corequisites');
+
+                setTimeout(() => {
+                    if (prereqsTextarea && prereqsTextarea.value) {
+                        prereqsTextarea.style.height = 'auto';
+                        prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                    }
+                    if (coreqsTextarea && coreqsTextarea.value) {
+                        coreqsTextarea.style.height = 'auto';
+                        coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                    }
+                }, 100);
+            }
 
         });
 
@@ -2704,10 +2767,20 @@
             $('#courseDescription').html(courseDescription);
             $('#learningAnalytics').html(learningAnalytics);
             $('#uniPolicy').html(uniPolicyVan);
-            //$('#crStatement').html(crStatement);
             $('#landAcknowledgement').html(landAcknowledgementV);
             $('.requiredBySenate').html(requiredBySenateLabel);
 
+            // hide the creative commons radio button and clear the licenses section
+            $('#noCopyright').css('display', 'none');
+            $('#noCopyright').next('label').css('display', 'none');
+            $('#creativeCommonsInput').empty();
+
+            // If creative commons was selected, switch to none
+            if ($('#noCopyright').is(':checked')) {
+                $('#noneCopyright').prop('checked', true);
+                $('#copyrightEx').html('');
+                $('#creativeCommonsInput').html('');
+            }
 
             // remove data specific to okanangan campus
             $('#courseFormat').empty();
@@ -2744,6 +2817,10 @@
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
 
+            // show the creative commons radio button from the Copyright Statement section
+            $('#noCopyright').css('display', '');
+            $('#noCopyright').next('label').css('display', '');
+
             // remove data specific to vancouver campus
             $('#courseCredit').empty();
             $('#officeLocation').empty();
@@ -2767,6 +2844,23 @@
             // Show prerequisites and corequisites inputs for Okanagan
             $('#prerequisites').closest('.col-6').show();
             $('#corequisites').closest('.col-6').show();
+
+            // Force resize of textareas if they contain content
+            if (syllabus && syllabus.prerequisites) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                if (prereqsTextarea) {
+                    prereqsTextarea.style.height = 'auto';
+                    prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                }
+            }
+
+            if (syllabus && syllabus.corequisites) {
+                const coreqsTextarea = document.getElementById('corequisites');
+                if (coreqsTextarea) {
+                    coreqsTextarea.style.height = 'auto';
+                    coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                }
+            }
 
             // update faculty dropdown
             setFaculties('Okanagan');
