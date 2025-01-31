@@ -119,39 +119,106 @@
                                                     Edit
                                                 </button>
 
-                                                @if($actualTotalOutcomes[$programCourse->course_id] != $expectedTotalOutcomes[$programCourse->course_id])
-                                                    <!-- If the User has been notified previously -->
-                                                    @if($programCourse->pivot->map_status == 1)
-                                                        <button type="button" class="btn btn-success btn-sm ml-2 float-right" disabled>
-                                                            <i class="bi bi-check2-circle"></i> Notified
+                                                @if($programCourse->owners[0]->id == $user->id)
+                                                    <!-- Allow owner to be redirected to the course to map it -->
+                                                    @if ($program->programLearningOutcomes->count() < 1 || $program->mappingScaleLevels->count() < 1)
+                                                        <button type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" data-toggle="modal" data-target="#checkPLOsModal{{$programCourse->course_id}}">
+                                                            Map Course
                                                         </button>
-                                                    @elseif($programCourse->owners[0]->id == $user->id)
-                                                        <!-- Allow owner to be redirected to the course to map it -->
+
+                                                        <!-- Warning Modal for missing PLOs or Mapping Scales -->
+                                                        <div class="modal fade" id="checkPLOsModal{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="checkPLOsModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="checkPLOsModalLabel">Caution</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @if ($program->programLearningOutcomes->count() < 1 && $program->mappingScaleLevels->count() < 1)
+                                                                            No Program Learning Outcomes and Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                        @elseif ($program->programLearningOutcomes->count() < 1)
+                                                                            No Program Learning Outcomes have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                        @elseif ($program->mappingScaleLevels->count() < 1)
+                                                                            No Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                        @endif
+                                                                        <br><br>
+                                                                        Would you still like to continue to <b>{{$programCourse->course_title}}</b>?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                        @if ($programCourse->learningOutcomes->count() > 0)
+                                                                            <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-primary">Continue</a>
+                                                                        @else
+                                                                            <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-primary">Continue</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <!-- Direct link if PLOs and Mapping Scales exist -->
                                                         @if ($programCourse->learningOutcomes->count() > 0)
-                                                            <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step5', $programCourse->course_id) }}">
-                                                                Map Course
-                                                            </a>
+                                                            <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Map Course</a>
                                                         @else
-                                                            <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step1', $programCourse->course_id) }}">
-                                                                Map Course
-                                                            </a>
+                                                            <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Map Course</a>
                                                         @endif
                                                     @endif
-                                                    @foreach($programCourse->editors as $editor)
-                                                        @if($editor->id == $user->id && $programCourse->pivot->map_status != 1)
-                                                            <!-- Show Only If the User is not the Owner and if they haven't previously notified the instructor -->
+                                                @endif
+
+                                                @foreach($programCourse->editors as $editor)
+                                                    @if($editor->id == $user->id)
+                                                        <!-- Show for editors -->
+                                                        @if ($program->programLearningOutcomes->count() < 1 || $program->mappingScaleLevels->count() < 1)
+                                                            <button type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" data-toggle="modal" data-target="#checkPLOsModal{{$programCourse->course_id}}_editor">
+                                                                Map Course
+                                                            </button>
+
+                                                            <!-- Warning Modal for missing PLOs or Mapping Scales -->
+                                                            <div class="modal fade" id="checkPLOsModal{{$programCourse->course_id}}_editor" tabindex="-1" role="dialog" aria-labelledby="checkPLOsModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="checkPLOsModalLabel">Caution</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            @if ($program->programLearningOutcomes->count() < 1 && $program->mappingScaleLevels->count() < 1)
+                                                                                No Program Learning Outcomes and Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                            @elseif ($program->programLearningOutcomes->count() < 1)
+                                                                                No Program Learning Outcomes have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                            @elseif ($program->mappingScaleLevels->count() < 1)
+                                                                                No Mapping Scales have been created for this program. You will not be able to map your Course Learning Outcomes until this is completed.
+                                                                            @endif
+                                                                            <br><br>
+                                                                            Would you still like to continue to <b>{{$programCourse->course_title}}</b>?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                            @if ($programCourse->learningOutcomes->count() > 0)
+                                                                                <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-primary">Continue</a>
+                                                                            @else
+                                                                                <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-primary">Continue</a>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <!-- Direct link if PLOs and Mapping Scales exist -->
                                                             @if ($programCourse->learningOutcomes->count() > 0)
-                                                                <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step5', $programCourse->course_id) }}">
-                                                                    Map Course
-                                                                </a>
+                                                                <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Map Course</a>
                                                             @else
-                                                                <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step1', $programCourse->course_id) }}">
-                                                                    Map Course
-                                                                </a>
+                                                                <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Map Course</a>
                                                             @endif
                                                         @endif
-                                                    @endforeach
-                                                @endif
+
+                                                    @endif
+                                                @endforeach
 
                                                 <!-- Delete Confirmation Modal -->
                                                 <div class="modal fade" id="deleteConfirmationCourse{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationCourse" aria-hidden="true">
