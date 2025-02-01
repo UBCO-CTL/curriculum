@@ -179,6 +179,10 @@
 </div>
 <!-- End of Add PLO Modal -->
 
+<!-- Add these lines in the header section -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{{ asset('js/plo_reorder.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/plo_reorder.css') }}">
 
 <div>
     <div class="row justify-content-center">
@@ -356,251 +360,95 @@
                                     <i class="bi bi-exclamation-circle-fill"></i>There are no program learning outcomes for this program.
                                 </div>
                             @else
-                                <table class="table table-light table-bordered table" style="width: 100%; margin: auto; table-layout:auto;">
-                                    <tbody>
-                                        <?php $count = 0 ?>
-                                        <!--Categories for PLOs -->
-                                        @foreach ($ploCategories as $plo)
-                                            @if ($plo->plo_category != NULL)
-                                                @if ($plo->plos->count() > 0)
-                                                    <tr class="mt-5">
-                                                        <th class="text-left" colspan="3" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
-                                                    </tr>
-                                                    <tr class="table-primary">
-                                                        <th class="text-left" colspan="2">Program Learning Outcome</th>
-                                                        <th class="text-center w-25" colspan="1">Actions</th>
-                                                    </tr>
-                                                @else
-                                                    <tr class="mt-5">
-                                                        <th class="text-left" colspan="3" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
-                                                    </tr>
-                                                    <tr class="alert alert-warning wizard">
-                                                        <th colspan="3" style="background-color: #fff3cd;"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no program learning outcomes set for this PLO category. </th>
-                                                    </tr>
-                                                @endif
-                                            @endif
-                                            <!-- Categorized PLOs -->
-                                            @foreach($ploProgramCategories as $index => $ploCat)
-                                                @if ($plo->plo_category_id == $ploCat->plo_category_id)
-                                                    <tr data-plo-id="{{$ploCat->pl_outcome_id}}">
-                                                        <td class="text-center" style="width: 10%;">{{$defaultShortFormsIndex[$ploCat->pl_outcome_id]}}</td>
-                                                        <td>
-                                                            <span style="font-weight: bold;">{{$ploCat->plo_shortphrase}}</span><br>
-                                                            {{$ploCat->pl_outcome}}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#editPLO{{$ploCat->pl_outcome_id}}">
-                                                                Edit
-                                                            </button>
-                                                            <button style="width:60px;" type="button" class="btn btn-danger btn-sm btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deletePLO{{$ploCat->pl_outcome_id}}">
-                                                                Delete
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-
-                                                <!-- Delete PLO Confirmation Model -->
-                                                <div class="modal fade" id="deletePLO{{$ploCat->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="deletePLO{{$ploCat->pl_outcome_id}}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Delete Confirmation</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-
-                                                            <div class="modal-body">
-                                                                @if ($ploCat->plo_shortphrase)
-                                                                    Are you sure you want to delete program learning outcome: {{$ploCat->plo_shortphrase}}?
-                                                                @else
-                                                                    Are you sure you want to delete this program learning outcome?
+                                <form action="{{route('program.plo.reorder', $program->program_id)}}" method="POST">
+                                    @csrf
+                                    <table class="table table-light table-bordered table" style="width: 100%; margin: auto; table-layout:auto;">
+                                        <tbody>
+                                            <?php $count = 0 ?>
+                                            <!--Categories for PLOs -->
+                                            @foreach ($ploCategories as $plo)
+                                                @if ($plo->plo_category != NULL)
+                                                    @if ($plo->plos->count() > 0)
+                                                        <tr class="mt-5">
+                                                            <th class="text-left" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
+                                                        </tr>
+                                                        <tr class="table-primary">
+                                                            <th class="text-center" style="width: 5%">#</th>
+                                                            <th class="text-left" colspan="2">Program Learning Outcome</th>
+                                                            <th class="text-center w-25" colspan="1">Actions</th>
+                                                        </tr>
+                                                        <tbody class="plo-category-section" data-category-id="{{$plo->plo_category_id}}">
+                                                            @foreach($ploProgramCategories as $index => $ploCat)
+                                                                @if ($plo->plo_category_id == $ploCat->plo_category_id)
+                                                                    <tr data-plo-id="{{$ploCat->pl_outcome_id}}">
+                                                                        <td class="text-center fw-bold drag-handle">↕</td>
+                                                                        <td class="text-center" style="width: 10%;">{{$defaultShortFormsIndex[$ploCat->pl_outcome_id]}}</td>
+                                                                        <td>
+                                                                            <span style="font-weight: bold;">{{$ploCat->plo_shortphrase}}</span><br>
+                                                                            {{$ploCat->pl_outcome}}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#editPLO{{$ploCat->pl_outcome_id}}">
+                                                                                Edit
+                                                                            </button>
+                                                                            <button style="width:60px;" type="button" class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deletePLO{{$ploCat->pl_outcome_id}}">
+                                                                                Delete
+                                                                            </button>
+                                                                        </td>
+                                                                        <input type="hidden" name="plos_pos[]" value="{{$ploCat->pl_outcome_id}}">
+                                                                    </tr>
                                                                 @endif
-                                                            </div>
-
-                                                            <form action="{{route('plo.destroy', $ploCat->pl_outcome_id)}}" method="POST">
-                                                                @csrf
-                                                                {{method_field('DELETE')}}
-                                                                <input type="hidden" class="form-check-input " name="program_id" value={{$program->program_id}}>
-
-                                                                <div class="modal-footer">
-                                                                    <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                                </div>
-
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- End of Delete PLO Confirmation Modal -->
-
-                                                <!-- Edit PLO Modal -->
-                                                <div class="modal fade" data-bs-keyboard="false" id="editPLO{{$ploCat->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="editPLO{{$ploCat->pl_outcome_id}}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="editPLOModalLabel">Edit Program Learning Outcome (PLO)</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-
-                                                            <form action="{{route('plo.update', $ploCat->pl_outcome_id)}}" method="POST">
-                                                                @csrf
-                                                                {{method_field('POST')}}
-                                                                <div class="modal-body">
-                                                                    <div class="form-floating mb-3">
-                                                                        <textarea id="editPLOinput{{$ploCat->pl_outcome_id}}" name="plo" class="form-control" placeholder="E.g. Develop..."  style="height: 100px" required>{{$ploCat->pl_outcome}}</textarea>
-                                                                        <label for="editPLOinput{{$ploCat->pl_outcome_id}}"><span class="requiredField">* </span>Program Learning Outcome</label>
-                                                                    </div>
-
-                                                                    <div class="form-floating mb-3">
-                                                                        <input type="text" class="form-control" id="editPLOShortphraseInput{{$ploCat->pl_outcome_id}}" placeholder="E.g. Experimental Design" value="{{$ploCat->plo_shortphrase}}" name="title" maxlength="50">
-                                                                        <label for="editPLOShortphraseInput{{$ploCat->pl_outcome_id}}">Short Phrase</label>
-                                                                        <small class="ml-2 form-text text-muted" style="font-size:12px"><i class="bi bi-exclamation-circle-fill text-warning mr-1" title=""></i> Having a short phrase helps with visualizing your program overview at the end of the mapping process (50 character limit)</small>
-                                                                    </div>
-                                                                    <div class="form-floating mb-3">
-                                                                        <select class="form-select" name="category" id="editPLOCatSelect{{$ploCat->pl_outcome_id}}" style="font-size:14px">
-                                                                            @if ($ploCat)
-                                                                                <option value="{{$ploCat->plo_category_id}}" selected>{{$ploCat->plo_category}}</option>
-                                                                                @foreach($ploCategories as $ploCategory)
-                                                                                    @if ($ploCategory->plo_category_id != $ploCat->plo_category_id)
-                                                                                        <option value="{{$ploCategory->plo_category_id}}">{{$ploCategory->plo_category}}</option>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                                <option value="">None</option>
-                                                                            @else
-                                                                                <option value="" selected>None</option>
-                                                                                @foreach ($ploCategories as $ploCategory)
-                                                                                    <option value="{{$ploCategory->plo_category_id}}">{{$ploCategory->plo_category}}</option>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </select>
-                                                                        <label for="editPLOCatSelect{{$ploCat->pl_outcome_id}}"><span class="requiredField">* </span>PLO Category</label>
-                                                                    </div>
-
-                                                                    <input type="hidden" class="form-check-input" name="program_id" value={{$program->program_id}}>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- End of Edit PLO Modal -->
+                                                            @endforeach
+                                                        </tbody>
+                                                    @else
+                                                        <tr class="mt-5">
+                                                            <th class="text-left" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
+                                                        </tr>
+                                                        <tr class="alert alert-warning wizard">
+                                                            <th colspan="4" style="background-color: #fff3cd;"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no program learning outcomes set for this PLO category. </th>
+                                                        </tr>
+                                                    @endif
+                                                @endif
                                             @endforeach
-                                            <tr>
-                                                <th  colspan="3" class="" style="border-color: #FFF; background-color:#FFF;"></th>
-                                            </tr>
-                                        @endforeach
-                                        <!--UnCategorized PLOs -->
-                                        @if($hasUncategorized)
-                                            <tr>
-                                                <th class="text-left" colspan="3" style="background-color: #ebebeb;">Uncategorized PLOs</th>
-                                            </tr>
-                                            <tr class="table-primary">
-                                                <th class="text-left" colspan="2">Program Learning Outcome</th>
-                                                <th class="text-center" colspan="1">Actions</th>
-                                            </tr>
-                                        @endif
-                                        @foreach($unCategorizedPLOS as $unCatIndex => $unCatplo)
-                                            <tr data-plo-id="{{$unCatplo->pl_outcome_id}}">
-                                                <td class="text-center" style="width: 10%;">{{$defaultShortFormsIndex[$unCatplo->pl_outcome_id]}}</td>
-                                                <td>
-                                                    <span style="font-weight: bold;">{{$unCatplo->plo_shortphrase}}</span><br>
-                                                    {{$unCatplo->pl_outcome}}
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#editPLOunCat{{$unCatplo->pl_outcome_id}}">
-                                                        Edit
-                                                    </button>
-                                                    <button style="width:60px;" type="button" class="btn btn-danger btn-sm btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deletePLO{{$unCatplo->pl_outcome_id}}">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <!-- Delete PLO Confirmation Model -->
-                                            <div class="modal fade" id="deletePLO{{$unCatplo->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="deletePLO{{$unCatplo->pl_outcome_id}}" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Delete Confirmation</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            @if ($unCatplo->plo_shortphrase)
-                                                                Are you sure you want to delete program learning outcome: {{$unCatplo->plo_shortphrase}}?
-                                                            @else
-                                                                Are you sure you want to delete this program learning outcome?
-                                                            @endif
-                                                        </div>
-                                                        <form action="{{route('plo.destroy', $unCatplo->pl_outcome_id)}}" method="POST">
-                                                            @csrf
-                                                            {{method_field('DELETE')}}
-                                                            <input type="hidden" class="form-check-input " name="program_id" value={{$program->program_id}}>
-                                                            <div class="modal-footer">
-                                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                                <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- End of Delete PLO Confirmation Modal -->
 
-                                            <div class="modal fade" id="editPLOunCat{{$unCatplo->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="editPLOunCat{{$unCatplo->pl_outcome_id}}" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="editPLOModalLabel">Edit Program Learning Outcome (PLO)</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-
-                                                        <form action="{{route('plo.update', $unCatplo->pl_outcome_id)}}" method="POST">
-                                                            @csrf
-                                                            {{method_field('POST')}}
-                                                            <div class="modal-body">
-                                                                <div class="form-floating mb-3">
-                                                                    <textarea id="editPLOinput{{$unCatplo->pl_outcome_id}}" name="plo" class="form-control" placeholder="E.g. Develop..."  style="height: 100px" required>{{$unCatplo->pl_outcome}}</textarea>
-                                                                    <label for="editPLOinput{{$unCatplo->pl_outcome_id}}"><span class="requiredField">* </span>Program Learning Outcome</label>
-                                                                </div>
-
-                                                                <div class="form-floating mb-3">
-                                                                    <input type="text" class="form-control" id="editPLOShortphraseInput{{$unCatplo->pl_outcome_id}}" placeholder="E.g. Experimental Design" value="{{$unCatplo->plo_shortphrase}}" name="title" maxlength="50">
-                                                                    <label for="editPLOShortphraseInput{{$unCatplo->pl_outcome_id}}">Short Phrase</label>
-                                                                    <small class="ml-2 form-text text-muted" style="font-size:12px"><i class="bi bi-exclamation-circle-fill text-warning mr-1" title=""></i> Having a short phrase helps with visualizing your program overview at the end of the mapping process (50 character limit)</small>
-                                                                </div>
-                                                                <div class="form-floating mb-3">
-                                                                    <select class="form-select" name="category" id="editPLOCatSelect{{$unCatplo->pl_outcome_id}}" style="font-size:14px">
-                                                                        @if ($unCatplo->plo_category_id)
-                                                                            <option value="{{$unCatplo->plo_category_id}}" selected>{{$unCatplo->plo_category}}</option>
-                                                                            @foreach($ploCategories as $ploCategory)
-                                                                                @if ($ploCategory->plo_category_id != $unCatplo->plo_category_id)
-                                                                                    <option value="{{$unCatplo->plo_category_id}}">{{$ploCategory->plo_category}}</option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                            <option value="">None</option>
-                                                                        @else
-                                                                            <option value="" selected>None</option>
-                                                                            @foreach ($ploCategories as $ploCategory)
-                                                                                <option value="{{$ploCategory->plo_category_id}}">{{$ploCategory->plo_category}}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                    <label for="editPLOCatSelect{{$unCatplo->pl_outcome_id}}"><span class="requiredField">* </span>PLO Category</label>
-                                                                </div>
-                                                                <input type="hidden" class="form-check-input" name="program_id" value={{$program->program_id}}>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- End of Edit PLO Modal -->
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                            <!-- UnCategorized PLOs -->
+                                            @if($hasUncategorized)
+                                                <tr>
+                                                    <th class="text-left" colspan="4" style="background-color: #ebebeb;">Uncategorized PLOs</th>
+                                                </tr>
+                                                <tr class="table-primary">
+                                                    <th class="text-center" style="width: 5%">#</th>
+                                                    <th class="text-left" colspan="2">Program Learning Outcome</th>
+                                                    <th class="text-center" colspan="1">Actions</th>
+                                                </tr>
+                                                <tbody class="plo-category-section" data-category-id="uncategorized">
+                                                    @foreach($unCategorizedPLOS as $unCatIndex => $unCatplo)
+                                                        <tr data-plo-id="{{$unCatplo->pl_outcome_id}}">
+                                                            <td class="text-center fw-bold drag-handle">↕</td>
+                                                            <td class="text-center" style="width: 10%;">{{$defaultShortFormsIndex[$unCatplo->pl_outcome_id]}}</td>
+                                                            <td>
+                                                                <span style="font-weight: bold;">{{$unCatplo->plo_shortphrase}}</span><br>
+                                                                {{$unCatplo->pl_outcome}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#editPLO{{$unCatplo->pl_outcome_id}}">
+                                                                    Edit
+                                                                </button>
+                                                                <button style="width:60px;" type="button" class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deletePLO{{$unCatplo->pl_outcome_id}}">
+                                                                    Delete
+                                                                </button>
+                                                            </td>
+                                                            <input type="hidden" name="plos_pos[]" value="{{$unCatplo->pl_outcome_id}}">
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-4">
+                                        <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
+                                    </div>
+                                </form>
                             @endif
                         </div>
                         <div class="card-footer text-end">
@@ -847,4 +695,92 @@
         </div>
     </div>
 </div>
+
+<!-- PLO Edit and Delete Modals -->
+@foreach($plos as $plo)
+    <!-- Delete PLO Modal -->
+    <div class="modal fade" id="deletePLO{{$plo->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="deletePLO{{$plo->pl_outcome_id}}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if ($plo->plo_shortphrase)
+                        Are you sure you want to delete program learning outcome: {{$plo->plo_shortphrase}}?
+                    @else
+                        Are you sure you want to delete this program learning outcome?
+                    @endif
+                </div>
+                <form action="{{route('plo.destroy', $plo->pl_outcome_id)}}" method="POST">
+                    @csrf
+                    {{method_field('DELETE')}}
+                    <input type="hidden" class="form-check-input" name="program_id" value={{$program->program_id}}>
+                    <div class="modal-footer">
+                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit PLO Modal -->
+    <div class="modal fade" data-bs-keyboard="false" id="editPLO{{$plo->pl_outcome_id}}" tabindex="-1" role="dialog" aria-labelledby="editPLO{{$plo->pl_outcome_id}}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPLOModalLabel">Edit Program Learning Outcome (PLO)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{route('plo.update', $plo->pl_outcome_id)}}" method="POST">
+                    @csrf
+                    {{method_field('POST')}}
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <textarea id="editPLOinput{{$plo->pl_outcome_id}}" name="plo" class="form-control" placeholder="E.g. Develop..." style="height: 100px" required>{{$plo->pl_outcome}}</textarea>
+                            <label for="editPLOinput{{$plo->pl_outcome_id}}"><span class="requiredField">* </span>Program Learning Outcome</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="editPLOShortphraseInput{{$plo->pl_outcome_id}}" placeholder="E.g. Experimental Design" value="{{$plo->plo_shortphrase}}" name="title" maxlength="50">
+                            <label for="editPLOShortphraseInput{{$plo->pl_outcome_id}}">Short Phrase</label>
+                            <small class="ml-2 form-text text-muted" style="font-size:12px"><i class="bi bi-exclamation-circle-fill text-warning mr-1" title=""></i> Having a short phrase helps with visualizing your program overview at the end of the mapping process (50 character limit)</small>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="category" id="editPLOCatSelect{{$plo->pl_outcome_id}}" style="font-size:14px">
+                                @if (isset($plo->plo_category_id) && $plo->plo_category_id)
+                                    @php
+                                        $currentCategory = $ploCategories->where('plo_category_id', $plo->plo_category_id)->first();
+                                    @endphp
+                                    <option value="{{$plo->plo_category_id}}" selected>{{$currentCategory ? $currentCategory->plo_category : 'None'}}</option>
+                                    @foreach($ploCategories as $ploCategory)
+                                        @if ($ploCategory->plo_category_id != $plo->plo_category_id)
+                                            <option value="{{$ploCategory->plo_category_id}}">{{$ploCategory->plo_category}}</option>
+                                        @endif
+                                    @endforeach
+                                    <option value="">None</option>
+                                @else
+                                    <option value="" selected>None</option>
+                                    @foreach ($ploCategories as $ploCategory)
+                                        <option value="{{$ploCategory->plo_category_id}}">{{$ploCategory->plo_category}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <label for="editPLOCatSelect{{$plo->pl_outcome_id}}"><span class="requiredField">* </span>PLO Category</label>
+                        </div>
+
+                        <input type="hidden" class="form-check-input" name="program_id" value={{$program->program_id}}>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endforeach
 @endsection
