@@ -138,6 +138,7 @@ Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])
 Route::delete('/plo/{program}/delete', [ProgramLearningOutcomeController::class, 'destroy'])->name('plo.destroy');
 Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('plo.update');
 Route::delete('/program/{program}/plos/deleteAll', [ProgramLearningOutcomeController::class, 'destroyAll'])->name('program.plo.destroyAll');
+Route::post('/programs/{program}/plo/reorder', [App\Http\Controllers\ProgramLearningOutcomeController::class, 'reorder'])->name('program.plo.reorder');
 
 Route::resource('/la', LearningActivityController::class);
 Route::post('/la/store', [LearningActivityController::class, 'store'])->name('la.store');
