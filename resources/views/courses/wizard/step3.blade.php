@@ -139,7 +139,7 @@
                     </div>
                     <div class="container-fluid px-4" style="max-width: 1200px;">
                         <div class="row">
-                            <div class="col mb-4">
+                            <div class="col mb-1">
                                 <button type="button" class="btn btn-primary col-3 float-right bg-primary text-white fs-5"  data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
                                     <i class="bi bi-plus mr-2"></i>Learning Activities
                                 </button>
