@@ -137,19 +137,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col mb-1">
-                            <button type="button" class="btn btn-primary col-3 float-right bg-primary text-white fs-5"  data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
-                                <i class="bi bi-plus mr-2"></i>Learning Activities
-                            </button>
+                    <div class="container-fluid px-4" style="max-width: 1200px;">
+                        <div class="row">
+                            <div class="col mb-4">
+                                <button type="button" class="btn btn-primary col-3 float-right bg-primary text-white fs-5"  data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
+                                    <i class="bi bi-plus mr-2"></i>Learning Activities
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div id="admins">
+                        <div id="admins" class="mb-5">
                         <form action="{{route('courses.tlaReorder', $course->course_id)}}" method="POST">
                             @csrf
                             {{method_field('POST')}}
-                            <table class="table table-light reorder-tbl-rows" id="l_activity_table">
+                            <table class="table table-light reorder-tbl-rows mb-4" id="l_activity_table">
                                 <tr class="table-primary">
                                     <th class="text-center">#</th>
                                     <th>Teaching and Learning Activities</th>
@@ -180,7 +181,7 @@
                                     @endforeach
                                 @endif
                             </table>
-                            <div class="mt-4">
+                            <div class="mt-4 mb-5 pb-4">
                                 <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
                             </div>
                         </form>
