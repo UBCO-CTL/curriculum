@@ -229,7 +229,7 @@
                                         <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveAssessmentMethodChanges">
                                         <button id="deleteAllAssessmentMethods" type="button" class="btn btn-danger col-3">Delete All</button>
                                         <button id="cancel" type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-success btn col-3" >Save Changes</button>
+                                        <button type="submit" class="btn btn-success btn col-3" >Save</button>
                                     </div>
                                 </form>
                             </div>

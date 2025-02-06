@@ -98,7 +98,7 @@
                                             <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveCLOChanges">
                                             <button id="deleteAllCLOs" type="button" class="btn btn-danger col-3">Delete All</button>
                                             <button id="cancel" type="button" class="btn btn-secondary col-3" data-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-success col-3">Save Changes</button>
+                                            <button type="submit" class="btn btn-success col-3">Save</button>
                                         </div>
                                     </form>
 
