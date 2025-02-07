@@ -1,23 +1,23 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
                 <!-- Select program content modal -->
-                
+
                 <div class="modal" id="setContentPDF" tabindex="-1" aria-labelledby="setContentPDFLabel" aria-hidden="true" data-bs-backdrop="static">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="setContentPDFLabel">Select Content to Include in Program Summary</h5>
-                                
+
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    
-                              
+
+
                             </div>
-            
+
                             <div class="modal-body" style="height: auto;">
                                 <form name="setContentForm" id="setContentForm">
                                 @csrf
                                 <div class="form-group">
-                                    <table class="table table-light table-bordered" style="margin: auto;"> 
+                                    <table class="table table-light table-bordered" style="margin: auto;">
                                         <thead>
                                             <tr class="table-primary">
                                                 <th>Content</th>
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <button id="downloadPartialPDFBtn"  data-route="{{route('programs.pdf', $program->program_id)}}" type="submit" class="btn btn-primary">Submit</button>
                                 <input value="1" name="formFilled" id="formFilled" form ="setContentForm"hidden>
                             </div>
@@ -94,11 +94,11 @@
                 </div>
                 <!-- End of select program content modal -->
                 <script type="application/javascript">
-                    
-                    
+
+
     $(document).ready(function () {
         var xhr;
-        
+
         $('#setContentForm').submit((e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -115,13 +115,13 @@
                 // show download modal
                 $('#setContentPDF').modal('toggle');
                 $('#downloadProgressModal').modal('show');
-                
-            },  
+
+            },
             success: (data, textStatus, jqXHR) => {
-                
+
                 $('#downloadProgressModal').modal('hide');
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -132,7 +132,7 @@
                     $("#save-file")[0].click();
                     // delete pdf summary after 15 sec/15,000 ms
 
-                    //Getting error 
+                    //Getting error
                     setTimeout(() => {deletePDF(route)}, 15000);
                 }
             },
@@ -140,17 +140,17 @@
                 // hide download modal
                 $('#downloadProgressModal').modal('hide');
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
-           
         });
-        
+
+        });
+
     });
 
-    
+
 
     function abort(event) {
         if (xhr) {
@@ -167,7 +167,7 @@
         if (errorToast.hasClass("hide")) {
             errorToast.removeClass("hide");
             errorToast.addClass("show");
-        } 
+        }
     }
 
     // hide the error toast
@@ -176,7 +176,7 @@
         if (errorToast.hasClass("show")) {
             errorToast.removeClass("show");
             errorToast.addClass("hide");
-        } 
+        }
     }
 
 
@@ -195,6 +195,6 @@
             error: (jqXHR, textStatus, error) => {
                 console.log(error);
             },
-        }); 
+        });
     }
 </script>
