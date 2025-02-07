@@ -34,7 +34,7 @@ define('INPUT_TIPS', [
     'otherCourseStaff' => 'At the discretion of the course instructor, the names of any other student-facing members of teaching staff such as teaching assistants involved in the offering of the course (if not available on the Student Service Centre or on Workday), and details of when and by what means students may contact them.',
     'learningOutcomes' => 'i.e., what is to be achieved and assessed in the course.',
     'learningAssessments' => 'The methods used to assess achievement of stated learning outcomes or objectives, including the weighting of each component in the final grade.',
-    'learningActivities' => 'Do you expect students to participate in class? In what ways? (e.g., case studies, using “clickers” to answer questions, working in small groups, etc.) Is participation in on-line discussions required? Are readings required in advance with answers to be submitted to discussion questions or problem sets?
+    'learningActivities' => 'Do you expect students to participate in class? In what ways? (e.g., case studies, using "clickers" to answer questions, working in small groups, etc.) Is participation in on-line discussions required? Are readings required in advance with answers to be submitted to discussion questions or problem sets?
     Is an oral presentation required? Is there a field excursion?',
     'learningMaterials' => 'List of required learning materials for your course (including textbooks, reading packages, on-line assessment tools, lab and field trip manuals) and where they might be obtained (e.g. the Bookstore if you ordered a text or a reading package, your department office if an in-house resource is available, the Library through their <a href="https://library.ok.ubc.ca/services/course-reserves/" target="_blank" rel="noopener noreferrer">course-reserve system</a>). Providing students with at least an estimate of the costs of materials is expected. Explanation of any on-line learning management system used (e.g.Canvas).',
     'latePolicy' => 'State your policies on re-grading of marked work and on late submissions. What are the penalties for late assignments?',
@@ -996,7 +996,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($CDArr as $index => $courseDesc) {
                             $templateProcessor->cloneBlock('NocourseDescription');
-                            $templateProcessor->setValue('courseDescriptionOK' . $i, $courseDesc . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('courseDescriptionOK' . $i, htmlspecialchars($courseDesc, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1050,7 +1050,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($COArr as $index => $courseOver) {
                             $templateProcessor->cloneBlock('NocourseOverview');
-                            $templateProcessor->setValue('courseOverview' . $i, $courseOver . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('courseOverview' . $i, htmlspecialchars($courseOver, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1099,7 +1099,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($LearnActArr as $index => $learnAct) {
                             $templateProcessor->cloneBlock('NoLearningActivities');
-                            $templateProcessor->setValue('learningActivities' . $i, $learnAct . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('learningActivities' . $i, htmlspecialchars($learnAct, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1552,7 +1552,7 @@ class SyllabusController extends Controller
                         foreach ($LearnActArr as $index => $learnAct) {
                             $templateProcessor->cloneBlock('NoLearningActivities');
                             $templateProcessor->cloneBlock('NoLearningActivitiesDesc', 0);
-                            $templateProcessor->setValue('learningActivities' . $i, $learnAct . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('learningActivities' . $i, htmlspecialchars($learnAct, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1602,8 +1602,8 @@ class SyllabusController extends Controller
                     $templateProcessor->cloneBlock('NoOtherInstructionalStaffDesc');
                     $templateProcessor->cloneBlock('NoOtherInstructionalStaff', 0);
                 }
-                
-                
+
+
                 // tell template processor to include course location if user completed the field(s)
                 if ($courseLocation = $syllabus->course_location) {
                     $templateProcessor->cloneBlock('NoCourseLocation');
