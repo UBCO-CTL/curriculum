@@ -86,8 +86,23 @@ class SyllabiTest extends TestCase
 
     public function test_syllabus_add_collab(): void
     {
+        // Mock the mail facade to prevent actual email sending
+        \Illuminate\Support\Facades\Mail::fake();
+
         $user = User::where('email', 'test-syllabi@ubc.ca')->first();
         $syllabus = Syllabus::where('course_title', 'Intro to Greatness')->orderBy('id', 'DESC')->first();
+
+        // Clear any existing relationships
+        DB::table('syllabi_users')->where('syllabus_id', $syllabus->id)->delete();
+
+        // Ensure owner has proper permission first
+        DB::table('syllabi_users')->insert([
+            'syllabus_id' => $syllabus->id,
+            'user_id' => $user->id,
+            'permission' => 1, // Owner permission
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         DB::table('users')->insert([
             'name' => 'Test Syllabus Collab',
@@ -108,18 +123,26 @@ class SyllabiTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('syllabus.assign', $syllabus->id), [
             'syllabus_new_collabs' => [
-                0 => 'test-syllabi-collab@ubc.ca', 1 => 'test-syllabi-collab-leave@ubc.ca',
+                0 => 'test-syllabi-collab@ubc.ca',
+                1 => 'test-syllabi-collab-leave@ubc.ca'
             ],
             'syllabus_new_permissions' => [
-                0 => 'edit', 1 => 'edit',
+                0 => 'edit',
+                1 => 'edit'
             ],
         ]);
 
         $this->assertDatabaseHas('syllabi_users', [
             'syllabus_id' => $syllabus->id,
             'user_id' => $user2->id,
+            'permission' => 2, // Edit permission
         ]);
 
+        $this->assertDatabaseHas('syllabi_users', [
+            'syllabus_id' => $syllabus->id,
+            'user_id' => $user3->id,
+            'permission' => 2, // Edit permission
+        ]);
     }
 
     public function test_syllabus_transfer(): void
@@ -128,24 +151,40 @@ class SyllabiTest extends TestCase
         $syllabus = Syllabus::where('course_title', 'Intro to Greatness')->orderBy('id', 'DESC')->first();
         $user2 = User::where('email', 'test-syllabi-collab@ubc.ca')->first();
 
+        // Ensure initial ownership is set correctly
+        DB::table('syllabi_users')->where('syllabus_id', $syllabus->id)->delete(); // Clear any existing relationships
+
+        DB::table('syllabi_users')->insert([
+            'syllabus_id' => $syllabus->id,
+            'user_id' => $user->id,
+            'permission' => 1, // Initial owner
+        ]);
+
+        DB::table('syllabi_users')->insert([
+            'syllabus_id' => $syllabus->id,
+            'user_id' => $user2->id,
+            'permission' => 2, // Initial collaborator
+        ]);
+
         $response = $this->actingAs($user)->post(route('syllabusUser.transferOwnership'), [
             'syllabus_id' => $syllabus->id,
             'oldOwnerId' => $user->id,
             'newOwnerId' => $user2->id,
         ]);
 
+        // After transfer, original owner should become editor (permission 2)
         $this->assertDatabaseHas('syllabi_users', [
             'syllabus_id' => $syllabus->id,
             'user_id' => $user->id,
             'permission' => 2,
         ]);
 
+        // New owner should have owner permission (permission 1)
         $this->assertDatabaseHas('syllabi_users', [
             'syllabus_id' => $syllabus->id,
             'user_id' => $user2->id,
             'permission' => 1,
         ]);
-
     }
 
     public function test_syllabus_remove_collab(): void
