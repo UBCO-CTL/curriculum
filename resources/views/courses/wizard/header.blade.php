@@ -15,9 +15,8 @@
                     @endforeach
                 @else
                     <a href="{{ route('programWizard.step1', $programs->first()->program_id) }}" class="text-primary">{{ $programs->first()->program }}</a>
-                    and <a href="#" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right"
-                        title="@foreach($programs->skip(1) as $program){{ $program->program }}{{ !$loop->last ? ', ' : '' }}@endforeach">
-                        {{ $programs->count() - 1 }} more...</a>
+                    and <a href="{{ route('courseWizard.step5', $course->course_id) }}" class="text-primary">
+                        {{ $programs->count() - 1 }} more (See Step 5 for details)</a>
                 @endif
             @else
                 <span class="text-muted">No associated programs</span>
