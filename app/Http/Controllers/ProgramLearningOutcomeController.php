@@ -108,16 +108,15 @@ class ProgramLearningOutcomeController extends Controller
             $request->session()->flash('success', 'Your program learning outcomes were updated successfully!');
         } catch (Throwable $exception) {
             $message = 'There was an error updating your program learning outcomes';
-            Log::error($message.' ...\n');
-            Log::error('Code - '.$exception->getCode());
-            Log::error('File - '.$exception->getFile());
-            Log::error('Line - '.$exception->getLine());
+            Log::error($message . ' ...\n');
+            Log::error('Code - ' . $exception->getCode());
+            Log::error('File - ' . $exception->getFile());
+            Log::error('Line - ' . $exception->getLine());
             Log::error($exception->getMessage());
             $request->session()->flash('error', $message);
         } finally {
             return redirect()->route('programWizard.step1', $request->input('program_id'));
         }
-
     }
 
     /**
@@ -202,6 +201,28 @@ class ProgramLearningOutcomeController extends Controller
         return redirect()->route('programWizard.step1', $request->input('program_id'));
     }
 
+    public function destroyAll(Request $request, $programId): RedirectResponse
+    {
+        $program = Program::find($programId);
+
+        try {
+            // Delete all PLOs for this program
+            ProgramLearningOutcome::where('program_id', $programId)->delete();
+
+            // Update program's last modified user
+            $user = User::find(Auth::id());
+            $program->last_modified_user = $user->name;
+            $program->touch();
+            $program->save();
+
+            $request->session()->flash('success', 'All program learning outcomes have been deleted');
+        } catch (Throwable $exception) {
+            $request->session()->flash('error', 'There was an error deleting the program learning outcomes');
+        }
+
+        return redirect()->route('programWizard.step1', $programId);
+    }
+
     public function import(Request $request)
     {
         // $this->validate($request, [
@@ -211,9 +232,10 @@ class ProgramLearningOutcomeController extends Controller
         $file = $request->file('upload');
         $clientFileName = $file->getClientOriginalName();
         $path = $file->storeAs(
-            'temporary', $clientFileName
+            'temporary',
+            $clientFileName
         );
-        $absolutePath = storage_path('app'.DIRECTORY_SEPARATOR.'temporary'.DIRECTORY_SEPARATOR.$clientFileName);
+        $absolutePath = storage_path('app' . DIRECTORY_SEPARATOR . 'temporary' . DIRECTORY_SEPARATOR . $clientFileName);
 
         /**  Create a new reader of the type defined by $clientFileName extension  **/
         $reader = IOFactory::createReaderForFile($absolutePath);
@@ -227,7 +249,7 @@ class ProgramLearningOutcomeController extends Controller
         foreach ($worksheets as $worksheet) {
             // create a program learning outcome category
             $worksheetTitle = $worksheet->getTitle();
-            Log::debug('Add PLO category: '.$worksheetTitle);
+            Log::debug('Add PLO category: ' . $worksheetTitle);
             $ploCategory = PLOCategory::create([
                 'plo_category' => $worksheetTitle,
                 'program_id' => $programId,
@@ -283,6 +305,5 @@ class ProgramLearningOutcomeController extends Controller
 
         // return
         return redirect()->back();
-
     }
 }
