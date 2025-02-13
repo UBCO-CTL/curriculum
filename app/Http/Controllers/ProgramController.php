@@ -620,17 +620,17 @@ class ProgramController extends Controller
         $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
 
         $header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-      
+
         $header[] = "Cache-Control: max-age=0";
-      
+
         $header[] = "Connection: keep-alive";
-      
+
         $header[] = "Keep-Alive: 300";
-      
+
         $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
-      
+
         $header[] = "Accept-Language: en-us,en;q=0.5";
-      
+
         $header[] = "Pragma: "; // browsers keep this blank.
 
 
@@ -914,8 +914,8 @@ class ProgramController extends Controller
      */
     public function spreadsheet(Request $request, int $programId)
     {
-        
-    
+
+
 
         // set the max time to generate a pdf summary as 5 mins/300 seconds
         set_time_limit(300);
@@ -947,7 +947,7 @@ class ProgramController extends Controller
             $mappingScalesSheet = $this->makeMappingScalesSheet($spreadsheet, $programId, $styles);
             $mapSheet = $this->makeOutcomeMapSheet($spreadsheet, $programId, $styles, $columns);
 
-            
+
             // get array of urls to charts in this program
             $charts = $this->getImagesOfCharts($programId, '.xlsx');
             $this->makeChartSheets($spreadsheet, $programId, $charts);
@@ -988,7 +988,7 @@ class ProgramController extends Controller
     // Method for generating data excel in program level
     public function dataSpreadsheet(Request $request, int $programId)
     {
-        
+
         // set the max time to generate a pdf summary as 5 mins/300 seconds
 
         set_time_limit(300);
@@ -1015,10 +1015,10 @@ class ProgramController extends Controller
                     ],
                 ],
             ];
-            
+
             // create each sheet in summary
             //$programLearningOutcomes = ProgramLearningOutcome::where('program_id', $programId)->get();
-            
+
                 $programSheet = $this->makeProgramInfoSheetData($spreadsheet, $programId, $styles);
                 $plosSheet = $this->makeLearningOutcomesSheetData($spreadsheet, $programId, $styles);
                 $courseSheet=$this->makeCourseInfoSheetData($spreadsheet, $programId, $styles, $columns);
@@ -1029,12 +1029,12 @@ class ProgramController extends Controller
                 $studentAssessment= $this->studentAssessmentMethodSheet($spreadsheet, $programId, $styles, $columns);
                 $learningActivitySheet= $this->learningActivitySheet($spreadsheet, $programId, $styles, $columns);
                 $strategicPrioritiesSheet= $this->strategicPrioritiesSheet($spreadsheet, $programId, $styles, $columns);
-                
+
 
                 // foreach sheet, set all possible columns in $columns to autosize
                 array_walk($columns, function ($letter, $index) use ($plosSheet, $courseSheet, $mappingScalesSheet,$mapSheet,$dominantMapSheet, $infoMapSheet,$studentAssessment,$learningActivitySheet,$programSheet, $strategicPrioritiesSheet)
                 {
-                    
+
                     $plosSheet->getColumnDimension($letter)->setAutoSize(true);
                     $mappingScalesSheet->getColumnDimension($letter)->setAutoSize(true);
                     $courseSheet->getColumnDimension($letter)->setAutoSize(true);
@@ -1045,9 +1045,9 @@ class ProgramController extends Controller
                     $learningActivitySheet->getColumnDimension($letter)->setAutoSize(true);
                     $programSheet->getColumnDimension($letter)->setAutoSize(true);
                     $strategicPrioritiesSheet->getColumnDimension($letter)->setAutoSize(true);
-                    
+
                 });
-           
+
             // generate the spreadsheet
             $writer = new Xlsx($spreadsheet);
             // set the spreadsheets name
@@ -1061,7 +1061,7 @@ class ProgramController extends Controller
 
             // return the location of the spreadsheet document on the server
             return $url;
-            
+
         } catch (Throwable $exception) {
             $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
             Log::error($message.' ...\n');
@@ -1168,7 +1168,9 @@ class ProgramController extends Controller
                     $sheet->setCellValue('K'.strval(($index * 8) + 2), $standards);
                     $sheet->mergeCells('K'.strval(($index * 8) + 2).':P'.strval(($index * 8) + 2).'');
                     $sheet->getStyle('K'.strval(($index * 8) + 2).'')->applyFromArray($styles['secondaryHeading']);
-                    $sheet->setCellValue('K'.strval(($index * 8) + 3), strip_tags(preg_replace('~[\r\n\t]+~', '', $outputMS[5][$index])));
+                    // Clean up the description text by removing HTML tags and normalizing whitespace
+                    $cleanDescription = trim(preg_replace('/\s+/', ' ', strip_tags($outputMS[5][$index])));
+                    $sheet->setCellValue('K'.strval(($index * 8) + 3), $cleanDescription);
                     $sheet->mergeCells('K'.strval(($index * 8) + 3).':P'.strval(($index * 8) + 9).'');
                     $sheet->getStyle('K'.strval(($index * 8) + 3).'')->applyFromArray($styles['text']);
 
@@ -1488,7 +1490,7 @@ class ProgramController extends Controller
      */
     private function makeOutcomeMapSheet(Spreadsheet $spreadsheet, int $programId, $styles, $columns): Worksheet
     {
-        
+
         try {
             // find this program
             $program = Program::find($programId);
@@ -1659,7 +1661,7 @@ class ProgramController extends Controller
 
     private function makeOutcomeMapSheetData(Spreadsheet $spreadsheet, int $programId, $styles, $columns): Worksheet
     {
-        
+
         try {
             // find this program
             $program = Program::find($programId);
@@ -2006,20 +2008,20 @@ class ProgramController extends Controller
         }
     }
 
-    
+
     private function makeInfoMapSheet2(Spreadsheet $spreadsheet, int $programId, $styles, $columns): Worksheet{
         try {
              //Find all PLOs for each program
             $programLearningOutcomes=[];
             $courseLearningOutcomes=[];
             $courseLearningOutcomeTitles=[];
-             
+
             $PLOs=ProgramLearningOutcome::where('program_id', $programId)->get();
             foreach($PLOs as $PLO){
             array_push($programLearningOutcomes, [$programId, $PLO]); //Storing PLOs in array, with the first entry noting the program ID
             }
-             
- 
+
+
             $coursePrograms=CourseProgram::where('program_id',$programId)->get();
             $courseProgramCIDs = $coursePrograms->pluck('course_id')->toArray();
 
@@ -2033,7 +2035,7 @@ class ProgramController extends Controller
             foreach($courseLearningOutcomeTitlesTemp as $CLOShortPhrases){
                 array_push($courseLearningOutcomeTitles, $CLOShortPhrases);
             }
-           
+
 
             }
 
@@ -2049,7 +2051,7 @@ class ProgramController extends Controller
             // Create a new sheet for Student Assessment Methods
             $sheet = $spreadsheet->createSheet();
             $sheet->setTitle('Program MAP Info Table');
-            
+
             // Add primary headings (Courses, Student Assessment Method) to the sheet
             $sheet->fromArray(['Courses','Course Learning Outcomes', 'Program Learning Outcomes'], null, 'A1');
             $sheet->getStyle('A1:C1')->applyFromArray($styles['primaryHeading']);
@@ -2065,7 +2067,7 @@ class ProgramController extends Controller
             $sheet->getStyle('A4:A'.strval(count($courses) + 3))->applyFromArray($styles['secondaryHeading']);
             $sheet->getStyle('A4:A100')->getFont()->setBold(true);
 
-            
+
             // Add CLOs to second column
             //Changing to A4 to accomodate adding PLO categories
             $sheet->fromArray(array_chunk($courseLearningOutcomeTitles, 1), null, 'B4');
@@ -2088,7 +2090,7 @@ class ProgramController extends Controller
                 // Adding CLO to PLO mapping to the sheet under the appropriate column
 
                 //Adding PLO Categories
-                            
+
                 $ploCategory = PLOCategory::where('plo_category_id', $PLO[1]->plo_category_id)->first();
                 if($ploCategory!=NULL){
                     $sheet->setCellValue($columns[$categoryColInSheet].'2', $ploCategory->plo_category);
@@ -2099,8 +2101,8 @@ class ProgramController extends Controller
                     $sheet->getStyle($columns[$categoryColInSheet].'2')->applyFromArray($styles['secondaryHeading']);
                     //$sheet->mergeCells($columns[$categoryColInSheet].'2:'.$columns[$categoryColInSheet].'2');
                 }
-                
-                
+
+
                 //Changing all column headers to start from 3 to accomodate PLO categories
                 $sheet->setCellValue($columns[$categoryColInSheet].'3', $PLO[1]->pl_outcome);
                 $sheet->getStyle($columns[$categoryColInSheet].'3')->getFont()->setBold(true);
@@ -2116,7 +2118,7 @@ class ProgramController extends Controller
                     }else{
                         array_push($outcomeMappings, ' ');
                     }
-                    
+
                 }
 
                 // Add weightage data to the respective column
@@ -2139,7 +2141,7 @@ class ProgramController extends Controller
                 $lastValue="";
                 $lastCoord="";
                 $duplicateFoundPreviously=false;
-                
+
                 $cellValues=[];
                 $cellCoords=[];
                 foreach ($cellIterator as $cell) {
@@ -2150,7 +2152,7 @@ class ProgramController extends Controller
                 $count=0;
                 foreach($cellValues as $value){
                     if($count<1){ //do nothing until we reach categories
-                        
+
                     }else{
 
                         if ($cellValues[$count]==$lastValue){
@@ -2167,20 +2169,20 @@ class ProgramController extends Controller
                                 //Merge from First Duplicate to Current
                                 $sheet->mergeCells($firstDuplicateColumnCoord.':'.$cellCoords[$count]);
                                 $sheet->getStyle($firstDuplicateColumnCoord)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                                
+
                                 //Reset where we found first dupe
                                 $firstDuplicateColumnValue="";
                                 $firstDuplicateColumnCoord="";
                                 $duplicateFoundPreviously=false;
                                 break;
                             }
-                            
+
                         }else{
                             if($duplicateFoundPreviously){
                                 //Merge from First Duplicate to Current
                                 $sheet->mergeCells($firstDuplicateColumnCoord.':'.$lastCoord);
                                 $sheet->getStyle($firstDuplicateColumnCoord)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                                
+
                                 //Reset where we found first dupe
                                 $firstDuplicateColumnValue="";
                                 $firstDuplicateColumnCoord="";
@@ -2196,7 +2198,7 @@ class ProgramController extends Controller
 
                     $count++;
                 }
-            }   
+            }
 
             $program = Program::find($programId);
             // get this programs mapping scales
@@ -2250,7 +2252,7 @@ class ProgramController extends Controller
                     }else{
                             if ($columnValue == $firstDuplicateColumnValue){
                                 $foundDuplicates=true; //found duplicate continue
-                                
+
                             }else{
                                 $foundDuplicates=false; //found non-duplicate, stop and merge
                                 //merge $firstColumnCoord
@@ -2263,7 +2265,7 @@ class ProgramController extends Controller
             */
             Log::Debug("Success!");
             return $sheet;
-    
+
         } catch (Throwable $exception) {
             // Log any errors
             $message = 'There was an error downloading the spreadsheet overview for: '.$course->course;
@@ -2530,18 +2532,18 @@ class ProgramController extends Controller
         $output = '';
 
         if (! count($namesStandards) < 1) {
-            $output .= '<table class="table table-light table-bordered table-sm"><tbody><tr class="table-primary"><th>Ministry Standards</th><th>Courses</th></tr>';
+            $output .= '<table class="table table-light table-bordered table-sm mb-0"><tbody><tr class="table-primary"><th style="width:50%">Ministry Standards</th><th>Courses</th></tr>';
             $i = 0;
             foreach ($namesStandards as $standard) {
-                $output .= '<tr><td class="col col-md-5"><b>'.$standard.'</b> - '.$descriptionsStandards[$i].'</td><td>';
+                $output .= '<tr><td class="align-top"><b>'.$standard.'</b><br><span class="small">'.$descriptionsStandards[$i].'</span></td><td class="p-0">';
                 $j = 0;
                 foreach ($standardsMappingScalesTitles as $standardsMappingScale) {
-                    $output .= '<table class="table table-light table-bordered table-sm"><tr><td>';
+                    $output .= '<div class="d-flex align-items-center p-2" style="border-bottom: 1px solid #dee2e6">';
 
-                    $output .= '<div class="row d-flex align-items-center justify-content-center"><div class="col col-md-1 text-md-right"><div style="background-color:'.$standardMappingScalesColours[$j].'; height: 12px; width: 12px; border-radius: 6px;"></div></div>';
-                    $output .= '<div class="col col-md-3 text-md-left">'.$standardsMappingScale.': '.$frequencyOfMinistryStandardIds[$j][$i].'</div>';
+                    $output .= '<div style="background-color:'.$standardMappingScalesColours[$j].'; height: 12px; width: 12px; border-radius: 6px; margin-right: 8px;"></div>';
+                    $output .= '<div class="mr-3">'.$standardsMappingScale.': '.$frequencyOfMinistryStandardIds[$j][$i].'</div>';
 
-                    $output .= '<div class="col col-md-7 text-md-left">';
+                    $output .= '<div class="flex-grow-1">';
                     $k = 0;
                     foreach ($coursesOfMinistryStandardResetKeys[$j][$i] as $course_id) {
                         $code = Course::where('course_id', $course_id)->pluck('course_code')->first();
@@ -2549,21 +2551,17 @@ class ProgramController extends Controller
                         if ($k != 0) {
                             $output .= ', '.$code.' '.$num;
                         } else {
-                            $output .= ' '.$code.' '.$num;
+                            $output .= $code.' '.$num;
                         }
                         $k++;
                     }
                     $output .= '</div></div>';
                     $j++;
-
-                    $output .= '</td></tr></table>';
                 }
                 $output .= '</td></tr>';
                 $i++;
             }
             $output .= '</tbody></table>';
-        } else {
-            $output = '<div class="alert alert-warning wizard"><i class="bi bi-exclamation-circle-fill"></i>There are no ministry standards for the courses belonging to this program, or there are no courses matching the criteria.</div>';
         }
 
         return $output;
@@ -2710,7 +2708,7 @@ class ProgramController extends Controller
                     ];
                     // Store the frequencies
                     $store[$plOutcomeId][$courseId]['frequencies'] = $freq[$plOutcomeId][$courseId];
-                    
+
                 }
             }
         }
@@ -2882,12 +2880,12 @@ class ProgramController extends Controller
             $sheet = $spreadsheet->createSheet();
             $sheet->setTitle('Mapping Scale');
             $mappingScaleLevels = $program->mappingScaleLevels;
-    
+
             if ($mappingScaleLevels->count() > 0) {
                 // Update header row to exclude the 'Colour' column
                 $sheet->fromArray(['Mapping Scale', 'Abbreviation', 'Description'], null, 'A1');
                 $sheet->getStyle('A1:C1')->applyFromArray($styles['primaryHeading']);
-    
+
                 foreach ($mappingScaleLevels as $index => $level) {
                     // Create array of scale values without the colour column
                     $scaleArr = [$level->title, $level->abbreviation, $level->description];
@@ -2913,10 +2911,10 @@ class ProgramController extends Controller
                 // add conditional formatting rule to the outcome maps sheet
                 $sheet->getStyle($wizard->getCellRange())->setConditionalStyles($conditionalStyles);
             }
-                
-    
+
+
             return $sheet;
-    
+
 
         } catch (Throwable $exception) {
             $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
@@ -2982,7 +2980,7 @@ class ProgramController extends Controller
                         }else{
                             $mapped='Yes';
                         }
-                        
+
                     }
                 }else{
                     $mapped='No';
@@ -3116,7 +3114,7 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
                     $scaleCategoryId=2;
                     break;
                 }
-                
+
                 if($mappingScale->abbreviation == 'Y'){
                     $scaleCategoryId=3;
                     break;
@@ -3126,7 +3124,7 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
                     break;
                 }
             }
-            
+
             break;
         }
     }
@@ -3136,12 +3134,12 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
     if (!isset($scaleCategoryId)){
         $scaleCategoryId = 7;
     }
-    
+
     //Log::Debug("CategoryId = ".$scaleCategoryId);
     //different scaleHierarchies for each MappingScaleGroup using a switch
     switch($scaleCategoryId){
         case 1:
-                
+
                 // Define the hierarchy of mapping scales
             $scaleHierarchy = [1 => 'I', 2 => 'D', 3 => 'A'];
 
@@ -3151,7 +3149,7 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
                 $course_id = $map['course_id'];
                 $map_scale_id = $map['map_scale_id'];
                 // Get the abbreviation for the current map scale
-                
+
                 //get mapping scale ID
                 if(is_string($store[$pl_outcome_id][$course_id])){
                 $currentStoredDominantScaleValue=array_search($store[$pl_outcome_id][$course_id], $scaleHierarchy);
@@ -3169,11 +3167,11 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
 
                 }
             }
-            
+
         break;
 
         case 2:
-                
+
                 // Define the hierarchy of mapping scales
             $scaleHierarchy = [1 => 'Mi', 2 => 'Ma', 3 => 'S', 4 => 'P'];
 
@@ -3198,14 +3196,14 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
                                 if (!isset($store[$pl_outcome_id][$course_id]) || $currentViewedDominantScaleValue >= $currentStoredDominantScaleValue) {
                     //Log::Debug("comparing ".$currentViewedDominantScaleValue."is >= ".$currentStoredDominantScaleValue);
                     $store[$pl_outcome_id][$course_id] = MappingScale::where('map_scale_id', $map_scale_id)->value('abbreviation');
-                    
+
                 }
             }
-            
+
         break;
 
         case 3:
-                
+
                 // Define the hierarchy of mapping scales
             $scaleHierarchy = [1 => 'Y'];
 
@@ -3233,11 +3231,11 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
 
                 }
             }
-        
+
         break;
 
         case 4:
-                
+
                 // Define the hierarchy of mapping scales
             $scaleHierarchy = [1 => 'F', 2 => 'E'];
 
@@ -3265,7 +3263,7 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
 
                 }
             }
-        
+
         break;
 
         case 7:
@@ -3286,7 +3284,7 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
                 array_push($scaleHierarchy, $mappingScaleCustomAbv);
 
             }
-            
+
             //$scaleHierarchy = array_reverse($scaleHierarchy);
 
 
@@ -3313,11 +3311,11 @@ private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $program
 
                 }
             }
-        
+
         break;
     }
 
-    
+
 
     return $store;
 }
@@ -3341,7 +3339,7 @@ public function fillCLOInfoArray($arr, $store){
                             $store[$pl_outcome_id][$course_id]=$store[$pl_outcome_id][$course_id].", ".LearningOutcome::where('l_outcome_id', $l_outcome_id)->value('l_outcome');
                         }
                     }
-                
+
             }
 
 
@@ -3357,7 +3355,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
         $assessmentMethodArray = [];
 
         if (count($courseIds)==1){ //check with multiple courses if this is actually working, for assessmentMethods it was always saying it was always not an array
-            
+
             $assessmentMethods = AssessmentMethod::where('course_id',$courseIds[0]->course_id)->get();
             if (count($assessmentMethods)==1 && $assessmentMethods!=NULL){
                 array_push($assessmentMethodArray, $assessmentMethods[0]);
@@ -3390,7 +3388,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
         // Create a new sheet for Student Assessment Methods
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Assessment Methods');
-        
+
         // Add primary headings (Courses, Student Assessment Method) to the sheet
         $sheet->fromArray(['Courses', 'Student Assessment Methods'], null, 'A1');
         $sheet->getStyle('A1:B1')->applyFromArray($styles['primaryHeading']);
@@ -3405,7 +3403,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
         foreach ($program->courses()->orderBy('course_code', 'asc')->orderBy('course_num', 'asc')->get() as $course) {
             $courses[$course->course_id] = $course->course_code.' '.$course->course_num;
         }
-        
+
         // Add course names to the first column
         $sheet->fromArray(array_chunk($courses, 1), null, 'A3');
         $sheet->getStyle('A3:A'.strval(3 + count($courses) - 1))->applyFromArray($styles['secondaryHeading']);
@@ -3430,14 +3428,14 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
 
             foreach ($courses as $courseId => $course) {
                 if ($assessmentMethod->course_id == array_search($course,$courses)){
-    
+
                 array_push($assessmentWeightages, '1'); // Empty if no weightage
                 }else{
                     array_push($assessmentWeightages, '');
                 }
-                    
+
             }
-            
+
 
             // Add weightage data to the respective column
             $sheet->fromArray(array_chunk($assessmentWeightages, 1), null, $columns[$categoryColInSheet].'3');
@@ -3474,9 +3472,9 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
                 array_push($originalColumns, $columnLetter1);
 
                 foreach($columnValues as $columnValue2){
-                
+
                     if(strcmp($columnValue,$columnValue2) == 0 && $countColumnCoord2 != $countColumnCoord1){ //if the same title but not the same column
-                    
+
                     $firstCellRow=3;
                     $lastRow = $sheet->getHighestRow();
                         //Step 3: Copy Cell values from later columns over to first found column
@@ -3496,7 +3494,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
                             if (is_null($cell1->getValue())){ //If the Value of first column is empty, replace it with value in second column
                                 $sheet->getCell($columnLetter1.$row)->setValue($cell2->getValue());
                             }
-                            
+
                         }
 
                     }
@@ -3511,10 +3509,10 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
             $previouslyDeletedColumn='';
             $deletedCount=0;
             $chars = range('A', 'Z');
-        
+
             foreach($columnsToBeDeleted as $deleteColumn){
-                
-                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){ 
+
+                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){
 
                     //So checking if the deleted column comes after the previously deleted column, we need to reduce the current delete by 1 letter for each column deleted
                     //strcmp if the first is lexicograpically greater than the second then a positive number will be returned.
@@ -3524,7 +3522,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
 
 
                 }
-                
+
                 $sheet->removeColumn($deleteColumn);
 
                 $previouslyDeletedColumn=$deleteColumn;
@@ -3532,7 +3530,7 @@ private function studentAssessmentMethodSheet(Spreadsheet $spreadsheet, int $pro
             }
 
         return $sheet;
- 
+
     } catch (Throwable $exception) {
         // Log any errors
         $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
@@ -3557,10 +3555,10 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
         $duplicateLearningActivities =[];
 
         if (count($courseIds)==1){ //check with multiple courses if this is actually working, for assessmentMethods it was always saying it was always not an array
-            
+
             $learningActivities = LearningActivity::where('course_id',$courseIds[0]->course_id)->get();
             if (count($learningActivities)==1 && $learningActivities!=NULL){
-                
+
                 array_push($learningActivityArray, $learningActivities[0]);
                 if (in_array($learningActivities[0]->l_activity, $learningActivityTitles)){
                 array_push($duplicateLearningActivities, $learningActivities[0]->l_activity);
@@ -3568,9 +3566,9 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
                     array_push($learningActivityTitles, $learningActivities[0]->l_activity);
                 }
             }else{
-                
+
                 if($learningActivities!=NULL){
-                    
+
                     foreach($learningActivities as $learningActivity){
                         array_push($learningActivityArray, $learningActivity);
                         if (in_array($learningActivity->l_activity, $learningActivityTitles)){
@@ -3588,7 +3586,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
                 $learningActivities = LearningActivity::where('course_id',$courseId->course_id)->get();
 
                 if (count($learningActivities)==1 && $learningActivities!=NULL){
-                    
+
                     array_push($learningActivityArray, $learningActivities[0]);
                     if (in_array($learningActivities[0]->l_activity, $learningActivityTitles)){
                         array_push($duplicateLearningActivities, $learningActivities[0]->l_activity);
@@ -3596,9 +3594,9 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
                         array_push($learningActivityTitles, $learningActivities[0]->l_activity);
                     }
                 }else{
-                    
+
                     if($learningActivities!=NULL){
-        
+
                         foreach($learningActivities as $learningActivity){
                             array_push($learningActivityArray, $learningActivity);
                             if (in_array($learningActivity->l_activity, $learningActivityTitles)){
@@ -3624,7 +3622,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
         // Create a new sheet for Student Assessment Methods
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Learning Activities');
-        
+
         // Add primary headings (Courses, Student Assessment Method) to the sheet
         $sheet->fromArray(['Courses', 'Teaching and Learning Activities'], null, 'A1');
         $sheet->getStyle('A1:B1')->applyFromArray($styles['primaryHeading']);
@@ -3639,7 +3637,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
         foreach ($program->courses()->orderBy('course_code', 'asc')->orderBy('course_num', 'asc')->get() as $course) {
             $courses[$course->course_id] = $course->course_code.' '.$course->course_num;
         }
-        
+
         // Add course names to the first column
         $sheet->fromArray(array_chunk($courses, 1), null, 'A3');
         $sheet->getStyle('A3:A'.strval(3 + count($courses) - 1))->applyFromArray($styles['secondaryHeading']);
@@ -3647,14 +3645,14 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
 
         // Retrieve and map Student Assessment Methods with their weightages
         $categoryColInSheet = 1;
-        
+
         foreach ($learningActivityArray as $learningActivity) {
             // Add assessment method to the sheet under the appropriate column
 
 
             $sheet->setCellValue($columns[$categoryColInSheet].'2', $learningActivity->l_activity);
-                
-            
+
+
             $sheet->getStyle($columns[$categoryColInSheet].'2')->applyFromArray($styles['secondaryHeading']);
             $sheet->mergeCells($columns[$categoryColInSheet].'2:'.$columns[$categoryColInSheet].'2');
 
@@ -3713,9 +3711,9 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
                 array_push($originalColumns, $columnLetter1);
 
                 foreach($columnValues as $columnValue2){
-                
+
                     if(strcmp($columnValue,$columnValue2) == 0 && $countColumnCoord2 != $countColumnCoord1){ //if the same title but not the same column
-                    
+
                     $firstCellRow=3;
                     $lastRow = $sheet->getHighestRow();
                         //Step 3: Copy Cell values from later columns over to first found column
@@ -3735,7 +3733,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
                             if (is_null($cell1->getValue())){ //If the Value of first column is empty, replace it with value in second column
                                 $sheet->getCell($columnLetter1.$row)->setValue($cell2->getValue());
                             }
-                            
+
                         }
 
                     }
@@ -3750,10 +3748,10 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
             $previouslyDeletedColumn='';
             $deletedCount=0;
             $chars = range('A', 'Z');
-        
+
             foreach($columnsToBeDeleted as $deleteColumn){
-                
-                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){ 
+
+                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){
 
                     //So checking if the deleted column comes after the previously deleted column, we need to reduce the current delete by 1 letter for each column deleted
                     //strcmp if the first is lexicograpically greater than the second then a positive number will be returned.
@@ -3763,7 +3761,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
 
 
                 }
-                
+
                 $sheet->removeColumn($deleteColumn);
 
                 $previouslyDeletedColumn=$deleteColumn;
@@ -3771,7 +3769,7 @@ private function learningActivitySheet(Spreadsheet $spreadsheet, int $programId,
             }
 
         return $sheet;
- 
+
     } catch (Throwable $exception) {
         // Log any errors
         $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
@@ -3794,16 +3792,16 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
         $strategicPrioritiesArray = [];
 
         Log::Debug("Before we get the COPs");
-        if (count($courseIds)==1){ 
-            
+        if (count($courseIds)==1){
+
             $courseOptionalPriorities = CourseOptionalPriorities::where('course_id',$courseIds[0]->course_id)->get();
             if (count($courseOptionalPriorities)==1 && $courseOptionalPriorities!=NULL){
                 $optionalPriority=OptionalPriorities::where('op_id', $courseOptionalPriorities[0]->op_id)->value('optional_priority');
                 array_push($strategicPrioritiesArray, [$optionalPriority, $courseIds[0]->course_id]);
             }else{
-                
+
                 if($courseOptionalPriorities!=NULL){
-                    
+
                     foreach($courseOptionalPriorities as $courseOptionalPriority){
                         $optionalPriority=OptionalPriorities::where('op_id', $courseOptionalPriority->op_id)->value('optional_priority');
                         array_push($strategicPrioritiesArray, [$optionalPriority, $courseIds[0]->course_id]);
@@ -3820,13 +3818,13 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
                     $optionalPriority=OptionalPriorities::where('op_id', $courseOptionalPriorities[0]->op_id)->value('optional_priority');
                     array_push($strategicPrioritiesArray, [$optionalPriority, $courseId->course_id]);
                 }else{
-                    
+
                     if($courseOptionalPriorities!=NULL){
-                        
+
                         foreach($courseOptionalPriorities as $courseOptionalPriority){
                             $optionalPriority=OptionalPriorities::where('op_id', $courseOptionalPriority->op_id)->value('optional_priority');
                             array_push($strategicPrioritiesArray, [$optionalPriority, $courseId->course_id]);
-    
+
                         }
                     }
                 }
@@ -3841,7 +3839,7 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Strategic Priorities');
         Log::Debug("After we set title");
-        
+
         // Add primary headings (Courses, Student Assessment Method) to the sheet
         $sheet->fromArray(['Courses', 'Strategic Priorities'], null, 'A1');
         $sheet->getStyle('A1:B1')->applyFromArray($styles['primaryHeading']);
@@ -3858,7 +3856,7 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
         foreach ($program->courses()->orderBy('course_code', 'asc')->orderBy('course_num', 'asc')->get() as $course) {
             $courses[$course->course_id] = $course->course_code.' '.$course->course_num;
         }
-        
+
         Log::Debug("After we set course codes");
         // Add course names to the first column
         $sheet->fromArray(array_chunk($courses, 1), null, 'A3');
@@ -3869,15 +3867,15 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
 
         // Retrieve and map Student Assessment Methods with their weightages
         $categoryColInSheet = 1;
-        
+
         foreach ($strategicPrioritiesArray as $strategicPriority) {
             // Add assessment method to the sheet under the appropriate column
             Log::Debug("Setting Cell value");
             Log::Debug($strategicPriority);
 
             $sheet->setCellValue($columns[$categoryColInSheet].'2', $strategicPriority[0]);
-                
-            
+
+
             //$sheet->getStyle($columns[$categoryColInSheet].'2')->applyFromArray($styles['secondaryHeading']);
             $sheet->mergeCells($columns[$categoryColInSheet].'2:'.$columns[$categoryColInSheet].'2');
 
@@ -3890,14 +3888,14 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
                 Log::Debug(array_search($course,$courses));
                 if ($strategicPriority[1] == array_search($course,$courses)){
 
-                
+
                 //if it is present in array, put in used for this slot,
                 array_push($SPusedInCourse, '1');
                 }else{
                     array_push($SPusedInCourse, '');
                 }
             }
-            
+
 
             // Add weightage data to the respective column
             $sheet->fromArray(array_chunk($SPusedInCourse, 1), null, $columns[$categoryColInSheet].'3');
@@ -3935,9 +3933,9 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
                 array_push($originalColumns, $columnLetter1);
 
                 foreach($columnValues as $columnValue2){
-                
+
                     if(strcmp($columnValue,$columnValue2) == 0 && $countColumnCoord2 != $countColumnCoord1){ //if the same title but not the same column
-                    
+
                     $firstCellRow=3;
                     $lastRow = $sheet->getHighestRow();
                         //Step 3: Copy Cell values from later columns over to first found column
@@ -3957,7 +3955,7 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
                             if (is_null($cell1->getValue())){ //If the Value of first column is empty, replace it with value in second column
                                 $sheet->getCell($columnLetter1.$row)->setValue($cell2->getValue());
                             }
-                            
+
                         }
 
                     }
@@ -3972,10 +3970,10 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
             $previouslyDeletedColumn='';
             $deletedCount=0;
             $chars = range('A', 'Z');
-        
+
             foreach($columnsToBeDeleted as $deleteColumn){
-                
-                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){ 
+
+                if($previouslyDeletedColumn!='' && strcmp($deleteColumn,$previouslyDeletedColumn)>0){
 
                     //So checking if the deleted column comes after the previously deleted column, we need to reduce the current delete by 1 letter for each column deleted
                     //strcmp if the first is lexicograpically greater than the second then a positive number will be returned.
@@ -3985,7 +3983,7 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
 
 
                 }
-                
+
                 $sheet->removeColumn($deleteColumn);
 
                 $previouslyDeletedColumn=$deleteColumn;
@@ -3993,7 +3991,7 @@ private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $program
             }
 
         return $sheet;
- 
+
     } catch (Throwable $exception) {
         // Log any errors
         $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
@@ -4015,7 +4013,7 @@ public function downloadUserGuide(){
 
     // return the location of the spreadsheet document on the server
     return $url;
-    
+
 }
 
 }
