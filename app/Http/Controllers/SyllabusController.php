@@ -29,6 +29,7 @@ use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Dompdf\Options as DomPdfOptions;
 
 define('INPUT_TIPS', [
     'otherCourseStaff' => 'At the discretion of the course instructor, the names of any other student-facing members of teaching staff such as teaching assistants involved in the offering of the course (if not available on the Student Service Centre or on Workday), and details of when and by what means students may contact them.',
@@ -52,7 +53,7 @@ define('INPUT_TIPS', [
     'learningAnalytics' => 'If your course or department has a learning resource centre (physical or virtual), inform your students. Who will students encounter there? Are the staff knowledgeable about this course?',
     'officeLocation' => 'Building & Room Number',
     'creativeCommons' => 'Include a copyright statement or include a Creative Commons Open Copyright license of your choosing. Visit the <a href="https://creativecommons.org/licenses/" target="_blank" rel="noopener noreferrer">Creative Commons Website</a> for options and more information. Need help deciding? Try using the <a href="https://creativecommons.org/choose/" target="_blank" rel="noopener noreferrer">Creative Commons License Chooser</a>.',
-    'uniPolicy' => 'Hearing from each course instructor about University policies and values can help to emphasize their importance to students. To fulfil the policy, you need only to present the following paragraph with the link to the web page that provides details and links to specific policies and resources. You may wish to take the opportunity to relate the ideas to your own course as part of your students’ education. This policy is <b>always included</b> in a generated Vancouver syllabus.',
+    'uniPolicy' => 'Hearing from each course instructor about University policies and values can help to emphasize their importance to students. To fulfil the policy, you need only to present the following paragraph with the link to the web page that provides details and links to specific policies and resources. You may wish to take the opportunity to relate the ideas to your own course as part of your students\' education. This policy is <b>always included</b> in a generated Vancouver syllabus.',
     'customResource' => 'Include any additional information or resources that have not been provided.',
     'saveWarning' => 'Be sure to save your content regularly by clicking the save button <i class="bi bi-clipboard2-check-fill"></i> at the top and bottom of this page.',
     'crossListed' => 'Is this a Cross-Listed Course? Per <a href="https://senate.ubc.ca/okanagan/forms/" target="_blank" rel="noopener noreferrer">Curriculum Guidelines</a>.',
@@ -2074,6 +2075,31 @@ class SyllabusController extends Controller
             $templateProcessor->cloneBlock('NoOutcomeMaps', 0);
         }
 
+        // Handle license information before PDF/Word specific processing
+        if (!empty($syllabus->license)) {
+            $licenseArr = explode("\n", $syllabus->license);
+            $i = 0;
+            if ($ext == 'pdf') {
+                foreach ($licenseArr as $index => $licenseLine) {
+                    $templateProcessor->cloneBlock('NoLicense');
+                    $templateProcessor->setValue('license' . $i, htmlspecialchars($licenseLine, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
+                    $i++;
+                }
+                for ($i; $i <= 20; $i++) {
+                    $templateProcessor->setValue('license' . $i, '');
+                }
+            } else {
+                $templateProcessor->cloneBlock('NoLicense');
+                $templateProcessor->setValue('license0', str_replace("\n", '</w:t><w:br/><w:t>', $syllabus->license));
+                $i++;
+                for ($i; $i <= 20; $i++) {
+                    $templateProcessor->setValue('license' . $i, '');
+                }
+            }
+        } else {
+            $templateProcessor->cloneBlock('NoLicense', 0);
+        }
+
         // set document name
         $fileName = 'syllabus';
         // word file ext
@@ -2087,6 +2113,7 @@ class SyllabusController extends Controller
             $pdfRendererPath = base_path(DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'dompdf');
             Settings::setPdfRendererPath($pdfRendererPath);
             Settings::setPdfRendererName('DomPDF');
+
             // get path to word file
             $wordFilePath = config('app.env') == 'local' ? public_path($fileName . $wordFileExt) : base_path('html' . DIRECTORY_SEPARATOR . $fileName . $wordFileExt);
             // load word file
