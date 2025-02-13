@@ -2562,6 +2562,8 @@ class ProgramController extends Controller
                 $i++;
             }
             $output .= '</tbody></table>';
+        } else {
+            $output = '<div class="alert alert-warning wizard"><i class="bi bi-exclamation-circle-fill"></i>There are no ministry standards for the courses belonging to this program, or there are no courses matching the criteria.</div>';
         }
 
         return $output;
