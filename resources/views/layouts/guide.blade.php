@@ -178,7 +178,7 @@
             <p class="help-p my-3" style="font-size:18px;">After you click on the button to create a program learning outcome you will be prompted with the following form to fill out.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreatePLOModal.PNG')}}" onclick="onClick(this)">
             <br>
-            <p class="help-p my-3" style="font-size:18px;">You can add this program learning outcome to a category by selecting from the dropdown list shown below, or you can choose ‘None’ if you would like to leave it uncategorized. You may change any of the information after you save it by selecting the ‘Edit’ button.</p>
+            <p class="help-p my-3" style="font-size:18px;">You can add this program learning outcome to a category by selecting from the dropdown list shown below, or you can choose 'None' if you would like to leave it uncategorized. You may change any of the information after you save it by selecting the 'Edit' button.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CategoryDropdown.png')}}" onclick="onClick(this)">
             <br>
             <div class="row">
@@ -220,12 +220,12 @@
             <p class="help-p my-3" style="font-size:18px;">There are two ways to add mapping scales to a program, the first involves importing a set of predefined mapping scales. This can be accomplished by clicking the 'Show Default Mapping Scales' button as shown below.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreateDefaultMappingScale.png')}}" onclick="onClick(this)">
             <br>
-            <p class="help-p my-3" style="font-size:18px;">After you will see the following prompt, as shown below. From the prompt, you can select from a set of Default Mapping Scales to add to your program by clicking the ‘+ Import Mapping Scale' button. As a side note if you have previously imported a set of default mapping scales it will be overwritten by the set you are trying to add.</p>
+            <p class="help-p my-3" style="font-size:18px;">After you will see the following prompt, as shown below. From the prompt, you can select from a set of Default Mapping Scales to add to your program by clicking the '+ Import Mapping Scale' button. As a side note if you have previously imported a set of default mapping scales it will be overwritten by the set you are trying to add.</p>
             <img class="img center my-3" src="{{asset('/img/guide/ImportMappingScaleModal.png')}}" onclick="onClick(this)">
             <br>
             <br>
             <h2 class="text-center mb-4">How to Add a Custom Mapping Scale</h2>
-            <p class="help-p my-3" style="font-size:18px;">The second method of adding a mapping scale involves creating a custom scale. This can be accomplished by clicking the ‘+ my own Mapping Scale Level’ button, as shown below.</p>
+            <p class="help-p my-3" style="font-size:18px;">The second method of adding a mapping scale involves creating a custom scale. This can be accomplished by clicking the 'my own Mapping Scale Level' button, as shown below.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreateCustomMappingScale.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3" style="font-size:18px;">After selecting the button, you will be prompted with the following form to fill out as shown below.</p>
@@ -268,16 +268,16 @@
             <p class="help-p my-3" style="font-size:18px;">The courses step allows you to either add an existing course to your program, or create a new course which is then added to your program. This then allows Program Learning Outcomes (PLOs) to be mapped to Course Learning Outcomes (CLOs).</p>
             <br>
             <h2 class="text-center mb-4">How to Add an Existing Course</h2>
-            <p class="help-p my-3" style="font-size:18px;">To add an existing course to your program you must either have previously created a course that is not already assigned to the current program, or have been added as a collaborator to a course. If at least one of those two requirements is met then you will be able to add and existing course by clicking the button ‘+ Existing Course’ as shown below. Otherwise, if neither condition is met then you can also create a new course, more information on how to create a new course is provided under this section.</p>
+            <p class="help-p my-3" style="font-size:18px;">To add an existing course to your program you must either have previously created a course that is not already assigned to the current program, or have been added as a collaborator to a course. If at least one of those two requirements is met then you will be able to add and existing course by clicking the button 'Existing Course' as shown below. Otherwise, if neither condition is met then you can also create a new course, more information on how to create a new course is provided under this section.</p>
             <img class="img center my-3" src="{{asset('/img/guide/AddExistingCourse.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3" style="font-size:18px;">From the prompt shown below you will be able to select from a list of available courses to add to your program. You can add multiple courses at a time. As well you can select whether or not the course is required by the program or if it is an elective.</p>
             <img class="img center my-3" src="{{asset('/img/guide/AddExistingCourseGif.gif')}}" onclick="onClick(this)">
             <br>
-            <p class="help-p my-3" style="font-size:18px;">After you press the “Add Selected’ you will see the courses added to you program in the courses table.</p>
+            <p class="help-p my-3" style="font-size:18px;">After you press the "Add Selected' you will see the courses added to you program in the courses table.</p>
             <br>
             <h2 class="text-center mb-4">How to Add a New Course</h2>
-            <p class="help-p my-3" style="font-size:18px;">To add a new course to your program you will first need to select the ‘+ New Course’ button.</p>
+            <p class="help-p my-3" style="font-size:18px;">To add a new course to your program you will first need to select the 'New Course' button.</p>
             <img class="img center my-3" src="{{asset('/img/guide/AddNewCourse.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3" style="font-size:18px;">This will open a prompt that will allow you to enter information regarding your course, as well as if it is required by the program.</p>
@@ -395,10 +395,10 @@
         $("#guideModal .update-content").html(`
             <h2 class="mb-4 head"><u>Course Learning Outcomes (Step 1)</u></h2>
             <br>
-            <p class="help-p my-3 center" style="font-size:18px;">Course Learning outcomes allow you to describe the outcomes that students can expect to take away from completing the course, further instructions can be found <a target=”_blank” href='https://ctl.ok.ubc.ca/teaching-effectively/course-design/'>here</a>.</p>
+            <p class="help-p my-3 center" style="font-size:18px;">Course Learning outcomes allow you to describe the outcomes that students can expect to take away from completing the course, further instructions can be found <a target="_blank" href='https://ctl.ok.ubc.ca/teaching-effectively/course-design/'>here</a>.</p>
             <br>
             <h2 class="text-center mb-4">How to Add a New Course Learning Outcome</h2>
-            <p class="help-p my-3 center" style="font-size:18px;">To create a Course Learning Outcome, you will need to select the ‘+ CLO’ button.</p>
+            <p class="help-p my-3 center" style="font-size:18px;">To create a Course Learning Outcome, you will need to select the '+ CLO' button.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreateCLO.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3 center" style="font-size:18px;">You can then enter your Course Learning outcome as well as a short phrase in the prompt shown below. There is further information provided in the prompt to help you generate ideas for creating Course Learning Outcomes.</p>
@@ -443,7 +443,7 @@
             <p class="help-p my-3 center" style="font-size:18px;">Student Assessment Methods provide a way to list the methods that students' understanding of course concepts and material will be evaluated and measured.</p>
             <br>
             <h2 class="text-center mb-4">How to Add a New Student Assessment Methods</h2>
-            <p class="help-p my-3 center" style="font-size:18px;">To create Student Assessment Methods, you will need to select the ‘+ Student Assessment Methods’ button.</p>
+            <p class="help-p my-3 center" style="font-size:18px;">To create Student Assessment Methods, you will need to select the '+ Student Assessment Methods' button.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreateStudentAssessmentMethod.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3 center" style="font-size:18px;">You will then see the prompt shown below, from this menu you can add as many Assessment Methods as you would like. For each Assessment Method you will need to assign a weight, you may also assign the weight of zero if you wish.</p>
@@ -489,7 +489,7 @@
             <p class="help-p my-3 center" style="font-size:18px;">Teaching and Learning Activities are used to describe the methods the course will be taught.</p>
             <br>
             <h2 class="text-center mb-4">How to Add New Teaching and Learning Activities</h2>
-            <p class="help-p my-3 center" style="font-size:18px;">To create Teaching and Learning Activities, you will need to select the ‘+ Learning Activities’ button.</p>
+            <p class="help-p my-3 center" style="font-size:18px;">To create Teaching and Learning Activities, you will need to select the '+ Learning Activities' button.</p>
             <img class="img center my-3" src="{{asset('/img/guide/CreateTeachingandLearningActivities.png')}}" onclick="onClick(this)">
             <br>
             <p class="help-p my-3 center" style="font-size:18px;">You will then see the prompt shown below, from this menu you can add as many Learning Activities as you would like.</p>
@@ -647,7 +647,7 @@
             <img class="img center my-3" src="{{asset('/img/guide/StrategicPriority.png')}}" onclick="onClick(this)">
             <br>
             <ol class="m-5">
-                <li class="my-2" style="font-size: 18px;">Select the Strategic Priority’s which align best for your course.</li>
+                <li class="my-2" style="font-size: 18px;">Select the Strategic Priority's which align best for your course.</li>
                 <li class="my-2" style="font-size: 18px;">Make sure you save your selection before leaving the page.</li>
             </ol>
             <img class="img center my-3" src="{{asset('/img/guide/StrategicPrioritySelection.png')}}" onclick="onClick(this)">
@@ -722,11 +722,51 @@
         $("#guideModal .update-content").html(`
             <h2 class="mb-4 head"><u>Syllabi</u></h2>
             <br>
-            <p class="help-p my-3 center" style="font-size:18px;">This page is under construction.</p>
+            <h2 class="text-center mb-4">How to Create a Syllabus</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator allows you to create and manage course syllabi. You can save your syllabus, download it in different formats, and import existing course information.</p>
+            <br>
+            <h2 class="text-center mb-4">Saving and Downloading Options</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator provides several options for managing your syllabus:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Click the "SAVE" button to save your current syllabus.</li>
+                <li class="my-2" style="font-size: 18px;">Use the "WORD" button to save and download your syllabus as a Word document (recommended for better formatting and a more modern design).</li>
+                <li class="my-2" style="font-size: 18px;">Use the "PDF" button to save and download your syllabus as a PDF document.</li>
+                <li class="my-2" style="font-size: 18px;">Click the "IMPORT" button to import information from an existing course.</li>
+            </ol>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusGeneratorButtons.png')}}" onclick="onClick(this)">
+            <br>
+            <h2 class="text-center mb-4">Campus-Specific Information</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator adapts to different campus requirements. Please note:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Field requirements may vary between campuses (some fields may be optional for one campus but mandatory for another).</li>
+                <li class="my-2" style="font-size: 18px;">Different campuses may have additional or fewer fields based on their specific requirements.</li>
+                <li class="my-2" style="font-size: 18px;">The layout and organization of the syllabus may differ between campuses to meet local standards.</li>
+            </ol>
+            <br>
+            <h2 class="text-center mb-4">Importing Course Information</h2>
+            <p class="help-p my-3" style="font-size:18px;">You can import information from existing courses to populate your syllabus. This includes course details, learning outcomes, and other relevant information.</p>
+            <img class="img center my-3" src="{{asset('/img/guide/ImportExistingCourse.png')}}" onclick="onClick(this)">
+            <br>
+            <h2 class="text-center mb-4">Syllabus Sections</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator includes several sections that you can customize. Note that available sections and their requirements may vary by campus:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Course Information - Basic details about the course</li>
+                <li class="my-2" style="font-size: 18px;">Course Description - Detailed description of the course content</li>
+                <li class="my-2" style="font-size: 18px;">Learning Outcomes - Course learning outcomes</li>
+                <li class="my-2" style="font-size: 18px;">Course Format - Information about how the course is delivered</li>
+                <li class="my-2" style="font-size: 18px;">Learning Activities - Teaching and learning activities</li>
+                <li class="my-2" style="font-size: 18px;">Assessment Methods - Student assessment methods and weights</li>
+                <li class="my-2" style="font-size: 18px;">Additional Campus-Specific Fields - Extra sections that may be required by your campus</li>
+            </ol>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusSections.png')}}" onclick="onClick(this)">
+            <br>
+            <h2 class="text-center mb-4">Program Learning Outcomes Mapping</h2>
+            <p class="help-p my-3" style="font-size:18px;">If your course is part of a program, you can view how the course learning outcomes map to program learning outcomes in a detailed mapping table.</p>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusPLOMapping.png')}}" onclick="onClick(this)">
         `);
     }
 
-    // calls for on click methods (nav bar) 
+    // calls for on click methods (nav bar)
     // Programs
     $('.programs-guide').on('click', setProgram);
     $('.plo-guide').on('click', setPLO);
@@ -744,7 +784,7 @@
     $('.coursesSummary-guide').on('click', setCoursesSummary);
     // Syllabi
     $('.syllabi-guide').on('click', setSyllabi);
-    
+
     // Calls from Dashboard
     $('#programHelp').on('click', setProgram);
     $('#coursesHelp').on('click', setCourses);
@@ -784,7 +824,7 @@
         font-size: 18px;
     }
     .update-content{
-        max-height:714px; 
+        max-height:714px;
         overflow-y: scroll;
         background-color: #fafafa;
     }
@@ -797,7 +837,7 @@
     .selected-attribute{
         border-bottom: solid 2px #0055b7;
     }
-    
+
     .modal-zoom{
         z-index: 1061;
     }
