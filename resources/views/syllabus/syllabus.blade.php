@@ -6,6 +6,31 @@
 
 @include('modals.courseSchedule')
 
+<!-- PDF Download Confirmation Modal -->
+<div class="modal fade" id="pdfDownloadConfirmation" tabindex="-1" aria-labelledby="pdfDownloadConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfDownloadConfirmationLabel">Download Format Recommendation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>For better formatting and a sleeker modern design, we recommend downloading your syllabus in Word format.</p>
+                <p>Would you like to:</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="submit" name="download" value="word" form="sylabusGenerator" class="btn btn-primary">
+                    <i class="bi-file-earmark-word-fill"></i> Download Word
+                </button>
+                <button type="submit" name="download" value="pdf" form="sylabusGenerator" class="btn btn-secondary">
+                    <i class="bi-file-pdf-fill"></i> Continue with PDF
+                </button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .inputFieldDescription {
         font-size: 13px;
@@ -28,7 +53,7 @@
                 </button>
             </div>
             <div class="col-2" style="max-width:10%">
-                <button type="submit" name="download" value="pdf" form="sylabusGenerator"
+                <button type="button" data-bs-toggle="modal" data-bs-target="#pdfDownloadConfirmation"
                     class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
                     title="Save and download my syllabus as PDF">
                     <i class="text-danger bi-file-pdf-fill btn btn-light rounded-circle m-2"></i>
@@ -1204,7 +1229,7 @@
             </button>
         </div>
         <div class="col-2" style="max-width:10%">
-            <button type="submit" name="download" value="pdf" form="sylabusGenerator"
+            <button type="button" data-bs-toggle="modal" data-bs-target="#pdfDownloadConfirmation"
                 class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
                 title="Save and download my syllabus as PDF">
                 <i class="text-danger bi-file-pdf-fill btn btn-light rounded-circle m-2"></i>
