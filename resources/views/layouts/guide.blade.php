@@ -320,8 +320,21 @@
             <h2 class="mb-4 head"><u>Program Overview (Step 4)</u></h2>
             <br>
             <p class="help-p my-3" style="font-size:18px;">The program overview provides a comprehensive view of all of the information regarding the program, as well as a detailed chart that shows the alignment of courses to program learning outcomes for this program. You must fill in the previous steps in order to see some of the fields for the program overview.</p>
-            <p class="help-p my-3" style="font-size:18px;">The program overview can be downloaded as a PDF copy.</p>
+            <p class="help-p my-3" style="font-size:18px;">The program overview offers two download options:</p>
+            <ol class="m-4">
+                <li class="my-2" style="font-size: 18px;"><strong>Download Summary</strong> - Provides a PDF or Excel download of the Program Overview, including all charts and details about program learning outcomes and course alignments. Excel format is available in Chrome and Firefox browsers only.</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Download Data</strong> - Exports detailed program data in Excel format, including comprehensive course-to-PLO mapping information that can be analyzed or further processed.</li>
+            </ol>
             <img class="img center my-3" src="{{asset('/img/guide/ProgramsDownloadPDF.png')}}" onclick="onClick(this)">
+            <br>
+            <h2 class="text-center mb-4">Using the Excel Data Export</h2>
+            <p class="help-p my-3" style="font-size:18px;">The Excel data export provides comprehensive mapping information in a format that can be used for analysis and reporting:</p>
+            <ul class="m-4">
+                <li class="my-2" style="font-size: 18px;">Contains all program learning outcomes and course alignments in an organized spreadsheet format</li>
+                <li class="my-2" style="font-size: 18px;">Includes detailed mapping scales and their applications across the curriculum</li>
+                <li class="my-2" style="font-size: 18px;">Provides data that can be filtered, sorted, and analyzed using Excel features</li>
+                <li class="my-2" style="font-size: 18px;">Useful for curriculum review, accreditation reporting, and program assessment</li>
+            </ul>
             <br>
             <button class="btn btn-primary float-left w-50" onclick="setProgramCourses()" style="color: white;"><i class="bi bi-arrow-left mr-2"></i> Courses (Step 3)</button>
         `);
