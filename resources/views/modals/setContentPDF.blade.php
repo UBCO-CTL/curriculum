@@ -1,4 +1,3 @@
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
                 <!-- Select program content modal -->
 
@@ -84,8 +83,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button id="downloadPartialPDFBtn"  data-route="{{route('programs.pdf', $program->program_id)}}" type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 120px;">Cancel</button>
+                                <button id="downloadPartialPDFBtn" data-route="{{route('programs.pdf', $program->program_id)}}" type="submit" class="btn btn-primary" style="width: 120px;">Submit</button>
                                 <input value="1" name="formFilled" id="formFilled" form ="setContentForm"hidden>
                             </div>
                         </form>
@@ -113,13 +112,19 @@
             },
             beforeSend: (jqXHR, settings) => {
                 // show download modal
-                $('#setContentPDF').modal('toggle');
-                $('#downloadProgressModal').modal('show');
-
+                var setContentModal = bootstrap.Modal.getInstance(document.getElementById('setContentPDF'));
+                if (setContentModal) {
+                    setContentModal.hide();
+                }
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
             },
             success: (data, textStatus, jqXHR) => {
-
-                $('#downloadProgressModal').modal('hide');
+                // hide download modal
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
                 if (data == -1)
                     showErrorToast()
@@ -138,7 +143,10 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
                     // show error toast
                     showErrorToast();
@@ -157,7 +165,10 @@
             // abort XMLHttpRequest
             xhr.abort();
             // hide download modal
-            $('#downloadProgressModal').modal('hide');
+            var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+            if (downloadModal) {
+                downloadModal.hide();
+            }
         }
     }
 
