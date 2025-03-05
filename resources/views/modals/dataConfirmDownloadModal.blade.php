@@ -17,15 +17,15 @@
                                 <br>
                                 </n>
                                 <div style="text-align: center;">
-                                <div><button id="downloadUserGuideBtn"  data-bs-route="{{route('programs.downloadUserGuide', $program->program_id)}}" class="btn btn-primary">Download User Guide</button></div>
+                                <div><button id="downloadUserGuideBtn"  data-bs-route="{{route('programs.downloadUserGuide', $program->program_id)}}" class="btn btn-primary" style="width: 220px;">Download User Guide</button></div>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
 
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 120px;">Cancel</button>
 
-                                <button id="dataConfirmDownloadBtn"  data-bs-route="{{route('programs.dataSpreadsheet', $program->program_id)}}" class="btn btn-primary">Confirm and Download</button>
+                                <button id="dataConfirmDownloadBtn"  data-bs-route="{{route('programs.dataSpreadsheet', $program->program_id)}}" class="btn btn-primary" style="width: 220px;">Confirm and Download</button>
                             </div>
 
                         </div>
@@ -46,7 +46,10 @@
             // abort XMLHttpRequest
             xhr.abort();
             // hide download modal
-            $('#downloadProgressModal').modal('hide');
+            var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+            if (downloadModal) {
+                downloadModal.hide();
+            }
         }
     }
 

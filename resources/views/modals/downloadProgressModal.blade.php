@@ -10,7 +10,9 @@
                 @if (Request::is('programWizard/*'))
                     <h5 class="modal-title" id="downloadProgressModalLabel">Downloading program overview for {{$program->program}} ...</h5>
                 @endif
-            </div>  
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <p class="mb-2">This may take up to 5 minutes.</p>
                 <p class="mb-2">If this message does not go away automatically within 5 minutes or less, please close the window and check your Downloads folder.</p>
@@ -21,7 +23,7 @@
                 <a id="save-file" hidden download></a>
             </div>
             <div class="modal-footer">
-                <button id="cancelDownloadBtn" type="button" class="btn btn-secondary" aria-label="Close">Cancel</button>
+                <button id="cancelDownloadBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 120px;">Cancel</button>
             </div>
         </div>
     </div>
@@ -51,7 +53,7 @@
         $("#downloadUserGuideBtn").click((e) =>
             downloadUserGuide(e.currentTarget)
         )
-        
+
     });
 
     // Course level pdf
@@ -63,13 +65,17 @@
             dataType: "text",
             beforeSend: (jqXHR, settings) => {
                 // show download modal
-                $('#downloadProgressModal').modal('show');
-            },  
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
+            },
             success: (data, textStatus, jqXHR) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -84,13 +90,16 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
+        });
     }
 
     // Course level excel
@@ -102,13 +111,17 @@
             dataType: "text",
             beforeSend: (jqXHR, settings) => {
                 // show download modal
-                $('#downloadProgressModal').modal('show');
-            },  
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
+            },
             success: (data, textStatus, jqXHR) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -123,15 +136,18 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
+        });
     }
-        
+
 
     // Program Level excel with charts
     function downloadExcel(trigger) {
@@ -142,14 +158,21 @@
             dataType: "text",
             beforeSend: (jqXHR, settings) => {
                 // hide confirmation modal and show download modal
-                $('#confirmDownloadModal').modal('hide');
-                $('#downloadProgressModal').modal('show');
-            },  
+                var confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmDownloadModal'));
+                if (confirmModal) {
+                    confirmModal.hide();
+                }
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
+            },
             success: (data, textStatus, jqXHR) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -164,16 +187,19 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
+        });
     }
 
-    // Program Level Data Excel 
+    // Program Level Data Excel
     function downloadDataExcel(trigger) {
         var route = "{{route('programs.dataSpreadsheet', $program->program_id)}}";
         xhr = $.ajax({
@@ -182,14 +208,21 @@
             dataType: "text",
             beforeSend: (jqXHR, settings) => {
                 // hide confirmation modal and show download modal
-                $('#dataConfirmDownloadModal').modal('hide');
-                $('#downloadProgressModal').modal('show');
-            },  
+                var dataConfirmModal = bootstrap.Modal.getInstance(document.getElementById('dataConfirmDownloadModal'));
+                if (dataConfirmModal) {
+                    dataConfirmModal.hide();
+                }
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
+            },
             success: (data, textStatus, jqXHR) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -204,17 +237,20 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
+        });
     }
 
-        // Download User Guide
-        function downloadUserGuide(trigger) {
+    // Download User Guide
+    function downloadUserGuide(trigger) {
         var route = "{{route('programs.downloadUserGuide', $program->program_id)}}";
         xhr = $.ajax({
             type: "GET",
@@ -222,14 +258,21 @@
             dataType: "text",
             beforeSend: (jqXHR, settings) => {
                 // hide confirmation modal and show download modal
-                $('#dataConfirmDownloadModal').modal('hide');
-                $('#downloadProgressModal').modal('show');
-            },  
+                var dataConfirmModal = bootstrap.Modal.getInstance(document.getElementById('dataConfirmDownloadModal'));
+                if (dataConfirmModal) {
+                    dataConfirmModal.hide();
+                }
+                var downloadModal = new bootstrap.Modal(document.getElementById('downloadProgressModal'));
+                downloadModal.show();
+            },
             success: (data, textStatus, jqXHR) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 // check if controller handled an error
-                if (data == -1) 
+                if (data == -1)
                     showErrorToast()
                 else {
                     // close error toast if open
@@ -244,13 +287,16 @@
             },
             error: (jqXHR, textStatus, error) => {
                 // hide download modal
-                $('#downloadProgressModal').modal('hide');
+                var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+                if (downloadModal) {
+                    downloadModal.hide();
+                }
                 if (textStatus != "abort") {
-                    // show error toast 
-                    showErrorToast();                
+                    // show error toast
+                    showErrorToast();
                 }
             },
-        });     
+        });
     }
 
     function abort(event) {
@@ -258,7 +304,10 @@
             // abort XMLHttpRequest
             xhr.abort();
             // hide download modal
-            $('#downloadProgressModal').modal('hide');
+            var downloadModal = bootstrap.Modal.getInstance(document.getElementById('downloadProgressModal'));
+            if (downloadModal) {
+                downloadModal.hide();
+            }
         }
     }
 
@@ -268,7 +317,7 @@
         if (errorToast.hasClass("hide")) {
             errorToast.removeClass("hide");
             errorToast.addClass("show");
-        } 
+        }
     }
 
     // hide the error toast
@@ -277,7 +326,7 @@
         if (errorToast.hasClass("show")) {
             errorToast.removeClass("show");
             errorToast.addClass("hide");
-        } 
+        }
     }
 
 
@@ -296,6 +345,6 @@
             error: (jqXHR, textStatus, error) => {
                 console.log(error);
             },
-        }); 
+        });
     }
 </script>
