@@ -100,6 +100,9 @@ Route::get('/programs/{program}/downloadUserGuide', [ProgramController::class, '
 // Program Summary raw data spreadsheet routes
 Route::get('/programs/{program}/dataSpreadsheet', [ProgramController::class, 'dataSpreadsheet'])->name('programs.dataSpreadsheet');
 
+// Performance benchmark route for downloads
+Route::get('/programs/{program}/benchmark/{type}', [ProgramController::class, 'benchmarkDownload'])->name('programs.benchmark');
+
 Route::get('/programs/{program}/duplicate', [ProgramController::class, 'duplicate'])->name('programs.duplicate');
 
 Route::resource('/courses', CourseController::class);
