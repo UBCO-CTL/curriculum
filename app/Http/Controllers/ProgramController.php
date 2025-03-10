@@ -418,15 +418,54 @@ class ProgramController extends Controller
             // Change key so that order isn't messed up when data is used in highcharts
             $index = 0;
             $freqForMS = [];
+            $naIndex = -1;
+
+            // Process all mapping scales except N/A first
             foreach ($freqOfMSIds as $ms_id => $freqOfMSId) {
+                if ($ms_id == 0) { // N/A has ID 0
+                    $naIndex = $index;
+                }
                 $freqForMS[$index] = $freqOfMSId;
                 $index++;
+            }
+
+            // Verify N/A values are properly set and not just copying from A
+            if ($naIndex >= 0) {
+                // Get actual N/A values from the database for verification
+                // This ensures N/A data is independent from other mapping scales
+                $naValues = [];
+                foreach ($plosInOrderIds as $i => $ploId) {
+                    // Count actual N/A mappings (where map_scale_id = 0)
+                    $naCount = DB::table('outcome_maps')
+                        ->where('pl_outcome_id', $ploId)
+                        ->where('map_scale_id', 0)
+                        ->count();
+                    $naValues[$i] = $naCount;
+                }
+
+                // Override the existing N/A values with the verified ones
+                $freqForMS[$naIndex] = $naValues;
             }
 
             // create series array for highcharts
             $seriesPLOCLO = [];
             for ($count = 0; $count < count($mappingScalesAbbrevArr); $count++) {
-                array_push($seriesPLOCLO, ['name' => $mappingScalesAbbrevArr[$count], 'data' => $freqForMS[$count], 'colour' => $programMappingScalesColors[$count]]);
+                // Check if this is the N/A series and if it has any non-zero values
+                $hasValues = true;
+                if ($count == $naIndex) {
+                    $hasValues = false;
+                    foreach ($freqForMS[$count] as $val) {
+                        if ($val > 0) {
+                            $hasValues = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Only include the series if it has values (for N/A) or is not N/A
+                if ($count != $naIndex || $hasValues) {
+                    array_push($seriesPLOCLO, ['name' => $mappingScalesAbbrevArr[$count], 'data' => $freqForMS[$count], 'colour' => $programMappingScalesColors[$count]]);
+                }
             }
 
             // DATA FOR ASSESSMENT METHODS - More efficient query
