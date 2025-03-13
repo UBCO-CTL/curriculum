@@ -1,17 +1,17 @@
 <!--Modal 1-->
 <div class="modal fade" id="guideModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalToggleLabel" style="color: black;">Guide</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="color: black;">
+            <div class="modal-body" style="color: black; padding: 0;">
                 <div class="container-fluid">
                     <div class="row">
                         <!--Nav Bar-->
-                        <div class="col-md-4" style="border-right: 1px solid grey;">
-                            <nav>
+                        <div class="col-md-3 col-lg-3" style="border-right: 1px solid grey;">
+                            <nav class="sticky-top pt-2">
                                 <ol style="list-style-type: none; font-size:medium; list-style: none; padding-left: 0;">
                                     <li class="li">
                                         <a class="programs-guide">Programs</a>
@@ -59,7 +59,22 @@
                                         </ol>
                                     </li>
                                     <li class="li">
-                                        <a class="syllabi-guide">Syllabi</a>
+                                        <a class="syllabi-guide">Syllabus Generator</a>
+                                        <!--Sub-Categories For Syllabus Generator-->
+                                        <ol class="ol-inner" style="list-style-type: none;">
+                                            <li class="li">
+                                                <a class="syllabusBasics-guide">Creating a Syllabus</a>
+                                            </li>
+                                            <li class="li">
+                                                <a class="syllabusImport-guide">Importing Course Information</a>
+                                            </li>
+                                            <li class="li">
+                                                <a class="syllabusSections-guide">Syllabus Sections</a>
+                                            </li>
+                                            <li class="li">
+                                                <a class="syllabusPLOMapping-guide">Program Learning Outcomes Mapping</a>
+                                            </li>
+                                        </ol>
                                     </li>
                                 </ol>
                             </nav>
@@ -724,16 +739,20 @@
         $("#guideModal .standards-guide").removeClass('selected-attribute');
         $("#guideModal .coursesSummary-guide").removeClass('selected-attribute');
         $("#guideModal .syllabi-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusBasics-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusImport-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusSections-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusPLOMapping-guide").removeClass('selected-attribute');
         // add attribute
         $("#guideModal .syllabi-guide").addClass('selected-attribute');
         // Reset Scroll to top
         $('.update-content').scrollTop(0);
 
         // Header
-        $("#guideModal .modal-title").text('Syllabi Guide');
+        $("#guideModal .modal-title").text('Syllabus Generator Guide');
         // Body
         $("#guideModal .update-content").html(`
-            <h2 class="mb-4 head"><u>Syllabi</u></h2>
+            <h2 class="mb-4 head"><u>Syllabus Generator</u></h2>
             <br>
             <h2 class="text-center mb-4">How to Create a Syllabus</h2>
             <p class="help-p my-3" style="font-size:18px;">The syllabus generator allows you to create and manage course syllabi. You can save your syllabus, download it in different formats, and import existing course information.</p>
@@ -779,6 +798,215 @@
         `);
     }
 
+    function setSyllabusBasics() {
+        // remove attributes
+        $("#guideModal .programs-guide").removeClass('selected-attribute');
+        $("#guideModal .plo-guide").removeClass('selected-attribute');
+        $("#guideModal .ms-guide").removeClass('selected-attribute');
+        $("#guideModal .programCourses-guide").removeClass('selected-attribute');
+        $("#guideModal .programOverview-guide").removeClass('selected-attribute');
+        $("#guideModal .courses-guide").removeClass('selected-attribute');
+        $("#guideModal .clo-guide").removeClass('selected-attribute');
+        $("#guideModal .sam-guide").removeClass('selected-attribute');
+        $("#guideModal .tla-guide").removeClass('selected-attribute');
+        $("#guideModal .courseAlignment-guide").removeClass('selected-attribute');
+        $("#guideModal .programOutcomeMapping-guide").removeClass('selected-attribute');
+        $("#guideModal .standards-guide").removeClass('selected-attribute');
+        $("#guideModal .coursesSummary-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabi-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusBasics-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusImport-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusSections-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusPLOMapping-guide").removeClass('selected-attribute');
+        // add attribute
+        $("#guideModal .syllabusBasics-guide").addClass('selected-attribute');
+        // Reset Scroll to top
+        $('.update-content').scrollTop(0);
+
+        // Header
+        $("#guideModal .modal-title").text('Creating a Syllabus Guide');
+        // Body
+        $("#guideModal .update-content").html(`
+            <h2 class="mb-4 head"><u>Creating a Syllabus</u></h2>
+            <br>
+            <h2 class="text-center mb-4">How to Create a Syllabus</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator allows you to create and manage course syllabi. You can start from scratch or import existing course information to save time.</p>
+            <br>
+            <h2 class="text-center mb-4">Saving and Downloading Options</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator provides several options for managing your syllabus:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Click the "SAVE" button to save your current syllabus.</li>
+                <li class="my-2" style="font-size: 18px;">Use the "WORD" button to save and download your syllabus as a Word document (recommended for better formatting and a more modern design).</li>
+                <li class="my-2" style="font-size: 18px;">Use the "PDF" button to save and download your syllabus as a PDF document.</li>
+                <li class="my-2" style="font-size: 18px;">Click the "IMPORT" button to import information from an existing course.</li>
+            </ol>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusGeneratorButtons.png')}}" onclick="onClick(this)">
+            <br>
+            <div class="row">
+                <div class="col"><button class="btn btn-primary float-left w-100" onclick="setSyllabi()" style="color: white;"><i class="bi bi-arrow-left mr-2"></i> Syllabus Generator</button></div>
+                <div class="col"><button class="btn btn-primary float-right w-100" onclick="setSyllabusImport()" style="color: white;">Importing Course Information <i class="bi bi-arrow-right mr-2"></i></button></div>
+            </div>
+        `);
+    }
+
+    function setSyllabusImport() {
+        // remove attributes
+        $("#guideModal .programs-guide").removeClass('selected-attribute');
+        $("#guideModal .plo-guide").removeClass('selected-attribute');
+        $("#guideModal .ms-guide").removeClass('selected-attribute');
+        $("#guideModal .programCourses-guide").removeClass('selected-attribute');
+        $("#guideModal .programOverview-guide").removeClass('selected-attribute');
+        $("#guideModal .courses-guide").removeClass('selected-attribute');
+        $("#guideModal .clo-guide").removeClass('selected-attribute');
+        $("#guideModal .sam-guide").removeClass('selected-attribute');
+        $("#guideModal .tla-guide").removeClass('selected-attribute');
+        $("#guideModal .courseAlignment-guide").removeClass('selected-attribute');
+        $("#guideModal .programOutcomeMapping-guide").removeClass('selected-attribute');
+        $("#guideModal .standards-guide").removeClass('selected-attribute');
+        $("#guideModal .coursesSummary-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabi-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusBasics-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusImport-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusSections-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusPLOMapping-guide").removeClass('selected-attribute');
+        // add attribute
+        $("#guideModal .syllabusImport-guide").addClass('selected-attribute');
+        // Reset Scroll to top
+        $('.update-content').scrollTop(0);
+
+        // Header
+        $("#guideModal .modal-title").text('Importing Course Information Guide');
+        // Body
+        $("#guideModal .update-content").html(`
+            <h2 class="mb-4 head"><u>Importing Course Information</u></h2>
+            <br>
+            <h2 class="text-center mb-4">How to Import Course Information</h2>
+            <p class="help-p my-3" style="font-size:18px;">You can import information from existing courses to populate your syllabus. This includes course details, learning outcomes, and other relevant information.</p>
+            <p class="help-p my-3" style="font-size:18px;">To import course information, click the "IMPORT" button in the syllabus generator toolbar.</p>
+            <img class="img center my-3" src="{{asset('/img/guide/ImportExistingCourse.png')}}" onclick="onClick(this)">
+            <br>
+            <p class="help-p my-3" style="font-size:18px;">After clicking the import button, you will see a modal that allows you to select which course to import from and what specific information to import:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Select a course from the dropdown menu</li>
+                <li class="my-2" style="font-size: 18px;">Choose which information to import (course information, learning outcomes, etc.)</li>
+                <li class="my-2" style="font-size: 18px;">Click "Import" to add the selected information to your syllabus</li>
+            </ol>
+            <p class="help-p my-3" style="font-size:18px;">Importing saves time by leveraging existing information, especially for courses that share similar content or structure.</p>
+            <br>
+            <div class="row">
+                <div class="col"><button class="btn btn-primary float-left w-100" onclick="setSyllabusBasics()" style="color: white;"><i class="bi bi-arrow-left mr-2"></i> Creating a Syllabus</button></div>
+                <div class="col"><button class="btn btn-primary float-right w-100" onclick="setSyllabusSections()" style="color: white;">Syllabus Sections <i class="bi bi-arrow-right mr-2"></i></button></div>
+            </div>
+        `);
+    }
+
+    function setSyllabusSections() {
+        // remove attributes
+        $("#guideModal .programs-guide").removeClass('selected-attribute');
+        $("#guideModal .plo-guide").removeClass('selected-attribute');
+        $("#guideModal .ms-guide").removeClass('selected-attribute');
+        $("#guideModal .programCourses-guide").removeClass('selected-attribute');
+        $("#guideModal .programOverview-guide").removeClass('selected-attribute');
+        $("#guideModal .courses-guide").removeClass('selected-attribute');
+        $("#guideModal .clo-guide").removeClass('selected-attribute');
+        $("#guideModal .sam-guide").removeClass('selected-attribute');
+        $("#guideModal .tla-guide").removeClass('selected-attribute');
+        $("#guideModal .courseAlignment-guide").removeClass('selected-attribute');
+        $("#guideModal .programOutcomeMapping-guide").removeClass('selected-attribute');
+        $("#guideModal .standards-guide").removeClass('selected-attribute');
+        $("#guideModal .coursesSummary-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabi-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusBasics-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusImport-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusSections-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusPLOMapping-guide").removeClass('selected-attribute');
+        // add attribute
+        $("#guideModal .syllabusSections-guide").addClass('selected-attribute');
+        // Reset Scroll to top
+        $('.update-content').scrollTop(0);
+
+        // Header
+        $("#guideModal .modal-title").text('Syllabus Sections Guide');
+        // Body
+        $("#guideModal .update-content").html(`
+            <h2 class="mb-4 head"><u>Syllabus Sections</u></h2>
+            <br>
+            <h2 class="text-center mb-4">Understanding Syllabus Sections</h2>
+            <p class="help-p my-3" style="font-size:18px;">The syllabus generator includes several sections that you can customize. Note that available sections and their requirements may vary by campus:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;"><strong>Course Information</strong> - Basic details about the course including course code, title, prerequisites, and contact information</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Course Description</strong> - Detailed description of the course content and purpose</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Learning Outcomes</strong> - Course learning outcomes that describe what students will learn or be able to do</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Course Format</strong> - Information about how the course is delivered (lectures, labs, online components)</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Learning Activities</strong> - Teaching and learning activities used in the course</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Assessment Methods</strong> - Student assessment methods and their weights in the final grade</li>
+                <li class="my-2" style="font-size: 18px;"><strong>Additional Campus-Specific Fields</strong> - Extra sections that may be required by your campus</li>
+            </ol>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusSections.png')}}" onclick="onClick(this)">
+            <br>
+            <p class="help-p my-3" style="font-size:18px;">Each section can be completed by filling in the appropriate fields. Required fields are marked with an asterisk (*) and must be completed before the syllabus can be saved.</p>
+            <br>
+            <div class="row">
+                <div class="col"><button class="btn btn-primary float-left w-100" onclick="setSyllabusImport()" style="color: white;"><i class="bi bi-arrow-left mr-2"></i> Importing Course Information</button></div>
+                <div class="col"><button class="btn btn-primary float-right w-100" onclick="setSyllabusPLOMapping()" style="color: white;">Program Learning Outcomes Mapping <i class="bi bi-arrow-right mr-2"></i></button></div>
+            </div>
+        `);
+    }
+
+    function setSyllabusPLOMapping() {
+        // remove attributes
+        $("#guideModal .programs-guide").removeClass('selected-attribute');
+        $("#guideModal .plo-guide").removeClass('selected-attribute');
+        $("#guideModal .ms-guide").removeClass('selected-attribute');
+        $("#guideModal .programCourses-guide").removeClass('selected-attribute');
+        $("#guideModal .programOverview-guide").removeClass('selected-attribute');
+        $("#guideModal .courses-guide").removeClass('selected-attribute');
+        $("#guideModal .clo-guide").removeClass('selected-attribute');
+        $("#guideModal .sam-guide").removeClass('selected-attribute');
+        $("#guideModal .tla-guide").removeClass('selected-attribute');
+        $("#guideModal .courseAlignment-guide").removeClass('selected-attribute');
+        $("#guideModal .programOutcomeMapping-guide").removeClass('selected-attribute');
+        $("#guideModal .standards-guide").removeClass('selected-attribute');
+        $("#guideModal .coursesSummary-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabi-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusBasics-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusImport-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusSections-guide").removeClass('selected-attribute');
+        $("#guideModal .syllabusPLOMapping-guide").removeClass('selected-attribute');
+        // add attribute
+        $("#guideModal .syllabusPLOMapping-guide").addClass('selected-attribute');
+        // Reset Scroll to top
+        $('.update-content').scrollTop(0);
+
+        // Header
+        $("#guideModal .modal-title").text('Program Learning Outcomes Mapping Guide');
+        // Body
+        $("#guideModal .update-content").html(`
+            <h2 class="mb-4 head"><u>Program Learning Outcomes Mapping</u></h2>
+            <br>
+            <h2 class="text-center mb-4">Understanding PLO-CLO Mapping in Syllabi</h2>
+            <p class="help-p my-3" style="font-size:18px;">If your course is part of a program, the syllabus generator will automatically include a mapping table showing how the course learning outcomes (CLOs) align with program learning outcomes (PLOs).</p>
+            <p class="help-p my-3" style="font-size:18px;">This mapping is based on the connections you've established in the Program Outcome Mapping step of course creation. The mapping uses the scale defined for the program.</p>
+            <img class="img center my-3" src="{{asset('/img/guide/SyllabusPLOMapping.png')}}" onclick="onClick(this)">
+            <br>
+            <h2 class="text-center mb-4">Benefits of PLO-CLO Mapping in Syllabi</h2>
+            <p class="help-p my-3" style="font-size:18px;">Including program learning outcome mapping in your syllabus offers several benefits:</p>
+            <ol class="m-5">
+                <li class="my-2" style="font-size: 18px;">Helps students understand how the course fits into their broader program of study</li>
+                <li class="my-2" style="font-size: 18px;">Demonstrates alignment between course activities and program goals</li>
+                <li class="my-2" style="font-size: 18px;">Supports accreditation requirements by clearly documenting curriculum mapping</li>
+                <li class="my-2" style="font-size: 18px;">Facilitates communication between instructors teaching different courses in the same program</li>
+            </ol>
+            <br>
+            <p class="help-p my-3" style="font-size:18px;">The mapping table is automatically generated based on your previous mappings in the course wizard, so you don't need to create it manually in the syllabus generator.</p>
+            <br>
+            <div class="row">
+                <div class="col"><button class="btn btn-primary float-left w-100" onclick="setSyllabusSections()" style="color: white;"><i class="bi bi-arrow-left mr-2"></i> Syllabus Sections</button></div>
+                <div class="col"><button class="btn btn-primary float-right w-100" onclick="setSyllabi()" style="color: white;">Back to Syllabus Generator <i class="bi bi-arrow-right mr-2"></i></button></div>
+            </div>
+        `);
+    }
+
     // calls for on click methods (nav bar)
     // Programs
     $('.programs-guide').on('click', setProgram);
@@ -797,6 +1025,10 @@
     $('.coursesSummary-guide').on('click', setCoursesSummary);
     // Syllabi
     $('.syllabi-guide').on('click', setSyllabi);
+    $('.syllabusBasics-guide').on('click', setSyllabusBasics);
+    $('.syllabusImport-guide').on('click', setSyllabusImport);
+    $('.syllabusSections-guide').on('click', setSyllabusSections);
+    $('.syllabusPLOMapping-guide').on('click', setSyllabusPLOMapping);
 
     // Calls from Dashboard
     $('#programHelp').on('click', setProgram);
@@ -837,8 +1069,6 @@
         font-size: 18px;
     }
     .update-content{
-        max-height:714px;
-        overflow-y: scroll;
         background-color: #fafafa;
     }
     .center {
@@ -863,7 +1093,7 @@
 
     .modal-xl{
         max-width: 1450px;
-    }
+        }
     .head{
         color: #002145;
     }
