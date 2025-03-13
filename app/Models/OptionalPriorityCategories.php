@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OptionalPriorityCategories extends Model
 {
@@ -20,7 +21,7 @@ class OptionalPriorityCategories extends Model
         'cat_name',
     ];
 
-    public function optionalPrioritySubcategories()
+    public function optionalPrioritySubcategories(): HasMany
     {
         return $this->hasMany(OptionalPrioritySubcategories::class, 'cat_id', 'cat_id');
     }

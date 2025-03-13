@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Course extends Model
@@ -20,73 +23,73 @@ class Course extends Model
 
     protected $guarded = ['course_id'];
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'course_users', 'course_id', 'user_id')->withPivot('permission');
     }
 
-    public function owners()
+    public function owners(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'course_users', 'course_id', 'user_id')->wherePivot('permission', 1);
     }
 
-    public function editors()
+    public function editors(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'course_users', 'course_id', 'user_id')->wherePivot('permission', 2);
     }
 
-    public function viewers()
+    public function viewers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'course_users', 'course_id', 'user_id')->wherePivot('permission', 3);
     }
 
-    public function learningActivities()
+    public function learningActivities(): HasMany
     {
         return $this->hasMany(LearningActivity::class, 'course_id', 'course_id');
     }
 
-    public function assessmentMethods()
+    public function assessmentMethods(): HasMany
     {
         return $this->hasMany(AssessmentMethod::class, 'course_id', 'course_id');
     }
 
-    public function learningOutcomes()
+    public function learningOutcomes(): HasMany
     {
         return $this->hasMany(LearningOutcome::class, 'course_id', 'course_id');
     }
 
-    public function programs()
+    public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class, 'course_programs', 'course_id', 'program_id');
     }
 
-    public function standards()
+    public function standards(): HasMany
     {
         return $this->hasMany(Standard::class, 'standard_category_id', 'standard_category_id');
     }
 
-    public function standardScalesCategory()
+    public function standardScalesCategory(): BelongsTo
     {
         return $this->belongsTo(StandardsScaleCategory::class, 'scale_category_id', 'scale_category_id');
     }
 
-    public function standardCategory()
+    public function standardCategory(): BelongsTo
     {
         return $this->belongsTo(StandardCategory::class, 'standard_category_id', 'standard_category_id');
     }
 
-    public function standardOutcomes()
+    public function standardOutcomes(): HasMany
     {
         return $this->hasMany(Standard::class, 'standard_category_id', 'standard_category_id');
     }
 
-    public function courseStandardOutcomes()
+    public function courseStandardOutcomes(): HasMany
     {
         //return $this->hasMany(Standard::class, 'standard_category_id', 'standard_category_id');
         return $this->hasManyThrough(StandardScale::class, StandardsScaleCategory::class);
     }
 
-    public function optionalPriorities()
+    public function optionalPriorities(): BelongsToMany
     {
         return $this->belongsToMany(OptionalPriorities::class, 'course_optional_priorities', 'course_id', 'op_id');
     }

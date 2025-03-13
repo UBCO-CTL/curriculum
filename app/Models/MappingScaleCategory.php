@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class MappingScaleCategory extends Model
@@ -17,7 +18,7 @@ class MappingScaleCategory extends Model
 
     protected $fillable = ['title', 'description', 'msc_title', 'Mappingtable'];
 
-    public function mappingScales()
+    public function mappingScales(): HasMany
     {
         return $this->hasMany(MappingScale::class, 'mapping_scale_categories_id', 'mapping_scale_categories_id');
     }

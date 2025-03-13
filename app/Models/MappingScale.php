@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MappingScale extends Model
 {
@@ -17,7 +19,7 @@ class MappingScale extends Model
 
     protected $fillable = ['map_scale_id', 'title', 'abbreviation', 'description', 'colour', 'mapping_scale_categories_id'];
 
-    public function programs()
+    public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class, 'mapping_scale_programs', 'map_scale_id', 'program_id')->withTimestamps();
     }
@@ -28,7 +30,7 @@ class MappingScale extends Model
         }
         return parent::newPivot($parent, $attributes, $table, $exists, $using=NULL);
     }*/
-    public function mappingScalePrograms()
+    public function mappingScalePrograms(): HasMany
     {
         return $this->hasMany(MappingScaleProgram::class);
     }

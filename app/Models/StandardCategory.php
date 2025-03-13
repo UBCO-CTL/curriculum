@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class StandardCategory extends Model
@@ -17,12 +18,12 @@ class StandardCategory extends Model
 
     protected $fillable = ['sc_name', 'Standardtable'];
 
-    public function courses()
+    public function courses(): HasMany
     {
         return $this->hasMany(Course::class, 'standard_category_id', 'standard_category_id');
     }
 
-    public function standards()
+    public function standards(): HasMany
     {
         return $this->hasMany(Standard::class, 'standard_category_id', 'standard_category_id');
     }

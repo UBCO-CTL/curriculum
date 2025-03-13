@@ -12,8 +12,6 @@ class OkanaganSyllabusResourceSeeder extends Seeder
      */
     public function run(): void
     {
-    
-
 
         OkanaganSyllabusResource::create([
             'id_name' => 'safewalk',
@@ -29,7 +27,6 @@ class OkanaganSyllabusResourceSeeder extends Seeder
             'id_name' => 'misconduct',
             'title' => 'Academic Misconduct',
         ]);
-        
 
         OkanaganSyllabusResource::create([
             'id_name' => 'genAI',

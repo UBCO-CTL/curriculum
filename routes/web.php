@@ -131,7 +131,6 @@ Route::resource('/lo', LearningOutcomeController::class);
 Route::post('/import/clos', [LearningOutcomeController::class, 'import'])->name('courses.outcomes.import');
 Route::post('/store/clos', [LearningOutcomeController::class, 'store'])->name('courses.outcomes.store');
 
-
 Route::resource('/plo', ProgramLearningOutcomeController::class);
 Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->name('program.outcomes.store');
 Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])->name('program.outcomes.import');

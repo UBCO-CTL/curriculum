@@ -1437,7 +1437,7 @@ class ProgramWizardController extends Controller
             // check if map_scale_value is in the frequency array and give it the value of 1
             if ($freq[$pl_outcome_id][$course_id][$map_scale_id] == 0) {
                 $freq[$pl_outcome_id][$course_id][$map_scale_id] = 1;
-            // if the value is found again, and is not zero, increment
+                // if the value is found again, and is not zero, increment
             } else {
                 $freq[$pl_outcome_id][$course_id][$map_scale_id] += 1;
             }
@@ -1522,7 +1522,7 @@ class ProgramWizardController extends Controller
             // check if map_scale_value is in the frequency array and give it the value of 1
             if ($freq[$pl_outcome_id][$course_id][$map_scale_id] == 0) {
                 $freq[$pl_outcome_id][$course_id][$map_scale_id] = 1;
-            // if the value is found again, and is not zero, increment
+                // if the value is found again, and is not zero, increment
             } else {
                 $freq[$pl_outcome_id][$course_id][$map_scale_id] += 1;
             }

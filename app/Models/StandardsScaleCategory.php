@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class StandardsScaleCategory extends Model
@@ -17,12 +18,12 @@ class StandardsScaleCategory extends Model
 
     protected $fillable = ['name', 'description', 'Scaletable'];
 
-    public function courses()
+    public function courses(): HasMany
     {
         return $this->hasMany(Course::class, 'scale_category_id', 'scale_category_id');
     }
 
-    public function standardScales()
+    public function standardScales(): HasMany
     {
         return $this->hasMany(StandardScale::class, 'scale_category_id', 'scale_category_id');
     }

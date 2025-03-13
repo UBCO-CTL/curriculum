@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Program extends Model
@@ -19,22 +21,22 @@ class Program extends Model
 
     protected $guarded = ['program_id'];
 
-    public function courses()
+    public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_programs', 'program_id', 'course_id')->withPivot('course_required', 'instructor_assigned', 'map_status', 'note')->withTimestamps();
     }
 
-    /* public function mappingScaleLevels()
+    /* public function mappingScaleLevels(): BelongsToMany
     {
         return $this->hasManyThrough(MappingScale::Class, MappingScaleProgram::Class);
     }*/
 
-    public function mappingScaleLevels()
+    public function mappingScaleLevels(): BelongsToMany
     {
         return $this->belongsToMany(MappingScale::class, 'mapping_scale_programs', 'program_id', 'map_scale_id')->withTimestamps();
     }
 
-    public function mappingScalePrograms()
+    public function mappingScalePrograms(): HasMany
     {
         return $this->hasMany(MappingScaleProgram::class, 'program_id', 'program_id');
     }
@@ -46,18 +48,18 @@ class Program extends Model
         return parent::newPivot($parent, $attributes, $table, $exists, $using = NULL);
     }*/
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'program_users', 'program_id', 'user_id')->withPivot('permission');
     }
 
     // Eloquent automatically determines the FK column for the ProgramLearningOutcome model by taking the parent model (program) and suffix it with _id (program_id)
-    public function programLearningOutcomes()
+    public function programLearningOutcomes(): HasMany
     {
         return $this->hasMany(ProgramLearningOutcome::class, 'program_id', 'program_id');
     }
 
-    public function ploCategories()
+    public function ploCategories(): HasMany
     {
         return $this->hasMany(PLOCategory::class, 'program_id', 'program_id');
     }

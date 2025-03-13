@@ -56,7 +56,7 @@ define('INPUT_TIPS', [
     'customResource' => 'Include any additional information or resources that have not been provided.',
     'saveWarning' => 'Be sure to save your content regularly by clicking the save button <i class="bi bi-clipboard2-check-fill"></i> at the top and bottom of this page.',
     'crossListed' => 'Is this a Cross-Listed Course? Per <a href="https://senate.ubc.ca/okanagan/forms/" target="_blank" rel="noopener noreferrer">Curriculum Guidelines</a>.',
-    'courseStructureOK' =>'A description of the course structure such as, for example, lecture, lab, tutorial, flipped classroom, mixed-mode, contact hours per week; day, time, and location of classes, or other activities that may not be available on the Student Service Centre or on Workday.'
+    'courseStructureOK' => 'A description of the course structure such as, for example, lecture, lab, tutorial, flipped classroom, mixed-mode, contact hours per week; day, time, and location of classes, or other activities that may not be available on the Student Service Centre or on Workday.',
 ]);
 
 class SyllabusController extends Controller
@@ -141,7 +141,7 @@ class SyllabusController extends Controller
                     return view('syllabus.syllabusGenerator')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
             }
 
-        // return view to create a syllabus
+            // return view to create a syllabus
         } else {
             return view('syllabus.syllabus')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
         }
@@ -238,7 +238,7 @@ class SyllabusController extends Controller
 
             // update syllabus
             $syllabus = $this->update($request, $syllabusId);
-        // else create a new syllabus
+            // else create a new syllabus
         } else {
             // create a new syllabus
 
@@ -326,7 +326,7 @@ class SyllabusController extends Controller
                     return view('syllabus.syllabusGenerator')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
             }
 
-        // return view to create a syllabus
+            // return view to create a syllabus
         } else {
             return view('syllabus.syllabus')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
         }
@@ -416,7 +416,7 @@ class SyllabusController extends Controller
 
         // save syllabus instructors
         foreach ($courseInstructors as $index => $courseInstructor) {
-            $syllabusInstructor = new SyllabusInstructor();
+            $syllabusInstructor = new SyllabusInstructor;
             $syllabusInstructor->syllabus_id = $syllabus->id;
             $syllabusInstructor->name = $courseInstructor;
             $syllabusInstructor->email = $courseInstructorEmails[$index];
@@ -651,7 +651,7 @@ class SyllabusController extends Controller
         SyllabusInstructor::where('syllabus_id', $syllabus->id)->delete();
         // save syllabus instructors
         foreach ($courseInstructors as $index => $courseInstructor) {
-            $syllabusInstructor = new SyllabusInstructor();
+            $syllabusInstructor = new SyllabusInstructor;
             $syllabusInstructor->syllabus_id = $syllabus->id;
             $syllabusInstructor->name = $courseInstructor;
             $syllabusInstructor->email = $courseInstructorEmails[$index];
@@ -719,7 +719,7 @@ class SyllabusController extends Controller
                         // delete all resources previously selected for the given syllabus
                         SyllabusResourceOkanagan::where('syllabus_id', $syllabus->id)->delete();
                     }
-                // campus was changed from 'V' to 'O'
+                    // campus was changed from 'V' to 'O'
                 } else {
                     // delete vancouver syllabus record
                     VancouverSyllabus::where('syllabus_id', $syllabus->id)->delete();
@@ -779,7 +779,7 @@ class SyllabusController extends Controller
                         // delete all resources previously selected for the given syllabus
                         SyllabusResourceVancouver::where('syllabus_id', $syllabus->id)->delete();
                     }
-                // campus was changed from 'O' to 'V'
+                    // campus was changed from 'O' to 'V'
                 } else {
                     // delete okanagan syllabus record
                     OkanaganSyllabus::where('syllabus_id', $syllabusId)->delete();
@@ -843,7 +843,7 @@ class SyllabusController extends Controller
             } else {
                 $request->session()->flash('error', 'There was an error deleting your syllabus');
             }
-        // else the current user does not own the syllabus, flash an error
+            // else the current user does not own the syllabus, flash an error
         } else {
             $request->session()->flash('error', 'You do not have permission to delete this syllabus');
         }
@@ -972,7 +972,7 @@ class SyllabusController extends Controller
     /**
      * Download the given syllabus $syllabusId in $ext format
      *
-     * @param  string  $ext: the file extension
+     * @param  string  $ext:  the file extension
      * @return a download response
      */
     public function download(int $syllabusId, $ext)
@@ -1126,7 +1126,6 @@ class SyllabusController extends Controller
                     $templateProcessor->cloneBlock('NoLearningActivities', 0);
                 }
 
-                
                 // tell template processor to include prerequisites if user completed the field(s)
                 if ($syllabus->prerequisites) {
                     $prerequisitesArr = explode("\n", $syllabus->prerequisites);
@@ -1393,7 +1392,7 @@ class SyllabusController extends Controller
                     if (in_array($resource->id, $selectedOkanaganSyllabusResourceIds)) {
                         $templateProcessor->cloneBlock($resource->id_name);
                         $templateProcessor->setValue($resource->id_name.'-title', $resource->title);
-                    // $templateProcessor->setValue($resource->id_name . '-description', $resource->description);
+                        // $templateProcessor->setValue($resource->id_name . '-description', $resource->description);
                     } else {
                         $templateProcessor->cloneBlock($resource->id_name, 0);
                     }
@@ -1832,7 +1831,7 @@ class SyllabusController extends Controller
                     if (in_array($resource->id, $selectedVancouverSyllabusResourceIds)) {
                         $templateProcessor->cloneBlock($resource->id_name);
                         $templateProcessor->setValue($resource->id_name.'-title', strtoupper($resource->title));
-                    // $templateProcessor->setValue($resource->id_name . '-description', $resource->description);
+                        // $templateProcessor->setValue($resource->id_name . '-description', $resource->description);
                     } else {
                         $templateProcessor->cloneBlock($resource->id_name, 0);
                     }

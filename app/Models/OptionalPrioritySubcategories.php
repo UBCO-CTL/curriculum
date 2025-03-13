@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OptionalPrioritySubcategories extends Model
 {
@@ -24,12 +26,12 @@ class OptionalPrioritySubcategories extends Model
         //'input_status',
     ];
 
-    public function optionalPriorities()
+    public function optionalPriorities(): HasMany
     {
         return $this->hasMany(OptionalPriorities::class, 'subcat_id', 'subcat_id');
     }
 
-    public function optionalPriorityCategory()
+    public function optionalPriorityCategory(): BelongsTo
     {
         return $this->belongsTo(OptionalPriorityCategories::class, 'cat_id', 'cat_id');
     }
