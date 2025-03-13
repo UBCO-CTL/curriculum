@@ -6,9 +6,9 @@
         <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
         <button type="button" class="close" data-dismiss="alert">×</button>
         <div>
-        The UBC Curriculum MAP tool will be unavailable on Thursday March 13th from 8:30AM-9:30AM for scheduled maintenance. Use of the tool during this time may result in lost data. Please contact <a href="ctl.helpdesk@ubc.ca">ctl.helpdesk@ubc.ca</a> with any questions.
+        We will be performing a planned system maintenance on Thursday March 20th from 9:30AM-12:30PM. Use of the tool during this period is not recommended. Please contact <a href="ctl.helpdesk@ubc.ca">ctl.helpdesk@ubc.ca</a> with any questions.
         </div>
-    </div>
+</div>
     <div class="row p-md-5 justify-content-center text-light bg-primary mt-3">
         <div class="col-md-12">
             <div class="container">
