@@ -1271,7 +1271,7 @@ class ProgramController extends Controller
                     $defaultShortForms[$plosInOrderCat[$i][$j]['pl_outcome_id']] = 'PLO #' . ($ploDefaultCount + 1);
                     $defaultShortFormsIndex[$plosInOrderCat[$i][$j]['pl_outcome_id']] = $ploDefaultCount + 1;
                     $ploDefaultCount++;
- 
+
                 }
             }
 
@@ -4017,8 +4017,25 @@ class ProgramController extends Controller
             foreach ($learningActivityArray as $learningActivity) {
                 // Add assessment method to the sheet under the appropriate column
 
+                // Add activity with percentage if available
+                $activityLabel = '';
 
-                $sheet->setCellValue($columns[$categoryColInSheet] . '2', $learningActivity->l_activity);
+                // Check if $learningActivity is an object or an array
+                if (is_object($learningActivity)) {
+                    $activityLabel = $learningActivity->l_activity;
+                    // Add percentage if available
+                    if (isset($learningActivity->percentage) && $learningActivity->percentage) {
+                        $activityLabel .= ' (' . $learningActivity->percentage . '%)';
+                    }
+                } else if (isset($learningActivity[0]) && !is_null($learningActivity[0])) {
+                    $activityLabel = $learningActivity[0]->l_activity;
+                    // Add percentage if available
+                    if (isset($learningActivity[0]->percentage) && $learningActivity[0]->percentage) {
+                        $activityLabel .= ' (' . $learningActivity[0]->percentage . '%)';
+                    }
+                }
+
+                $sheet->setCellValue($columns[$categoryColInSheet] . '2', $activityLabel);
 
 
                 $sheet->getStyle($columns[$categoryColInSheet] . '2')->applyFromArray($styles['secondaryHeading']);
@@ -4029,13 +4046,14 @@ class ProgramController extends Controller
                 foreach ($courses as $courseId => $course) {
 
                     $TLAcourseID = 0;
-                    if ($learningActivity[0] == NULL) {
+                    // Check if $learningActivity is an object or an array
+                    if (is_object($learningActivity)) {
                         $TLAcourseID = $learningActivity->course_id;
-                    } else {
+                    } else if (isset($learningActivity[0]) && !is_null($learningActivity[0])) {
                         $TLAcourseID = $learningActivity[0]->course_id;
                     }
-                    if ($TLAcourseID == array_search($course, $courses)) {
 
+                    if ($TLAcourseID == array_search($course, $courses)) {
                         //check if TLA is duplicated in array
                         //if it is present in array, put in used for this slot,
                         array_push($TLAusedInCourse, '1');
