@@ -77,9 +77,12 @@
                                                             <input type="hidden" name="user_id" value="{{Auth::id()}}">
                                                             <input type="hidden" name="note" value="{{$programCourse->pivot->note}}">
                                                             <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
-                                                            <button type="submit" class="btn btn-sm {{$programCourse->pivot->course_required ? 'btn-primary' : 'btn-outline-primary'}}">
-                                                                {{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}
-                                                            </button>
+                                                            <div class="form-check form-switch d-flex align-items-center course-switch">
+                                                                <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
+                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                    <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
+                                                                </label>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                     <p class="form-text text-muted mt-2">
@@ -98,9 +101,12 @@
                                                             <input type="hidden" name="user_id" value="{{Auth::id()}}">
                                                             <input type="hidden" name="note" value="">
                                                             <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
-                                                            <button type="submit" class="btn btn-sm {{$programCourse->pivot->course_required ? 'btn-primary' : 'btn-outline-primary'}}">
-                                                                {{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}
-                                                            </button>
+                                                            <div class="form-check form-switch d-flex align-items-center course-switch">
+                                                                <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
+                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                    <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
+                                                                </label>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                 </td>
@@ -552,6 +558,34 @@
     text-align: left;
     max-width: 600px;
     width: auto;
+}
+
+/* Custom styles for the form switch */
+.form-check.form-switch {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.form-check.form-switch .form-check-input {
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.form-check.form-switch .form-check-label {
+    padding-left: 30px;
+    font-size: 0.875rem;
+}
+
+/* .switch-input {
+    position: relative;
+    width: 40px;
+    height: 20px;
+} */
+
+.course-switch {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
 }
 </style>
 @endsection
