@@ -1232,13 +1232,36 @@ class ProgramController extends Controller
             // get array of urls to charts in this program
             $charts = $this->getImagesOfCharts($program_id, '.pdf');
 
+            // Get all PLOs ordered consistently
+            $allPLO = ProgramLearningOutcome::where('program_id', $program_id)
+                ->orderBy('plo_category_id', 'asc')
+                ->orderBy('position', 'asc')
+                ->get();
+
+            // Get categorized PLOs with proper ordering
+            $ploProgramCategories = ProgramLearningOutcome::where('program_id', $program_id)
+                ->whereNotNull('plo_category_id')
+                ->orderBy('plo_category_id', 'asc')
+                ->orderBy('position', 'asc')
+                ->get();
+
+            // Get all PLOs with category info ordered
+            $plos = DB::table('program_learning_outcomes')
+                ->leftJoin('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')
+                ->where('program_learning_outcomes.program_id', $program_id)
+                ->orderBy('program_learning_outcomes.plo_category_id', 'asc')
+                ->orderBy('program_learning_outcomes.position', 'asc')
+                ->get();
+
             //get defaultShortForms based on PLO Category, then Creation Order
             $defaultShortForms = [];
             $defaultShortFormsIndex = [];
             $plosInOrderCat = [];
 
             foreach ($ploCategories as $ploCat) {
-                $plosByCat = ProgramLearningOutcome::where('plo_category_id', $ploCat['plo_category_id'])->get();
+                $plosByCat = ProgramLearningOutcome::where('plo_category_id', $ploCat['plo_category_id'])
+                    ->orderBy('position', 'asc')
+                    ->get();
                 array_push($plosInOrderCat, $plosByCat);
             }
 
@@ -1248,13 +1271,20 @@ class ProgramController extends Controller
                     $defaultShortForms[$plosInOrderCat[$i][$j]['pl_outcome_id']] = 'PLO #' . ($ploDefaultCount + 1);
                     $defaultShortFormsIndex[$plosInOrderCat[$i][$j]['pl_outcome_id']] = $ploDefaultCount + 1;
                     $ploDefaultCount++;
+ 
                 }
             }
+
+            $unCategorizedPLOS = ProgramLearningOutcome::where('program_id', $program_id)
+                ->whereNull('plo_category_id')
+                ->orderBy('position', 'asc')
+                ->get();
 
             foreach ($unCategorizedPLOS as $unCatPLO) {
                 $defaultShortForms[$unCatPLO->pl_outcome_id] = 'PLO #' . ($ploDefaultCount + 1);
                 $defaultShortFormsIndex[$unCatPLO->pl_outcome_id] = $ploDefaultCount + 1;
                 $ploDefaultCount++;
+
             }
 
             $pdf = PDF::loadView('programs.downloadSummary', compact('charts', 'coursesByLevels', 'ploIndexArray', 'program', 'ploCount', 'msCount', 'courseCount', 'mappingScales', 'programCourses', 'ploCategories', 'ploProgramCategories', 'allPLO', 'plos', 'unCategorizedPLOS', 'numCatUsed', 'uniqueCategories', 'plosPerCategory', 'numUncategorizedPLOS', 'hasUncategorized', 'store', 'tableMS', 'programContent', 'defaultShortForms', 'defaultShortFormsIndex'));
