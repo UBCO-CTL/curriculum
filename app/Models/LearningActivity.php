@@ -11,7 +11,7 @@ class LearningActivity extends Model
 
     protected $primaryKey = 'l_activity_id';
 
-    protected $fillable = ['l_activity', 'course_id'];
+    protected $fillable = ['l_activity', 'course_id', 'percentage'];
 
     public function learningOutcomes()
     {
