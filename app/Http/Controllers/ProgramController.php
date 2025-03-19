@@ -3967,7 +3967,8 @@ class ProgramController extends Controller
             Log::error('File - '.$exception->getFile());
             Log::error('Line - '.$exception->getLine());
             Log::error($exception->getMessage());
-
+        }
+    }
 
 public function downloadUserGuide(){
     
