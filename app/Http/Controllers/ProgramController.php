@@ -4025,13 +4025,13 @@ class ProgramController extends Controller
                     $activityLabel = $learningActivity->l_activity;
                     // Add percentage if available
                     if (isset($learningActivity->percentage) && $learningActivity->percentage) {
-                        $activityLabel .= ' (% of Time: ' . $learningActivity->percentage . '%)';
+                        $activityLabel .= ' (' . $learningActivity->percentage . '% of Time)';
                     }
                 } else if (isset($learningActivity[0]) && !is_null($learningActivity[0])) {
                     $activityLabel = $learningActivity[0]->l_activity;
                     // Add percentage if available
                     if (isset($learningActivity[0]->percentage) && $learningActivity[0]->percentage) {
-                        $activityLabel .= ' (% of Time: ' . $learningActivity[0]->percentage . '%)';
+                        $activityLabel .= ' (' . $learningActivity[0]->percentage . '% of Time)';
                     }
                 }
 

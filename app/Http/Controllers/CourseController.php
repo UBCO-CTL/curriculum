@@ -1450,7 +1450,7 @@ private function makeLearningActivityMapSheetData(Spreadsheet $spreadsheet, int 
         foreach ($learningActivities as $learningActivity) {
             $activityLabel = $learningActivity->l_activity;
             if ($learningActivity->percentage) {
-                $activityLabel .= ' (% of Time: ' . $learningActivity->percentage . '%)';
+                $activityLabel .= ' (' . $learningActivity->percentage . '% of Time)';
             }
 
             // Add learning activity to the sheet under the appropriate column
