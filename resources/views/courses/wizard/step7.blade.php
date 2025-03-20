@@ -154,7 +154,7 @@
                                     <tr class="table-primary">
                                         <th class="text-center">#</th>
                                         <th>Teaching and Learning Activity</th>
-                                        <th>Time %</th>
+                                        <th width="23.45%">% of Time</th>
                                     </tr>
 
                                     @foreach($course->learningActivities->sortBy('l_activities_pos')->values() as $index => $l_activity)
@@ -233,8 +233,8 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                    @endif
-                                </table>
+                                    </table>
+                                @endif
                             @endif
                         </div>
                     </div>

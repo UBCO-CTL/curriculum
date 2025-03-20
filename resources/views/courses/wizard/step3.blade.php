@@ -72,7 +72,7 @@
                                             </datalist>
                                         </div>
                                         <div class="col-2">
-                                            <label for="activityPercentage" class="form-label fs-6"><b>Time %</b></label>
+                                            <label for="activityPercentage" class="form-label fs-6"><b>% of Time</b></label>
                                             <input id="activityPercentage" type="number" min="0" max="100" class="form-control" placeholder="%">
                                         </div>
                                         <div class="col-2">
@@ -90,7 +90,7 @@
                                         <thead>
                                             <tr class="table-primary">
                                                 <th>Teaching and Learning Activity</th>
-                                                <th class="text-center">Time %</th>
+                                                <th class="text-center">% of Time</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -166,7 +166,7 @@
                                 <tr class="table-primary">
                                     <th class="text-center">#</th>
                                     <th>Teaching and Learning Activities</th>
-                                    <th class="text-center">Time %</th>
+                                    <th class="text-center">% of Time</th>
                                     <th class="text-center w-25">Actions</th>
                                 </tr>
                                 @if(count($l_activities)<1)

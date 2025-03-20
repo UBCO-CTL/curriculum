@@ -164,7 +164,7 @@
                         <tr class="info">
                             <th class="text-center">#</th>
                             <th>Teaching and Learning Activity</th>
-                            <th>Time %</th>
+                            <th>% of Time</th>
                         </tr>
 
                         @foreach($course->learningActivities as $index => $l_activity)
