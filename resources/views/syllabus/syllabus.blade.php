@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('layouts.guide')
+
 @include('modals.importCourseModal', ['myCourses' => $myCourses, 'syllabus' => $syllabus])
 
 @include('modals.courseSchedule')
