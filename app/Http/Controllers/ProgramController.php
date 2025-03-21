@@ -4021,6 +4021,7 @@ class ProgramController extends Controller
                     }
                 }
             }
+        }
             Log::Debug("Learning Activity Count Total");
             Log::Debug(count($learningActivityArray));
 
@@ -4197,8 +4198,9 @@ class ProgramController extends Controller
             }
 
         return $sheet;
-
-    } catch (Throwable $exception) {
+    
+    
+    }catch(Throwable $exception){
         // Log any errors
         $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
         Log::error($message.' ...\n');
@@ -4209,7 +4211,10 @@ class ProgramController extends Controller
 
             return $exception;
         }
+
     }
+
+    
 
     private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $programId, $styles, $columns): Worksheet
     {
