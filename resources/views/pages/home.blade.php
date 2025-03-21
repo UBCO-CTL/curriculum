@@ -2,13 +2,7 @@
 
 @section('content')
 
-<div class="alert alert-warning">
-        <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <div>
-        We will be performing a planned system maintenance on Thursday March 20th from 9:30AM-12:30PM. Use of the tool during this period is not recommended. Please contact <a href="ctl.helpdesk@ubc.ca">ctl.helpdesk@ubc.ca</a> with any questions.
-        </div>
-</div>
+
 <!-- Browser Notification -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastPlacement" style="z-index: 11">
     <div id="browser-notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
