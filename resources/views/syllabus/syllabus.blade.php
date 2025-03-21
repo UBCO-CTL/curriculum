@@ -6,6 +6,7 @@
 
 @include('modals.courseSchedule')
 
+
 <!-- PDF Download Confirmation Modal -->
 <div class="modal fade" id="pdfDownloadConfirmation" tabindex="-1" aria-labelledby="pdfDownloadConfirmationLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -31,6 +32,7 @@
     </div>
 </div>
 
+
 <style>
     .inputFieldDescription {
         font-size: 13px;
@@ -43,7 +45,15 @@
 <div class="m-auto" style="max-width:860px;height:100%;">
 
     <div class="m-3">
-        <h3 class="text-center lh-lg fw-bold mt-4">Syllabus Generator</h3>
+        <!-- Add help icon next to the main title -->
+        <h3 class="text-center lh-lg fw-bold mt-4">
+            Syllabus Generator
+            <span>
+                <a id="syllabusGeneratorHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                    <i class="bi bi-question-circle-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with the Syllabus Generator"></i>
+                </a>
+            </span>
+        </h3>
 
         <div class="text-center row justify-content-center">
             <div class="col-2" style="max-width:10%">
@@ -643,10 +653,13 @@
 
         <div class="col-12">
             <label for="learningOutcome">
-                <h5 class="fw-bold">Learning Outcomes or Objectives</h5>
+                <h5 class="fw-bold">Learning Outcomes</h5>
             </label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningOutcomes']}}"></i>
+            <a id="cloHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Course Learning Outcomes"></i>
+            </a>
             <p class="inputFieldDescription"><i>Upon successful completion of this course, students will be able to ...</i></p>
             <div id="formatCLOs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
@@ -655,15 +668,34 @@
         </div>
 
         <div class="col-12">
+            <label for="learningAssessments">
+                <h5 class="fw-bold">Methods of Assessment</h5>
+            </label><span class="requiredBySenateOK"></span>
+            <span class="requiredBySenate"></span>
+            <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningAssessments']}}"></i>
+            <a id="samHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Student Assessment Methods"></i>
+            </a>
+            <div id="formatAssessments" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
+            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningAssessments" data-formatnoteid="formatAssessments" placeholder="E.g. Presentation, 25%, Dec 1, ... &#10;E.g. Midterm Exam, 25%, Sept 31, ..." name="learningAssessments" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_assessments : ''}}</textarea>
+        </div>
+
+        <!-- Add Learning Activities help icon -->
+        <div class="col-12">
             <label for="learningActivities">
                 <h5 class="fw-bold">Learning Activities</h5>
             </label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningActivities']}}"></i>
-            <div id="formatActivities" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+            <a id="tlaHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Teaching and Learning Activities"></i>
+            </a>
+            <div id="formatLearningActivities" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
             </div>
-            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="52431" id="learningActivities" data-formatnoteid="formatActivities" placeholder="E.g. Class participation consists of clicker questions, group discussions ... &#10;E.g. Students are expected to complete class pre-readings ..." name="learningActivities" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_activities : ''}}</textarea>
+            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningActivities" data-formatnoteid="formatLearningActivities" placeholder="E.g. Group discussions&#10;E.g. Case studies" name="learningActivities" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_activities : ''}}</textarea>
         </div>
         <!-- Course Learning Materials -->
         <div class="col-12">
@@ -681,25 +713,6 @@
                 id="learningMaterials" name="learningMaterials" class="form-control" type="date" form="sylabusGenerator"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_materials : ''}}</textarea>
         </div>
-
-
-        <div class="col-12">
-            <label for="learningAssessments">
-                <h5 class="fw-bold">Methods of Assessment</h5>
-            </label><span class="requiredBySenateOK"></span>
-            <span class="requiredBySenate"></span>
-            <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningAssessments']}}"></i>
-            <div id="formatAssessments" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
-            </div>
-            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningAssessments" data-formatnoteid="formatAssessments" placeholder="E.g. Presentation, 25%, Dec 1, ... &#10;E.g. Midterm Exam, 25%, Sept 31, ..." name="learningAssessments" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_assessments : ''}}</textarea>
-        </div>
-
-
-
-        <!-- Course Structure -->
-        <div class="col-12" id="courseStructure"></div>
-
 
 
         @if (isset($courseAlignment))
@@ -744,10 +757,16 @@
         <div class="p-0 m-0" id="outcomeMapsDiv">
             @foreach ($outcomeMaps as $programId => $outcomeMap)
             <div class="p-0 m-0" id="outcomeMapsDiv">
+                <!-- Add help icon for PLO/CLO mapping section -->
                 <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
                     {{$outcomeMap["program"]->program}}
                     <button type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                     <input hidden name="import_course_settings[programs][]" value="{{$programId}}">
+                    <span>
+                        <a id="syllabusPLOMappingHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                            <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Program Learning Outcomes Mapping"></i>
+                        </a>
+                    </span>
                 </h5>
 
                 @if ($outcomeMap['program']->mappingScaleLevels->count() < 1)
@@ -758,10 +777,18 @@
             </div>
             @else
             <div class="col-12">
+                <!-- Add help icon for mapping scale section -->
                 <table class="table table-bordered table-light">
                     <thead>
                         <tr class="table-primary">
-                            <th colspan="2">Mapping Scale</th>
+                            <th colspan="2">
+                                Mapping Scale
+                                <span>
+                                    <a id="syllabusMappingScaleHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                                        <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Mapping Scales"></i>
+                                    </a>
+                                </span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -785,11 +812,14 @@
             @if (isset($outcomeMap['outcomeMap']) > 0)
             <div class="col-12">
                 <div style="overflow: auto;">
+                    <!-- Add help icon for CLO/PLO table -->
                     <table class="table table-bordered table-light">
                         <thead>
                             <tr class="table-primary">
                                 <th colspan="1" class="w-auto">CLO</th>
-                                <th colspan="{{$outcomeMap['program']->programLearningOutcomes->count()}}">Program Learning Outcome</th>
+                                <th colspan="{{$outcomeMap['program']->programLearningOutcomes->count()}}">
+                                    Program Learning Outcome
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -2966,4 +2996,90 @@
 <script src="{{ asset('js/drag_drop_tbl_row.js') }}"></script>
 <!-- Include stylesheet to style reorder table rows -->
 <link rel="stylesheet" href="{{ asset('css/drag_drop_tbl_row.css' ) }}">
+
+<!-- Initialize tooltips and help icon functionality -->
+<script>
+    $(document).ready(function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Enhanced fix for modal backdrop cleanup and focus management on close
+        $('#guideModal').on('hidden.bs.modal', function () {
+            // Remove any lingering backdrop and reset body styles
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css({
+                'overflow': '',
+                'padding-right': ''
+            });
+
+            // Completely reset modal state
+            $(this).removeClass('show');
+            $(this).attr('aria-hidden', 'true');
+            $(this).css('display', 'none');
+
+            // Return focus to the document
+            setTimeout(function() {
+                $(document).focus();
+                $('html, body').animate({ scrollTop: $(document).scrollTop() }, 0);
+            }, 100);
+        });
+
+        // Make sure help icons properly trigger the guide modal
+        $('#syllabusGeneratorHelp, #cloHelp, #samHelp, #tlaHelp, #syllabusPLOMappingHelp, #syllabusMappingScaleHelp').on('click', function(e) {
+            e.preventDefault();
+
+            // Get the modal element
+            var modalEl = document.getElementById('guideModal');
+
+            // Dispose of any existing modal instance to prevent conflicts
+            var existingModal = bootstrap.Modal.getInstance(modalEl);
+            if (existingModal) {
+                existingModal.dispose();
+            }
+
+            // Reset the modal state before creating a new instance
+            $(modalEl).removeClass('show');
+            $(modalEl).attr('aria-hidden', 'true');
+            $(modalEl).css('display', 'none');
+
+            // Clean up any lingering backdrops from previous modals
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css({
+                'overflow': '',
+                'padding-right': ''
+            });
+
+            // Create a new modal instance with explicit configuration
+            var guideModal = new bootstrap.Modal(modalEl, {
+                backdrop: true,
+                keyboard: true,
+                focus: true
+            });
+
+            // Show the modal
+            guideModal.show();
+
+            // Call the appropriate guide function based on which help icon was clicked
+            var iconId = $(this).attr('id');
+            if (iconId === 'syllabusGeneratorHelp') {
+                setSyllabi();
+            } else if (iconId === 'cloHelp') {
+                setCLO();
+            } else if (iconId === 'samHelp') {
+                setSAM();
+            } else if (iconId === 'tlaHelp') {
+                setTLA();
+            } else if (iconId === 'syllabusPLOMappingHelp') {
+                setSyllabusPLOMapping();
+            } else if (iconId === 'syllabusMappingScaleHelp') {
+                setMS();
+            }
+        });
+    });
+</script>
 @endsection
