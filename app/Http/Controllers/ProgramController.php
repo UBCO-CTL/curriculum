@@ -1580,16 +1580,29 @@ class ProgramController extends Controller
                 $sheet->mergeCells('Q1:Z1');
                 $sheet->getStyle('K1')->applyFromArray($styles['primaryHeading']);
                 $sheet->getStyle('Q1')->applyFromArray($styles['primaryHeading']);
+
+                // Set column widths to prevent text cutoff
+                $sheet->getColumnDimension('K')->setWidth(20);
+                for ($col = 'L'; $col <= 'P'; $col++) {
+                    $sheet->getColumnDimension($col)->setWidth(15);
+                }
+                for ($col = 'Q'; $col <= 'Z'; $col++) {
+                    $sheet->getColumnDimension($col)->setWidth(12);
+                }
+
                 foreach ($outputMS[0] as $index => $standards) {
                     // add standards and descriptions
-                    $sheet->setCellValue('K'.strval(($index * 8) + 2), $standards);
-                    $sheet->mergeCells('K'.strval(($index * 8) + 2).':P'.strval(($index * 8) + 2).'');
-                    $sheet->getStyle('K'.strval(($index * 8) + 2).'')->applyFromArray($styles['secondaryHeading']);
-                    // Clean up the description text by removing HTML tags and normalizing whitespace
-                    $cleanDescription = trim(preg_replace('/\s+/', ' ', strip_tags($outputMS[5][$index])));
-                    $sheet->setCellValue('K'.strval(($index * 8) + 3), $cleanDescription);
-                    $sheet->mergeCells('K'.strval(($index * 8) + 3).':P'.strval(($index * 8) + 9).'');
-                    $sheet->getStyle('K'.strval(($index * 8) + 3).'')->applyFromArray($styles['text']);
+
+                    $sheet->setCellValue('K' . strval(($index * 8) + 2), $standards);
+                    $sheet->mergeCells('K' . strval(($index * 8) + 2) . ':P' . strval(($index * 8) + 2) . '');
+                    $sheet->getStyle('K' . strval(($index * 8) + 2) . '')->applyFromArray($styles['secondaryHeading']);
+
+                    // Clean up description text to avoid weird spacing
+                    $cleanDescription = trim(strip_tags(preg_replace('/\s+/', ' ', $outputMS[5][$index])));
+                    $sheet->setCellValue('K' . strval(($index * 8) + 3), $cleanDescription);
+                    $sheet->mergeCells('K' . strval(($index * 8) + 3) . ':P' . strval(($index * 8) + 9) . '');
+                    $sheet->getStyle('K' . strval(($index * 8) + 3) . '')->applyFromArray($styles['text']);
+
 
                     $count = 0;
                     foreach ($outputMS[1] as $indexMS => $titleMS) {
@@ -1609,11 +1622,11 @@ class ProgramController extends Controller
                             if ($k != 0) {
                                 $output .= ', ' . $code . ' ' . $num;
                             } else {
-                                $output .= ' ' . $code . ' ' . $num;
+                                $output .= $code . ' ' . $num; // Remove extra space
                             }
                             $k++;
                         }
-                        $sheet->setCellValue('S' . strval(3 + $count + ($index * 8)), ($output));
+                        $sheet->setCellValue('S' . strval(3 + $count + ($index * 8)), $output);
                         $count++;
                     }
                     // style remaining cells
@@ -2935,13 +2948,17 @@ class ProgramController extends Controller
             $output .= '<table class="table table-light table-bordered table-sm mb-0"><tbody><tr class="table-primary"><th style="width:50%">Ministry Standards</th><th>Courses</th></tr>';
             $i = 0;
             foreach ($namesStandards as $standard) {
-                $output .= '<tr><td class="align-top"><b>'.$standard.'</b><br><span class="small">'.$descriptionsStandards[$i].'</span></td><td class="p-0">';
+
+                // Clean up the description text by removing HTML tags and normalizing whitespace
+                $cleanDescription = trim(preg_replace('/\s+/', ' ', strip_tags($descriptionsStandards[$i])));
+
+                $output .= '<tr><td class="col col-md-5"><b>' . $standard . '</b><br><span class="small">' . $cleanDescription . '</span></td><td>';
                 $j = 0;
                 foreach ($standardsMappingScalesTitles as $standardsMappingScale) {
-                    $output .= '<div class="d-flex align-items-center p-2" style="border-bottom: 1px solid #dee2e6">';
+                    $output .= '<div class="d-flex align-items-center p-2" style="border-bottom: 1px solid #dee2e6; margin-right: 8px;">';
 
-                    $output .= '<div style="background-color:'.$standardMappingScalesColours[$j].'; height: 12px; width: 12px; border-radius: 6px; margin-right: 8px;"></div>';
-                    $output .= '<div class="mr-3">'.$standardsMappingScale.': '.$frequencyOfMinistryStandardIds[$j][$i].'</div>';
+                    $output .= '<div style="background-color:' . $standardMappingScalesColours[$j] . '; height: 12px; width: 12px; border-radius: 6px; margin-right: 8px;"></div>';
+                    $output .= '<div class="m-3">' . $standardsMappingScale . ': ' . $frequencyOfMinistryStandardIds[$j][$i] . '</div>';
 
                     $output .= '<div class="flex-grow-1">';
                     $k = 0;
@@ -2951,11 +2968,14 @@ class ProgramController extends Controller
                         if ($k != 0) {
                             $output .= ', ' . $code . ' ' . $num;
                         } else {
-                            $output .= $code.' '.$num;
+
+                            $output .= $code . ' ' . $num;
+
                         }
                         $k++;
                     }
-                    $output .= '</div></div>';
+                    $output .= '</div>';
+                    $output .= '</div>';
                     $j++;
                 }
                 $output .= '</td></tr>';
