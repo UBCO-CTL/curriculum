@@ -2,13 +2,6 @@
 
 @section('content')
 
-<div class="alert alert-warning">
-        <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <div>
-        We will be performing a planned system maintenance on Thursday March 20th from 9:30AM-12:30PM. Use of the tool during this period is not recommended. Please contact <a href="ctl.helpdesk@ubc.ca">ctl.helpdesk@ubc.ca</a> with any questions.
-        </div>
-</div>
 <link href=" {{ asset('css/accordions.css') }}" rel="stylesheet" type="text/css" >
 <!--Link for FontAwesome Font for the arrows for the accordions.-->
 <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" rel="stylesheet" type="text/css" >
