@@ -27,12 +27,13 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addLearningActivitiesModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> Teaching and Learning Activities</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
                             <div class="modal-body">
                                 <form id="addLearningActivitiesForm" class="needs-validation" novalidate>
                                     <div class="row justify-content-between align-items-end m-2">
-                                        <div class="col-10">
+                                        <div class="col-8">
                                             <label for="learningActivity" class="form-label fs-6"><b>Learning Activity</b></label>
                                             <input id="learningActivity" class="form-control" list="learningActivitiesOptions" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="191" placeholder="Type to search or add your own..." required>
                                             <div class="invalid-tooltip">
@@ -71,6 +72,10 @@
                                             </datalist>
                                         </div>
                                         <div class="col-2">
+                                            <label for="activityPercentage" class="form-label fs-6"><b>% of Time</b></label>
+                                            <input id="activityPercentage" type="number" min="0" max="100" class="form-control" placeholder="%">
+                                        </div>
+                                        <div class="col-2">
                                             <button id="addLearningActivityBtn" type="submit" class="btn btn-primary col">Add</button>
                                         </div>
                                     </div>
@@ -85,6 +90,7 @@
                                         <thead>
                                             <tr class="table-primary">
                                                 <th>Teaching and Learning Activity</th>
+                                                <th class="text-center">% of Time</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -94,6 +100,12 @@
                                                 <td>
                                                     <input list="learningActivitiesOptions" id="l_activity{{$l_activity->l_activity_id}}" type="text" class="form-control" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="191"
                                                     name="current_l_activities[{{$l_activity->l_activity_id}}]" value = "{{$l_activity->l_activity}}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" min="0" max="100" class="form-control" id="l_activity_percentage{{$l_activity->l_activity_id}}"
+                                                    name="current_l_activities_percentage[{{$l_activity->l_activity_id}}]"
+                                                    value="{{$l_activity->percentage ?? ''}}"
+                                                    placeholder="%" form="saveLearningActivityChanges">
                                                 </td>
                                                 <td class="text-center">
                                                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>
@@ -154,11 +166,12 @@
                                 <tr class="table-primary">
                                     <th class="text-center">#</th>
                                     <th>Teaching and Learning Activities</th>
+                                    <th class="text-center">% of Time</th>
                                     <th class="text-center w-25">Actions</th>
                                 </tr>
                                 @if(count($l_activities)<1)
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <div class="alert alert-warning wizard">
                                                 <i class="bi bi-exclamation-circle-fill"></i>There are no teaching and learning activities set for this course.
                                             </div>
@@ -171,6 +184,9 @@
                                             <td>
                                                 {{$l_activity->l_activity}}
                                             </td>
+                                            <td class="text-center">
+                                                {{$l_activity->percentage ?? '–'}}%
+                                            </td>
                                             <td class="text-center align-middle">
                                                 <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
                                                     Edit
@@ -179,6 +195,20 @@
                                             <input type="hidden" name="l_activities_pos[]" value="{{$l_activity->l_activity_id}}">
                                         </tr>
                                     @endforeach
+
+                                    <?php
+                                    $learningActivitiesTotal = 0;
+                                    foreach($l_activities as $l_activity) {
+                                        $learningActivitiesTotal += $l_activity->percentage ?? 0;
+                                    }
+                                    ?>
+
+                                    <tr class="table-secondary fw-bold">
+                                        <td></td>
+                                        <td>Total</td>
+                                        <td class="text-center">{{$learningActivitiesTotal}}%</td>
+                                        <td></td>
+                                    </tr>
                                 @endif
                             </table>
                             <div class="mt-4 mb-5 pb-4">
@@ -248,6 +278,12 @@
                             <input list="learningActivitiesOptions" id="l_activity{{$l_activity->l_activity_id}}" type="text" class="form-control" name="current_l_activities[{{$l_activity->l_activity_id}}]" value = "{{$l_activity->l_activity}}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
                         </td>
                         <td class="text-center">
+                            <input type="number" min="0" max="100" class="form-control" id="l_activity_percentage{{$l_activity->l_activity_id}}"
+                            name="current_l_activities_percentage[{{$l_activity->l_activity_id}}]"
+                            value="{{$l_activity->percentage ?? ''}}"
+                            placeholder="%" form="saveLearningActivityChanges">
+                        </td>
+                        <td class="text-center">
                             <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>
                         </td>
                     </tr>
@@ -266,6 +302,9 @@
             <tr>
                 <td>
                     <input list="learningActivitiesOptions" type="text" class="form-control" name="new_l_activities[]" value = "${$('#learningActivity').val()}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
+                </td>
+                <td class="text-center">
+                    <input type="number" min="0" max="100" class="form-control" name="new_l_activities_percentage[]" value="${$('#activityPercentage').val()}" placeholder="%" form="saveLearningActivityChanges">
                 </td>
                 <td class="text-center">
                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>

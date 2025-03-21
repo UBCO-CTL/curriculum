@@ -18,14 +18,15 @@
                         </div>
                     </h3>
 
-                    <!-- Add CLO Modal: Bloom’s Taxonomy of Learning Modal -->
-                    <div class="modal fade" data-backdrop="static" data-keyboard="false" id="addLearningOutcomeModal" tabindex="-1" role="dialog"
+                    <!-- Add CLO Modal: Bloom's Taxonomy of Learning Modal -->
+                    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addLearningOutcomeModal" tabindex="-1" role="dialog"
                         aria-labelledby="addLearningOutcomeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addLearningOutcomeModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> Course Learning Outcomes or Competencies
                                     </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
                                 <div class="modal-body text-left">
@@ -97,7 +98,7 @@
                                         <div class="modal-footer">
                                             <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveCLOChanges">
                                             <button id="deleteAllCLOs" type="button" class="btn btn-danger col-3">Delete All</button>
-                                            <button id="cancel" type="button" class="btn btn-secondary col-3" data-dismiss="modal">Cancel</button>
+                                            <button id="cancel" type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal">Cancel</button>
                                             <button type="submit" class="btn btn-success col-3">Save</button>
                                         </div>
                                     </form>
@@ -141,7 +142,7 @@
                             </div>
                         </form>
                         <div class="col-6 text-right">
-                            <button type="button" class="btn btn-primary btn-lg col-4 fs-5 bg-primary text-white"  data-toggle="modal" data-target="#addLearningOutcomeModal">
+                            <button type="button" class="btn btn-primary btn-lg col-4 fs-5 bg-primary text-white"  data-bs-toggle="modal" data-bs-target="#addLearningOutcomeModal">
                                 <b ><i class="bi bi-plus mr-2"></i>CLO</b>
                             </button>
                         </div>
@@ -170,7 +171,7 @@
                                                 {{$l_outcome->l_outcome}}
                                             </td>
                                             <td class="text-center align-middle">
-                                                <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-toggle="modal" data-target="#addLearningOutcomeModal">
+                                                <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#addLearningOutcomeModal">
                                                     Edit
                                                 </button>
                                                 <!-- <button style="width:60px;" type="button" class="btn btn-danger btn-sm btn btn-danger btn-sm m-1"
@@ -194,9 +195,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="CLOdeleteConfirmation">Delete Confirmation</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body text-left">
                                         Are you sure you want to delete {{$l_outcome->l_outcome}}
@@ -206,7 +205,7 @@
                                             {{method_field('DELETE')}}
                                             <input type="hidden" name="course_id" value="{{$course->course_id}}">
                                             <div class="modal-footer">
-                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                 <button style="width:60px;" type="submit" class="btn btn-danger btn-sm ">Delete</button>
                                             </div>
                                         </form>

@@ -29,12 +29,13 @@ use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Dompdf\Options as DomPdfOptions;
 
 define('INPUT_TIPS', [
     'otherCourseStaff' => 'At the discretion of the course instructor, the names of any other student-facing members of teaching staff such as teaching assistants involved in the offering of the course (if not available on the Student Service Centre or on Workday), and details of when and by what means students may contact them.',
     'learningOutcomes' => 'i.e., what is to be achieved and assessed in the course.',
     'learningAssessments' => 'The methods used to assess achievement of stated learning outcomes or objectives, including the weighting of each component in the final grade.',
-    'learningActivities' => 'Do you expect students to participate in class? In what ways? (e.g., case studies, using “clickers” to answer questions, working in small groups, etc.) Is participation in on-line discussions required? Are readings required in advance with answers to be submitted to discussion questions or problem sets?
+    'learningActivities' => 'Do you expect students to participate in class? In what ways? (e.g., case studies, using "clickers" to answer questions, working in small groups, etc.) Is participation in on-line discussions required? Are readings required in advance with answers to be submitted to discussion questions or problem sets?
     Is an oral presentation required? Is there a field excursion?',
     'learningMaterials' => 'List of required learning materials for your course (including textbooks, reading packages, on-line assessment tools, lab and field trip manuals) and where they might be obtained (e.g. the Bookstore if you ordered a text or a reading package, your department office if an in-house resource is available, the Library through their <a href="https://library.ok.ubc.ca/services/course-reserves/" target="_blank" rel="noopener noreferrer">course-reserve system</a>). Providing students with at least an estimate of the costs of materials is expected. Explanation of any on-line learning management system used (e.g.Canvas).',
     'latePolicy' => 'State your policies on re-grading of marked work and on late submissions. What are the penalties for late assignments?',
@@ -52,7 +53,7 @@ define('INPUT_TIPS', [
     'learningAnalytics' => 'If your course or department has a learning resource centre (physical or virtual), inform your students. Who will students encounter there? Are the staff knowledgeable about this course?',
     'officeLocation' => 'Building & Room Number',
     'creativeCommons' => 'Include a copyright statement or include a Creative Commons Open Copyright license of your choosing. Visit the <a href="https://creativecommons.org/licenses/" target="_blank" rel="noopener noreferrer">Creative Commons Website</a> for options and more information. Need help deciding? Try using the <a href="https://creativecommons.org/choose/" target="_blank" rel="noopener noreferrer">Creative Commons License Chooser</a>.',
-    'uniPolicy' => 'Hearing from each course instructor about University policies and values can help to emphasize their importance to students. To fulfil the policy, you need only to present the following paragraph with the link to the web page that provides details and links to specific policies and resources. You may wish to take the opportunity to relate the ideas to your own course as part of your students’ education. This policy is <b>always included</b> in a generated Vancouver syllabus.',
+    'uniPolicy' => 'Hearing from each course instructor about University policies and values can help to emphasize their importance to students. To fulfil the policy, you need only to present the following paragraph with the link to the web page that provides details and links to specific policies and resources. You may wish to take the opportunity to relate the ideas to your own course as part of your students\' education. This policy is <b>always included</b> in a generated Vancouver syllabus.',
     'customResource' => 'Include any additional information or resources that have not been provided.',
     'saveWarning' => 'Be sure to save your content regularly by clicking the save button <i class="bi bi-clipboard2-check-fill"></i> at the top and bottom of this page.',
     'crossListed' => 'Is this a Cross-Listed Course? Per <a href="https://senate.ubc.ca/okanagan/forms/" target="_blank" rel="noopener noreferrer">Curriculum Guidelines</a>.',
@@ -122,7 +123,7 @@ class SyllabusController extends Controller
 
             // show view based on user permission
             switch ($userPermission) {
-                    // owner
+                // owner
                 case 1:
                     return $this->syllabusEditor($syllabus, ['user' => $user, 'myCourses' => $myCourses, 'vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'faculties' => $faculties, 'departments' => $departments, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps]);
 
@@ -131,12 +132,12 @@ class SyllabusController extends Controller
                     // editor
                     return $this->syllabusEditor($syllabus, ['user' => $user, 'myCourses' => $myCourses, 'vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'faculties' => $faculties, 'departments' => $departments, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps]);
                     break;
-                    // viewer
+                // viewer
                 case 3:
                     return $this->syllabusViewer($syllabus, ['vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps, 'vancouverSyllabus' => $vancouverSyllabus, 'okanaganSyllabus' => $okanaganSyllabus]);
 
                     break;
-                    // return view to create a syllabus as default
+                // return view to create a syllabus as default
                 default:
                     return view('syllabus.syllabusGenerator')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
             }
@@ -304,7 +305,7 @@ class SyllabusController extends Controller
 
             // show view based on user permission
             switch ($userPermission) {
-                    // owner
+                // owner
                 case 1:
                     return $this->syllabusEditor($syllabus, ['user' => $user, 'myCourses' => $myCourses, 'vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'faculties' => $faculties, 'departments' => $departments, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps]);
 
@@ -313,12 +314,12 @@ class SyllabusController extends Controller
                     // editor
                     return $this->syllabusEditor($syllabus, ['user' => $user, 'myCourses' => $myCourses, 'vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'faculties' => $faculties, 'departments' => $departments, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps]);
                     break;
-                    // viewer
+                // viewer
                 case 3:
                     return $this->syllabusViewer($syllabus, ['vancouverSyllabusResources' => $vancouverSyllabusResources, 'okanaganSyllabusResources' => $okanaganSyllabusResources, 'courseAlignment' => $courseAlignment, 'outcomeMaps' => $outcomeMaps, 'vancouverSyllabus' => $vancouverSyllabus, 'okanaganSyllabus' => $okanaganSyllabus]);
 
                     break;
-                    // return view to create a syllabus as default
+                // return view to create a syllabus as default
                 default:
                     return view('syllabus.syllabusGenerator')->with('user', $user)->with('myCourses', $myCourses)->with('inputFieldDescriptions', INPUT_TIPS)->with('okanaganSyllabusResources', $okanaganSyllabusResources)->with('vancouverSyllabusResources', $vancouverSyllabusResources)->with('faculties', $faculties)->with('departments', $departments)->with('syllabus', []);
             }
@@ -996,7 +997,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($CDArr as $index => $courseDesc) {
                             $templateProcessor->cloneBlock('NocourseDescription');
-                            $templateProcessor->setValue('courseDescriptionOK' . $i, $courseDesc . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('courseDescriptionOK' . $i, htmlspecialchars($courseDesc, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1050,7 +1051,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($COArr as $index => $courseOver) {
                             $templateProcessor->cloneBlock('NocourseOverview');
-                            $templateProcessor->setValue('courseOverview' . $i, $courseOver . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('courseOverview' . $i, htmlspecialchars($courseOver, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1099,7 +1100,7 @@ class SyllabusController extends Controller
                     if ($ext == 'pdf') {
                         foreach ($LearnActArr as $index => $learnAct) {
                             $templateProcessor->cloneBlock('NoLearningActivities');
-                            $templateProcessor->setValue('learningActivities' . $i, $learnAct . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('learningActivities' . $i, htmlspecialchars($learnAct, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1552,7 +1553,7 @@ class SyllabusController extends Controller
                         foreach ($LearnActArr as $index => $learnAct) {
                             $templateProcessor->cloneBlock('NoLearningActivities');
                             $templateProcessor->cloneBlock('NoLearningActivitiesDesc', 0);
-                            $templateProcessor->setValue('learningActivities' . $i, $learnAct . '</w:t><w:br/><w:t>');
+                            $templateProcessor->setValue('learningActivities' . $i, htmlspecialchars($learnAct, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
                             $i++;
                         }
 
@@ -1602,8 +1603,8 @@ class SyllabusController extends Controller
                     $templateProcessor->cloneBlock('NoOtherInstructionalStaffDesc');
                     $templateProcessor->cloneBlock('NoOtherInstructionalStaff', 0);
                 }
-                
-                
+
+
                 // tell template processor to include course location if user completed the field(s)
                 if ($courseLocation = $syllabus->course_location) {
                     $templateProcessor->cloneBlock('NoCourseLocation');
@@ -1917,6 +1918,44 @@ class SyllabusController extends Controller
         }
 
         //Late Policy
+        // Check if any of the "Other Course Policies" fields are filled in
+        $hasOtherCoursePolicies = !empty($syllabus->late_policy) ||
+            !empty($syllabus->missed_exam_policy) ||
+            !empty($syllabus->missed_activity_policy) ||
+            !empty($syllabus->passing_criteria) ||
+            !empty($vancouverSyllabus->learning_analytics ?? null) ||
+            !empty($syllabus->additional_course_info);
+
+        // Only include the "Other Course Policies" section if at least one field is filled in
+        if (!$hasOtherCoursePolicies) {
+            // Hide the entire Other Course Policies section
+            $templateProcessor->cloneBlock('NoOtherCoursePolicies', 0);
+        } else {
+            // Show the Other Course Policies section
+            $templateProcessor->cloneBlock('NoOtherCoursePolicies', 1);
+
+            // Process each policy section individually
+            if (empty($syllabus->late_policy)) {
+                $templateProcessor->cloneBlock('NolatePolicy', 0);
+            }
+
+            if (empty($syllabus->missed_exam_policy)) {
+                $templateProcessor->cloneBlock('NoMissingExam', 0);
+            }
+
+            if (empty($syllabus->missed_activity_policy)) {
+                $templateProcessor->cloneBlock('NomissingActivity', 0);
+            }
+
+            if (empty($syllabus->passing_criteria)) {
+                $templateProcessor->cloneBlock('NopassingCriteria', 0);
+            }
+
+            // For Vancouver campus learning analytics
+            if ($syllabus->campus == 'V' && empty($vancouverSyllabus->learning_analytics)) {
+                $templateProcessor->cloneBlock('NoLearningAnalytics', 0);
+            }
+        }
 
         if ($latePolicy = $syllabus->late_policy) {
             $LPArr = explode("\n", $latePolicy);
@@ -2074,6 +2113,74 @@ class SyllabusController extends Controller
             $templateProcessor->cloneBlock('NoOutcomeMaps', 0);
         }
 
+        // Student Services Resources - Only show if academic integrity checkboxes are checked
+        $vancouverResources = null;
+        $okanaganResources = null;
+
+        if ($syllabus->campus == 'V') {
+            $vancouverResources = SyllabusResourceVancouver::where('syllabus_id', $syllabus->id)->get();
+        } else if ($syllabus->campus == 'O') {
+            $okanaganResources = SyllabusResourceOkanagan::where('syllabus_id', $syllabus->id)->get();
+        }
+
+        $hasAcademicIntegrityResources = false;
+
+        // Check Vancouver campus resources
+        if ($vancouverResources && $vancouverResources->count() > 0) {
+            foreach ($vancouverResources as $resource) {
+                $vResource = VancouverSyllabusResource::find($resource->v_syllabus_resource_id);
+                if ($vResource && in_array($vResource->id_name, ['academicIntegrity', 'genAI', 'genAIprohibit'])) {
+                    $hasAcademicIntegrityResources = true;
+                    break;
+                }
+            }
+        }
+
+        // Check Okanagan campus resources
+        if ($okanaganResources && $okanaganResources->count() > 0) {
+            foreach ($okanaganResources as $resource) {
+                $oResource = OkanaganSyllabusResource::find($resource->o_syllabus_resource_id);
+                if ($oResource && in_array($oResource->id_name, ['academicIntegrity', 'genAI', 'genAIprohibit'])) {
+                    $hasAcademicIntegrityResources = true;
+                    break;
+                }
+            }
+        }
+
+        // Only include the "Student Services Resources" section if academic integrity checkboxes are checked
+        if (!$hasAcademicIntegrityResources) {
+            // Hide the entire Student Services Resources section
+            $templateProcessor->cloneBlock('NoStudentServicesResources', 0);
+        } else {
+            // Show the Student Services Resources section
+            $templateProcessor->cloneBlock('NoStudentServicesResources', 1);
+        }
+
+        // Handle license information before PDF/Word specific processing
+        if (!empty($syllabus->license)) {
+            $licenseArr = explode("\n", $syllabus->license);
+            $i = 0;
+            if ($ext == 'pdf') {
+                foreach ($licenseArr as $index => $licenseLine) {
+                    $templateProcessor->cloneBlock('NoLicense');
+                    $templateProcessor->setValue('license' . $i, htmlspecialchars($licenseLine, ENT_QUOTES | ENT_HTML5) . '</w:t><w:br/><w:t>');
+                    $i++;
+                }
+                for ($i; $i <= 20; $i++) {
+                    $templateProcessor->setValue('license' . $i, '');
+                }
+            } else {
+                $templateProcessor->cloneBlock('NoLicense');
+                $templateProcessor->setValue('license0', str_replace("\n", '</w:t><w:br/><w:t>', $syllabus->license));
+                $i++;
+                for ($i; $i <= 20; $i++) {
+                    $templateProcessor->setValue('license' . $i, '');
+                }
+            }
+        } else {
+            $templateProcessor->cloneBlock('NoLicense', 0);
+        }
+
         // set document name
         $fileName = 'syllabus';
         // word file ext
@@ -2087,6 +2194,7 @@ class SyllabusController extends Controller
             $pdfRendererPath = base_path(DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'dompdf');
             Settings::setPdfRendererPath($pdfRendererPath);
             Settings::setPdfRendererName('DomPDF');
+
             // get path to word file
             $wordFilePath = config('app.env') == 'local' ? public_path($fileName . $wordFileExt) : base_path('html' . DIRECTORY_SEPARATOR . $fileName . $wordFileExt);
             // load word file
