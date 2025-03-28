@@ -13,7 +13,18 @@ class ProgramLearningOutcome extends Model
 
     protected $primaryKey = 'pl_outcome_id';
 
-    protected $fillable = ['program_id', 'pl_outcome', 'plo_shortphrase', 'pl_outcome_id', 'plo_category_id'];
+    protected $fillable = ['program_id', 'pl_outcome', 'plo_shortphrase', 'pl_outcome_id', 'plo_category_id', 'position'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Add default ordering by category_id and position
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('plo_category_id', 'asc')
+                   ->orderBy('position', 'asc');
+        });
+    }
 
     public function learningOutcomes(): BelongsToMany
     {

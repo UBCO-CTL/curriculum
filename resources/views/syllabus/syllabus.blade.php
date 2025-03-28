@@ -2,11 +2,38 @@
 
 @section('content')
 
-
+@include('layouts.guide')
 
 @include('modals.importCourseModal', ['myCourses' => $myCourses, 'syllabus' => $syllabus])
 
 @include('modals.courseSchedule')
+
+
+<!-- PDF Download Confirmation Modal -->
+<div class="modal fade" id="pdfDownloadConfirmation" tabindex="-1" aria-labelledby="pdfDownloadConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfDownloadConfirmationLabel">Download Format Recommendation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>For better formatting and a sleeker modern design, we recommend downloading your syllabus in Word format.</p>
+                <p>Would you like to:</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="submit" name="download" value="word" form="sylabusGenerator" class="btn btn-primary">
+                    <i class="bi-file-earmark-word-fill"></i> Download Word
+                </button>
+                <button type="submit" name="download" value="pdf" form="sylabusGenerator" class="btn btn-secondary">
+                    <i class="bi-file-pdf-fill"></i> Continue with PDF
+                </button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <style>
     .inputFieldDescription {
@@ -20,7 +47,15 @@
 <div class="m-auto" style="max-width:860px;height:100%;">
 
     <div class="m-3">
-        <h3 class="text-center lh-lg fw-bold mt-4">Syllabus Generator</h3>
+        <!-- Add help icon next to the main title -->
+        <h3 class="text-center lh-lg fw-bold mt-4">
+            Syllabus Generator
+            <span>
+                <a id="syllabusGeneratorHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                    <i class="bi bi-question-circle-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with the Syllabus Generator"></i>
+                </a>
+            </span>
+        </h3>
 
         <div class="text-center row justify-content-center">
             <div class="col-2" style="max-width:10%">
@@ -29,17 +64,15 @@
                     <p style="font-size:12px" class="text-muted m-0">SAVE</p>
                 </button>
             </div>
-            <!-- PDF Download Disabled while we investigate escaping issues -->
-            <!--
             <div class="col-2" style="max-width:10%">
-                <button type="submit" name="download" value="pdf" form="sylabusGenerator"
-                    class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    title="Save and download my syllabus as PDF">
-                    <i class="text-danger bi-file-pdf-fill btn btn-light rounded-circle m-2"></i>
-                    <p style="font-size:12px" class="text-muted m-0">PDF</p>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#pdfDownloadConfirmation"
+                    class="btn m-0 p-0" style="background:none;border:none">
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save and download syllabus as PDF">
+                        <i class="text-danger bi-file-pdf-fill btn btn-light rounded-circle m-2"></i>
+                        <p style="font-size:12px" class="text-muted m-0">PDF</p>
+                    </span>
                 </button>
             </div>
-            -->
             <div class="col-2" style="max-width:10%">
                 <button type="submit" name="download" value="word" form="sylabusGenerator"
                     class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -355,12 +388,36 @@
         </div>
 
         <div class="col-6">
-            <label for="endTime">Prerequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="prerequisites" name="prerequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}">
+            <label for="prerequisites">Prerequisites</label><span class="requiredBySenateOK"></span>
+            <textarea
+                data-formatnoteid="formatPrereqs"
+                oninput="autoResize(this)"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="prerequisites"
+                name="prerequisites"
+                class="form-control"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111, COSC 123"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->prerequisites : ''}}</textarea>
         </div>
         <div class="col-6">
-            <label for="endTime">Corequisites</label><span class="requiredBySenateOK"></span>
-            <input oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="100" spellcheck="true" id="corequisites" name="corequisites" class="form-control" type="text" value="{{ !empty($syllabus) ? $syllabus->corequisites : ''}}">
+            <label for="corequisites">Corequisites</label><span class="requiredBySenateOK"></span>
+            <textarea
+                data-formatnoteid="formatCoreqs"
+                oninput="autoResize(this)"
+                onpaste="validateMaxlength()"
+                maxlength="7500"
+                id="corequisites"
+                name="corequisites"
+                class="form-control"
+                style="min-height:38px; max-height:200px; resize:none; overflow-y:hidden;"
+                rows="1"
+                form="sylabusGenerator"
+                placeholder="E.g. COSC 111"
+                spellcheck="true">{{ !empty($syllabus) ? $syllabus->corequisites : ''}}</textarea>
         </div>
 
         <!-- Land Acknowledgement Statement -->
@@ -598,10 +655,13 @@
 
         <div class="col-12">
             <label for="learningOutcome">
-                <h5 class="fw-bold">Learning Outcomes or Objectives</h5>
+                <h5 class="fw-bold">Learning Outcomes</h5>
             </label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningOutcomes']}}"></i>
+            <a id="cloHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Course Learning Outcomes"></i>
+            </a>
             <p class="inputFieldDescription"><i>Upon successful completion of this course, students will be able to ...</i></p>
             <div id="formatCLOs" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
@@ -610,15 +670,34 @@
         </div>
 
         <div class="col-12">
+            <label for="learningAssessments">
+                <h5 class="fw-bold">Methods of Assessment</h5>
+            </label><span class="requiredBySenateOK"></span>
+            <span class="requiredBySenate"></span>
+            <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningAssessments']}}"></i>
+            <a id="samHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Student Assessment Methods"></i>
+            </a>
+            <div id="formatAssessments" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
+            </div>
+            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningAssessments" data-formatnoteid="formatAssessments" placeholder="E.g. Presentation, 25%, Dec 1, ... &#10;E.g. Midterm Exam, 25%, Sept 31, ..." name="learningAssessments" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_assessments : ''}}</textarea>
+        </div>
+
+        <!-- Add Learning Activities help icon -->
+        <div class="col-12">
             <label for="learningActivities">
                 <h5 class="fw-bold">Learning Activities</h5>
             </label><span class="requiredBySenateOK"></span>
             <span class="requiredBySenate"></span>
             <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningActivities']}}"></i>
-            <div id="formatActivities" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
+            <a id="tlaHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Teaching and Learning Activities"></i>
+            </a>
+            <div id="formatLearningActivities" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
                 <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
             </div>
-            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="52431" id="learningActivities" data-formatnoteid="formatActivities" placeholder="E.g. Class participation consists of clicker questions, group discussions ... &#10;E.g. Students are expected to complete class pre-readings ..." name="learningActivities" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_activities : ''}}</textarea>
+            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningActivities" data-formatnoteid="formatLearningActivities" placeholder="E.g. Group discussions&#10;E.g. Case studies" name="learningActivities" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_activities : ''}}</textarea>
         </div>
         <!-- Course Learning Materials -->
         <div class="col-12">
@@ -636,25 +715,6 @@
                 id="learningMaterials" name="learningMaterials" class="form-control" type="date" form="sylabusGenerator"
                 spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_materials : ''}}</textarea>
         </div>
-
-
-        <div class="col-12">
-            <label for="learningAssessments">
-                <h5 class="fw-bold">Methods of Assessment</h5>
-            </label><span class="requiredBySenateOK"></span>
-            <span class="requiredBySenate"></span>
-            <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$inputFieldDescriptions['learningAssessments']}}"></i>
-            <div id="formatAssessments" class="collapsibleNotes btn-primary rounded-3" style="overflow:hidden;transition:height 0.3s ease-out;height:auto" data-collapsed="false">
-                <i class="bi bi-exclamation-triangle-fill fs-5 pl-2 pr-2 pb-1"></i> <span class="fs-6">Place each entry on a new line for the best formatting results.</span>
-            </div>
-            <textarea oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="10000" id="learningAssessments" data-formatnoteid="formatAssessments" placeholder="E.g. Presentation, 25%, Dec 1, ... &#10;E.g. Midterm Exam, 25%, Sept 31, ..." name="learningAssessments" class="form-control" type="date" style="height:125px;" form="sylabusGenerator" spellcheck="true">{{ !empty($syllabus) ? $syllabus->learning_assessments : ''}}</textarea>
-        </div>
-
-
-
-        <!-- Course Structure -->
-        <div class="col-12" id="courseStructure"></div>
-
 
 
         @if (isset($courseAlignment))
@@ -699,10 +759,16 @@
         <div class="p-0 m-0" id="outcomeMapsDiv">
             @foreach ($outcomeMaps as $programId => $outcomeMap)
             <div class="p-0 m-0" id="outcomeMapsDiv">
+                <!-- Add help icon for PLO/CLO mapping section -->
                 <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
                     {{$outcomeMap["program"]->program}}
                     <button type="button" class="btn btn-danger float-right" onclick="removeSection(this)">Remove Section</button>
                     <input hidden name="import_course_settings[programs][]" value="{{$programId}}">
+                    <span>
+                        <a id="syllabusPLOMappingHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                            <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Program Learning Outcomes Mapping"></i>
+                        </a>
+                    </span>
                 </h5>
 
                 @if ($outcomeMap['program']->mappingScaleLevels->count() < 1)
@@ -713,10 +779,18 @@
             </div>
             @else
             <div class="col-12">
+                <!-- Add help icon for mapping scale section -->
                 <table class="table table-bordered table-light">
                     <thead>
                         <tr class="table-primary">
-                            <th colspan="2">Mapping Scale</th>
+                            <th colspan="2">
+                                Mapping Scale
+                                <span>
+                                    <a id="syllabusMappingScaleHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
+                                        <i class="bi bi-question-circle-fill text-primary ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with Mapping Scales"></i>
+                                    </a>
+                                </span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -740,11 +814,14 @@
             @if (isset($outcomeMap['outcomeMap']) > 0)
             <div class="col-12">
                 <div style="overflow: auto;">
+                    <!-- Add help icon for CLO/PLO table -->
                     <table class="table table-bordered table-light">
                         <thead>
                             <tr class="table-primary">
                                 <th colspan="1" class="w-auto">CLO</th>
-                                <th colspan="{{$outcomeMap['program']->programLearningOutcomes->count()}}">Program Learning Outcome</th>
+                                <th colspan="{{$outcomeMap['program']->programLearningOutcomes->count()}}">
+                                    Program Learning Outcome
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1058,7 +1135,7 @@
                                 <strong>Attribution-ShareAlike: </strong>
                                 <strong>CC BY-SA</strong>
                                 <br>
-                                This license lets others remix, adapt, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.
+                                This license lets others remix, adapt, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to "copyleft" free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.
                                 <br>
                                 <a href="https://creativecommons.org/licenses/by-sa/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode">View Legal Code</a>
                             </div>
@@ -1098,7 +1175,7 @@
                                 <strong>Attribution-NonCommercial: </strong>
                                 <strong>CC BY-NC</strong>
                                 <br>
-                                This license lets others remix, adapt, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they don’t have to license their derivative works on the same terms.
+                                This license lets others remix, adapt, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they don't have to license their derivative works on the same terms.
                                 <br>
                                 <a href="https://creativecommons.org/licenses/by-nc/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-nc/4.0/legalcode">View Legal Code</a>
                             </div>
@@ -1138,7 +1215,7 @@
                                 <strong>Attribution-NonCommercial-NoDerivs: </strong>
                                 <strong>CC BY-NC-ND</strong>
                                 <br>
-                                This license is the most restrictive of our six main licenses, only allowing others to download your works and share them with others as long as they credit you, but they can’t change them in any way or use them commercially.<br>
+                                This license is the most restrictive of our six main licenses, only allowing others to download your works and share them with others as long as they credit you, but they can't change them in any way or use them commercially.<br>
                                 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">View Legal Code</a>
                             </div>
                             <br>
@@ -1184,17 +1261,15 @@
                 <p style="font-size:12px" class="text-muted m-0">SAVE</p>
             </button>
         </div>
-        <!-- PDF Download Disabled while we investigate escaping issues -->
-        <!--
-            <div class="col-2" style="max-width:10%">
-                <button type="submit" name="download" value="pdf" form="sylabusGenerator"
-                    class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    title="Save and download my syllabus as PDF">
+        <div class="col-2" style="max-width:10%">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#pdfDownloadConfirmation"
+                class="btn m-0 p-0" style="background:none;border:none">
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save and download syllabus as PDF">
                     <i class="text-danger bi-file-pdf-fill btn btn-light rounded-circle m-2"></i>
                     <p style="font-size:12px" class="text-muted m-0">PDF</p>
-                </button>
-            </div>
-            -->
+                </span>
+            </button>
+        </div>
         <div class="col-2" style="max-width:10%">
             <button type="submit" name="download" value="word" form="sylabusGenerator"
                 class="btn m-0 p-0" style="background:none;border:none" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -1260,6 +1335,12 @@
         return item.campus_id === 2;
     });
     var departments = <?php echo json_encode($departments); ?>;
+
+    function autoResize(textarea) {
+        validateMaxlength();
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
 
     $(document).ready(function() {
 
@@ -1361,7 +1442,7 @@
                                                 <strong>Attribution-ShareAlike: </strong>
                                                 <strong>CC BY-SA</strong>
                                                 <br>
-                                                This license lets others remix, adapt, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.
+                                                This license lets others remix, adapt, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to "copyleft" free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.
                                                 <br>
                                                 <a href="https://creativecommons.org/licenses/by-sa/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode">View Legal Code</a>
                                             </div>
@@ -1393,7 +1474,7 @@
                                                 <strong>Attribution-NonCommercial: </strong>
                                                 <strong>CC BY-NC</strong>
                                                 <br>
-                                                This license lets others remix, adapt, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they don’t have to license their derivative works on the same terms.
+                                                This license lets others remix, adapt, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they don't have to license their derivative works on the same terms.
                                                 <br>
                                                 <a href="https://creativecommons.org/licenses/by-nc/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-nc/4.0/legalcode">View Legal Code</a>
                                             </div>
@@ -1426,7 +1507,7 @@
                                                 <strong>Attribution-NonCommercial-NoDerivs: </strong>
                                                 <strong>CC BY-NC-ND</strong>
                                                 <br>
-                                                This license is the most restrictive of our six main licenses, only allowing others to download your works and share them with others as long as they credit you, but they can’t change them in any way or use them commercially.
+                                                This license is the most restrictive of our six main licenses, only allowing others to download your works and share them with others as long as they credit you, but they can't change them in any way or use them commercially.
                                                 <br>
                                                 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">View License Deed</a> | <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">View Legal Code</a>
                                             </div>
@@ -1437,6 +1518,39 @@
                                  `);
 
             $('#copyrightEx').html(``);
+
+            // Initialize textareas
+            ['prerequisites', 'corequisites'].forEach(id => {
+                const textarea = document.getElementById(id);
+                if (textarea) {
+                    textarea.addEventListener('input', function() {
+                        autoResize(this);
+                    });
+
+                    // Initial resize if there's content
+                    if (textarea.value) {
+                        autoResize(textarea);
+                    }
+                }
+            });
+
+
+            // If campus is already selected (viewing existing syllabus)
+            if ($('#campus').val()) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                const coreqsTextarea = document.getElementById('corequisites');
+
+                setTimeout(() => {
+                    if (prereqsTextarea && prereqsTextarea.value) {
+                        prereqsTextarea.style.height = 'auto';
+                        prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                    }
+                    if (coreqsTextarea && coreqsTextarea.value) {
+                        coreqsTextarea.style.height = 'auto';
+                        coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                    }
+                }, 100);
+            }
 
         });
 
@@ -2601,7 +2715,7 @@
             <label for="landAcknowledgement"><h5 class="fw-bold">Land Acknowledgement</h5></label>
             <br>
             <div class="col-12">
-                <blockquote> UBC’s Point Grey Campus is located on the traditional, ancestral, and unceded territory of the xwməθkwəy̓əm (Musqueam) people. The land it is situated on has always been a place of learning for the Musqueam people, who for millennia have passed on their culture, history, and traditions from one generation to the next on this site.</blockquote>
+                <blockquote> UBC's Point Grey Campus is located on the traditional, ancestral, and unceded territory of the xwməθkwəy̓əm (Musqueam) people. The land it is situated on has always been a place of learning for the Musqueam people, who for millennia have passed on their culture, history, and traditions from one generation to the next on this site.</blockquote>
                 <div class="col-6">
                 @if(!empty($syllabus))
                     @if($syllabus->land_acknow)
@@ -2658,7 +2772,7 @@
             <label for="statementUBCValues"><h5 class="fw-bold">Statement of UBC Values</h5></label><span class="requiredBySenateOK"></span>
             <br>
             <div class="col-12">
-                <blockquote> UBC creates an exceptional learning environment that fosters global citizenship, advances a civil and sustainable society, and supports outstanding research to serve the people of British Columbia, Canada, and the world. UBC’s core values are excellence, integrity, respect, academic freedom, and accountability.</blockquote>
+                <blockquote> UBC creates an exceptional learning environment that fosters global citizenship, advances a civil and sustainable society, and supports outstanding research to serve the people of British Columbia, Canada, and the world. UBC's core values are excellence, integrity, respect, academic freedom, and accountability.</blockquote>
             </div>
             `;
 
@@ -2706,10 +2820,20 @@
             $('#courseDescription').html(courseDescription);
             $('#learningAnalytics').html(learningAnalytics);
             $('#uniPolicy').html(uniPolicyVan);
-            //$('#crStatement').html(crStatement);
             $('#landAcknowledgement').html(landAcknowledgementV);
             $('.requiredBySenate').html(requiredBySenateLabel);
 
+            // hide the creative commons radio button and clear the licenses section
+            $('#noCopyright').css('display', 'none');
+            $('#noCopyright').next('label').css('display', 'none');
+            $('#creativeCommonsInput').empty();
+
+            // If creative commons was selected, switch to none
+            if ($('#noCopyright').is(':checked')) {
+                $('#noneCopyright').prop('checked', true);
+                $('#copyrightEx').html('');
+                $('#creativeCommonsInput').html('');
+            }
 
             // remove data specific to okanangan campus
             $('#courseFormat').empty();
@@ -2746,6 +2870,10 @@
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
 
+            // show the creative commons radio button from the Copyright Statement section
+            $('#noCopyright').css('display', '');
+            $('#noCopyright').next('label').css('display', '');
+
             // remove data specific to vancouver campus
             $('#courseCredit').empty();
             $('#officeLocation').empty();
@@ -2769,6 +2897,23 @@
             // Show prerequisites and corequisites inputs for Okanagan
             $('#prerequisites').closest('.col-6').show();
             $('#corequisites').closest('.col-6').show();
+
+            // Force resize of textareas if they contain content
+            if (syllabus && syllabus.prerequisites) {
+                const prereqsTextarea = document.getElementById('prerequisites');
+                if (prereqsTextarea) {
+                    prereqsTextarea.style.height = 'auto';
+                    prereqsTextarea.style.height = prereqsTextarea.scrollHeight + 'px';
+                }
+            }
+
+            if (syllabus && syllabus.corequisites) {
+                const coreqsTextarea = document.getElementById('corequisites');
+                if (coreqsTextarea) {
+                    coreqsTextarea.style.height = 'auto';
+                    coreqsTextarea.style.height = coreqsTextarea.scrollHeight + 'px';
+                }
+            }
 
             // update faculty dropdown
             setFaculties('Okanagan');
@@ -2853,4 +2998,90 @@
 <script src="{{ asset('js/drag_drop_tbl_row.js') }}"></script>
 <!-- Include stylesheet to style reorder table rows -->
 <link rel="stylesheet" href="{{ asset('css/drag_drop_tbl_row.css' ) }}">
+
+<!-- Initialize tooltips and help icon functionality -->
+<script>
+    $(document).ready(function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Enhanced fix for modal backdrop cleanup and focus management on close
+        $('#guideModal').on('hidden.bs.modal', function () {
+            // Remove any lingering backdrop and reset body styles
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css({
+                'overflow': '',
+                'padding-right': ''
+            });
+
+            // Completely reset modal state
+            $(this).removeClass('show');
+            $(this).attr('aria-hidden', 'true');
+            $(this).css('display', 'none');
+
+            // Return focus to the document
+            setTimeout(function() {
+                $(document).focus();
+                $('html, body').animate({ scrollTop: $(document).scrollTop() }, 0);
+            }, 100);
+        });
+
+        // Make sure help icons properly trigger the guide modal
+        $('#syllabusGeneratorHelp, #cloHelp, #samHelp, #tlaHelp, #syllabusPLOMappingHelp, #syllabusMappingScaleHelp').on('click', function(e) {
+            e.preventDefault();
+
+            // Get the modal element
+            var modalEl = document.getElementById('guideModal');
+
+            // Dispose of any existing modal instance to prevent conflicts
+            var existingModal = bootstrap.Modal.getInstance(modalEl);
+            if (existingModal) {
+                existingModal.dispose();
+            }
+
+            // Reset the modal state before creating a new instance
+            $(modalEl).removeClass('show');
+            $(modalEl).attr('aria-hidden', 'true');
+            $(modalEl).css('display', 'none');
+
+            // Clean up any lingering backdrops from previous modals
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css({
+                'overflow': '',
+                'padding-right': ''
+            });
+
+            // Create a new modal instance with explicit configuration
+            var guideModal = new bootstrap.Modal(modalEl, {
+                backdrop: true,
+                keyboard: true,
+                focus: true
+            });
+
+            // Show the modal
+            guideModal.show();
+
+            // Call the appropriate guide function based on which help icon was clicked
+            var iconId = $(this).attr('id');
+            if (iconId === 'syllabusGeneratorHelp') {
+                setSyllabi();
+            } else if (iconId === 'cloHelp') {
+                setCLO();
+            } else if (iconId === 'samHelp') {
+                setSAM();
+            } else if (iconId === 'tlaHelp') {
+                setTLA();
+            } else if (iconId === 'syllabusPLOMappingHelp') {
+                setSyllabusPLOMapping();
+            } else if (iconId === 'syllabusMappingScaleHelp') {
+                setMS();
+            }
+        });
+    });
+</script>
 @endsection

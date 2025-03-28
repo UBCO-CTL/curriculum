@@ -27,17 +27,18 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addLearningActivitiesModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> Teaching and Learning Activities</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
                             <div class="modal-body">
                                 <form id="addLearningActivitiesForm" class="needs-validation" novalidate>
                                     <div class="row justify-content-between align-items-end m-2">
-                                        <div class="col-10">
+                                        <div class="col-8">
                                             <label for="learningActivity" class="form-label fs-6"><b>Learning Activity</b></label>
                                             <input id="learningActivity" class="form-control" list="learningActivitiesOptions" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="191" placeholder="Type to search or add your own..." required>
                                             <div class="invalid-tooltip">
                                                 Please provide a learning activity.
-                                            </div>                                            
+                                            </div>
                                             <datalist id="learningActivitiesOptions">
                                                 <option value="Discussion">
                                                 <option value="Gallery walk">
@@ -67,8 +68,12 @@
                                                     @foreach($custom_activities as $activity)
                                                     <option value={{$activity->custom_activities}}>
                                                     @endforeach
-                                                @endif                                            
+                                                @endif
                                             </datalist>
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="activityPercentage" class="form-label fs-6"><b>% of Time</b></label>
+                                            <input id="activityPercentage" type="number" min="0" max="100" class="form-control" placeholder="%">
                                         </div>
                                         <div class="col-2">
                                             <button id="addLearningActivityBtn" type="submit" class="btn btn-primary col">Add</button>
@@ -79,12 +84,13 @@
                                     <div class="col-8">
                                         <hr>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="row m-1">
                                     <table id="addLearningActivitiesTbl" class="table table-light table-borderless">
                                         <thead>
                                             <tr class="table-primary">
                                                 <th>Teaching and Learning Activity</th>
+                                                <th class="text-center">% of Time</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -96,22 +102,29 @@
                                                     name="current_l_activities[{{$l_activity->l_activity_id}}]" value = "{{$l_activity->l_activity}}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
                                                 </td>
                                                 <td class="text-center">
+                                                    <input type="number" min="0" max="100" class="form-control" id="l_activity_percentage{{$l_activity->l_activity_id}}"
+                                                    name="current_l_activities_percentage[{{$l_activity->l_activity_id}}]"
+                                                    value="{{$l_activity->percentage ?? ''}}"
+                                                    placeholder="%" form="saveLearningActivityChanges">
+                                                </td>
+                                                <td class="text-center">
                                                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>
                                                 </td>
                                             </tr>
-                                            @endforeach                                               
+                                            @endforeach
                                         </tbody>
-                                    </table>                                    
+                                    </table>
                                 </div>
                             </div>
                             <form method="POST" id="saveLearningActivityChanges" action="{{ action([\App\Http\Controllers\LearningActivityController::class, 'store']) }}">
                                 @csrf
                                 <div class="modal-footer">
                                     <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveLearningActivityChanges">
+                                    <button id="deleteAllLearningActivities" type="button" class="btn btn-danger col-3">Delete All</button>
                                     <button id="cancel" type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success btn col-3">Save Changes</button>
+                                    <button type="submit" class="btn btn-success btn col-3">Save</button>
                                 </div>
-                            </form>    
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -119,7 +132,7 @@
 
                 <div class="card-body">
                     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div class="col mb-6">
                             Input all teaching and learning activities or <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://teaching.cornell.edu/teaching-resources/teaching-cornell-guide/instructional-strategies"><i class="bi bi-box-arrow-up-right"></i> instructional strategies</a> of the course individually. Consider approaches to enhance inclusion in your classroom:
                             <ul>
@@ -128,46 +141,51 @@
                             (Offered by CAST) to design your course. You may also use <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://udlguidelines.cast.org/binaries/content/assets/common/publications/articles/cast-udl-planningq-a11y.pdf"><i class="bi bi-box-arrow-up-right"></i> these key questions to guide</a> you. </li>
                             <li>For concrete ways to decolonize your curriculum and pedagogy, explore <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://www.concordia.ca/ctl/decolonization/strategies.html"><i class="bi bi-box-arrow-up-right"></i> these strategies</a>.</li>
                             <li>
-                            Not sure how to teach/embed career-related outcomes? Request a workshop from The Career Development Team for your classroom <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://students.ok.ubc.ca/career-experience/faculty-workshops/"><i class="bi bi-box-arrow-up-right"></i> here</a>.              
+                            Not sure how to teach/embed career-related outcomes? Request a workshop from The Career Development Team for your classroom <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://students.ok.ubc.ca/career-experience/faculty-workshops/"><i class="bi bi-box-arrow-up-right"></i> here</a>.
                             </li>
                             <li>
-                            Embed <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://blogs.ubc.ca/teachingandwellbeing/files/2018/11/TLEF_Handout_October-2018.pdf"><i class="bi bi-box-arrow-up-right"></i>teaching practices</a>  that promote student wellbeing.</li> 
+                            Embed <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://blogs.ubc.ca/teachingandwellbeing/files/2018/11/TLEF_Handout_October-2018.pdf"><i class="bi bi-box-arrow-up-right"></i>teaching practices</a>  that promote student wellbeing.</li>
                             </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col mb-1">
-                            <button type="button" class="btn btn-primary col-3 float-right bg-primary text-white fs-5"  data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
-                                <i class="bi bi-plus mr-2"></i>Learning Activities
-                            </button>
+                    <div class="container-fluid px-4" style="max-width: 1200px;">
+                        <div class="row">
+                            <div class="col mb-1">
+                                <button type="button" class="btn btn-primary col-3 float-right bg-primary text-white fs-5"  data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
+                                    <i class="bi bi-plus mr-2"></i>Learning Activities
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div id="admins">
+                        <div id="admins" class="mb-5">
                         <form action="{{route('courses.tlaReorder', $course->course_id)}}" method="POST">
                             @csrf
                             {{method_field('POST')}}
-                            <table class="table table-light reorder-tbl-rows" id="l_activity_table">
+                            <table class="table table-light reorder-tbl-rows mb-4" id="l_activity_table">
                                 <tr class="table-primary">
                                     <th class="text-center">#</th>
                                     <th>Teaching and Learning Activities</th>
+                                    <th class="text-center">% of Time</th>
                                     <th class="text-center w-25">Actions</th>
                                 </tr>
                                 @if(count($l_activities)<1)
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <div class="alert alert-warning wizard">
-                                                <i class="bi bi-exclamation-circle-fill"></i>There are no teaching and learning activities set for this course.                    
+                                                <i class="bi bi-exclamation-circle-fill"></i>There are no teaching and learning activities set for this course.
                                             </div>
                                         </td>
                                     </tr>
                                 @else
                                     @foreach($l_activities as $index => $l_activity)
                                         <tr>
-                                            <td class="text-center fw-bold" style="width:5%">↕</td>                                                
+                                            <td class="text-center fw-bold" style="width:5%">↕</td>
                                             <td>
                                                 {{$l_activity->l_activity}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{$l_activity->percentage ?? '–'}}%
                                             </td>
                                             <td class="text-center align-middle">
                                                 <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#addLearningActivitiesModal">
@@ -177,9 +195,23 @@
                                             <input type="hidden" name="l_activities_pos[]" value="{{$l_activity->l_activity_id}}">
                                         </tr>
                                     @endforeach
+
+                                    <?php
+                                    $learningActivitiesTotal = 0;
+                                    foreach($l_activities as $l_activity) {
+                                        $learningActivitiesTotal += $l_activity->percentage ?? 0;
+                                    }
+                                    ?>
+
+                                    <tr class="table-secondary fw-bold">
+                                        <td></td>
+                                        <td>Total</td>
+                                        <td class="text-center">{{$learningActivitiesTotal}}%</td>
+                                        <td></td>
+                                    </tr>
                                 @endif
                             </table>
-                            <div class="mt-4">
+                            <div class="mt-4 mb-5 pb-4">
                                 <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
                             </div>
                         </form>
@@ -196,7 +228,7 @@
                             <button class="btn btn-sm btn-primary col-3 float-right">Course Alignment <i class="bi bi-arrow-right ml-2"></i></button>
                         </a>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
    </div>
@@ -204,8 +236,14 @@
 
 <script>
     $(document).ready(function () {
-
         sortDropdown();
+
+        // To Delete All Learning Activities
+        $('#deleteAllLearningActivities').click(function() {
+            if (confirm('Are you sure you want to delete all learning activities? This cannot be undone.')) {
+                $('#addLearningActivitiesTbl tbody').empty();
+            }
+        });
     //   $("form").submit(function () {
     //     // prevent duplicate form submissions
     //     $(this).find(":submit").attr('disabled', 'disabled');
@@ -220,14 +258,14 @@
             // check if input fields contain data
             if ($('#learningActivity').val().length != 0) {
                 addLearningActivity();
-                // reset form 
+                // reset form
                 $(this).trigger('reset');
                 $(this).removeClass('was-validated');
             } else {
                 // mark form as validated
                 $(this).addClass('was-validated');
             }
-            // readjust modal's position 
+            // readjust modal's position
             document.querySelector('#addLearningActivitiesModal').handleUpdate();
 
         });
@@ -240,10 +278,16 @@
                             <input list="learningActivitiesOptions" id="l_activity{{$l_activity->l_activity_id}}" type="text" class="form-control" name="current_l_activities[{{$l_activity->l_activity_id}}]" value = "{{$l_activity->l_activity}}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
                         </td>
                         <td class="text-center">
+                            <input type="number" min="0" max="100" class="form-control" id="l_activity_percentage{{$l_activity->l_activity_id}}"
+                            name="current_l_activities_percentage[{{$l_activity->l_activity_id}}]"
+                            value="{{$l_activity->percentage ?? ''}}"
+                            placeholder="%" form="saveLearningActivityChanges">
+                        </td>
+                        <td class="text-center">
                             <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>
                         </td>
                     </tr>
-                @endforeach                                               
+                @endforeach
             `);
         });
     });
@@ -258,6 +302,9 @@
             <tr>
                 <td>
                     <input list="learningActivitiesOptions" type="text" class="form-control" name="new_l_activities[]" value = "${$('#learningActivity').val()}" placeholder="Choose from the dropdown list or type your own" form="saveLearningActivityChanges" required spellcheck="true" style="white-space: pre">
+                </td>
+                <td class="text-center">
+                    <input type="number" min="0" max="100" class="form-control" name="new_l_activities_percentage[]" value="${$('#activityPercentage').val()}" placeholder="%" form="saveLearningActivityChanges">
                 </td>
                 <td class="text-center">
                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteLearningActivity(this)"></i>
