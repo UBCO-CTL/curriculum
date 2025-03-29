@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Throwable;
@@ -90,11 +91,21 @@ class ProgramLearningOutcomeController extends Controller
             }
             // add new plos
             if ($newPLOs) {
+                // Get max position for each category
+                $maxPositions = [];
+                foreach ($program->programLearningOutcomes->groupBy('plo_category_id') as $categoryId => $categoryPLOs) {
+                    $maxPositions[$categoryId] = $categoryPLOs->max('position') ?? 0;
+                }
+
                 foreach ($newPLOs as $index => $plo) {
+                    $categoryId = $newPLOCategories[$index];
+                    $maxPositions[$categoryId] = ($maxPositions[$categoryId] ?? 0) + 1;
+
                     $newPLO = new ProgramLearningOutcome;
                     $newPLO->pl_outcome = $plo;
                     $newPLO->plo_shortphrase = $newPLOShortphrases[$index];
-                    $newPLO->plo_category_id = $newPLOCategories[$index];
+                    $newPLO->plo_category_id = $categoryId;
+                    $newPLO->position = $maxPositions[$categoryId];
                     $newPLO->program_id = $programId;
                     $newPLO->save();
                 }
@@ -108,16 +119,15 @@ class ProgramLearningOutcomeController extends Controller
             $request->session()->flash('success', 'Your program learning outcomes were updated successfully!');
         } catch (Throwable $exception) {
             $message = 'There was an error updating your program learning outcomes';
-            Log::error($message.' ...\n');
-            Log::error('Code - '.$exception->getCode());
-            Log::error('File - '.$exception->getFile());
-            Log::error('Line - '.$exception->getLine());
+            Log::error($message . ' ...\n');
+            Log::error('Code - ' . $exception->getCode());
+            Log::error('File - ' . $exception->getFile());
+            Log::error('Line - ' . $exception->getLine());
             Log::error($exception->getMessage());
             $request->session()->flash('error', $message);
         } finally {
             return redirect()->route('programWizard.step1', $request->input('program_id'));
         }
-
     }
 
     /**
@@ -202,18 +212,38 @@ class ProgramLearningOutcomeController extends Controller
         return redirect()->route('programWizard.step1', $request->input('program_id'));
     }
 
+    public function destroyAll(Request $request, $programId): RedirectResponse
+    {
+        $program = Program::find($programId);
+
+        try {
+            // Delete all PLOs for this program
+            ProgramLearningOutcome::where('program_id', $programId)->delete();
+
+            // Update program's last modified user
+            $user = User::find(Auth::id());
+            $program->last_modified_user = $user->name;
+            $program->touch();
+            $program->save();
+
+            $request->session()->flash('success', 'All program learning outcomes have been deleted');
+        } catch (Throwable $exception) {
+            $request->session()->flash('error', 'There was an error deleting the program learning outcomes');
+        }
+
+        return redirect()->route('programWizard.step1', $programId);
+    }
+
     public function import(Request $request)
     {
-        // $this->validate($request, [
-        //     'upload'=> 'required|mimes:csv,xlsx,xlx,xls|max:2048',
-        // ]);
         $programId = $request->input('program_id');
         $file = $request->file('upload');
         $clientFileName = $file->getClientOriginalName();
         $path = $file->storeAs(
-            'temporary', $clientFileName
+            'temporary',
+            $clientFileName
         );
-        $absolutePath = storage_path('app'.DIRECTORY_SEPARATOR.'temporary'.DIRECTORY_SEPARATOR.$clientFileName);
+        $absolutePath = storage_path('app' . DIRECTORY_SEPARATOR . 'temporary' . DIRECTORY_SEPARATOR . $clientFileName);
 
         /**  Create a new reader of the type defined by $clientFileName extension  **/
         $reader = IOFactory::createReaderForFile($absolutePath);
@@ -227,11 +257,17 @@ class ProgramLearningOutcomeController extends Controller
         foreach ($worksheets as $worksheet) {
             // create a program learning outcome category
             $worksheetTitle = $worksheet->getTitle();
-            Log::debug('Add PLO category: '.$worksheetTitle);
+            Log::debug('Add PLO category: ' . $worksheetTitle);
             $ploCategory = PLOCategory::create([
                 'plo_category' => $worksheetTitle,
                 'program_id' => $programId,
             ]);
+
+            // Get max position for this category
+            $maxPosition = ProgramLearningOutcome::where('program_id', $programId)
+                ->where('plo_category_id', $ploCategory->plo_category_id)
+                ->max('position') ?? 0;
+
             foreach ($worksheet->getRowIterator() as $rowIndex => $row) {
                 // skip header row
                 if ($rowIndex == 1) {
@@ -246,6 +282,9 @@ class ProgramLearningOutcomeController extends Controller
                 $plo->program_id = $programId;
                 // set plo category
                 $plo->plo_category_id = $ploCategory->plo_category_id;
+                // increment position for new PLO
+                $maxPosition++;
+                $plo->position = $maxPosition;
 
                 foreach ($cellIterator as $cell) {
                     // get column index of cell
@@ -283,6 +322,25 @@ class ProgramLearningOutcomeController extends Controller
 
         // return
         return redirect()->back();
+    }
 
+    public function reorder(Request $request, $program_id)
+    {
+        try {
+            // Get the new order of PLO IDs from the request
+            $ploOrder = $request->input('plos_pos');
+
+            // Update each PLO's position
+            foreach ($ploOrder as $position => $ploId) {
+                ProgramLearningOutcome::where('pl_outcome_id', $ploId)
+                    ->update(['position' => $position + 1]); // +1 to make positions 1-based
+            }
+
+            Session::flash('success', 'PLO order updated successfully');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Session::flash('error', 'Error updating PLO order');
+            return redirect()->back();
+        }
     }
 }

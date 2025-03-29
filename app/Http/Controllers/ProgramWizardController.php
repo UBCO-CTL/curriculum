@@ -64,62 +64,78 @@ class ProgramWizardController extends Controller
             $programUsers[$program->program_id] = $programsUsers;
         }
 
-        //$plos = ProgramLearningOutcome::join('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')->where('program_learning_outcomes.program_id', $program_id)->get();
-        $plos = DB::table('program_learning_outcomes')->leftJoin('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')->where('program_learning_outcomes.program_id', $program_id)->get();
-
         $program = Program::where('program_id', $program_id)->first();
+
+        // Get PLOs ordered by category and position
+        $plos = ProgramLearningOutcome::where('program_id', $program_id)
+            ->orderBy('plo_category_id', 'asc')
+            ->orderBy('position', 'asc')
+            ->get();
+
         $ploCategories = PLOCategory::where('program_id', $program_id)->get();
 
-        $ploProgramCategories = PLOCategory::where('p_l_o_categories.program_id', $program_id)->join('program_learning_outcomes', 'p_l_o_categories.plo_category_id', '=', 'program_learning_outcomes.plo_category_id')->get();
+        // Get categorized PLOs with proper ordering
+        $ploProgramCategories = ProgramLearningOutcome::where('program_id', $program_id)
+            ->whereNotNull('plo_category_id')
+            ->orderBy('plo_category_id', 'asc')
+            ->orderBy('position', 'asc')
+            ->get();
 
         //progress bar
-        $ploCount = count($plos);
+        $ploCount = $plos->count();
         $msCount = MappingScale::join('mapping_scale_programs', 'mapping_scales.map_scale_id', '=', 'mapping_scale_programs.map_scale_id')
             ->where('mapping_scale_programs.program_id', $program_id)->count();
         $courseCount = CourseProgram::where('program_id', $program_id)->count();
 
-        // returns true if there exists a plo without a category
-        $hasUncategorized = false;
-        foreach ($plos as $plo) {
-            if ($plo->plo_category == null) {
-                $hasUncategorized = true;
-            }
-        }
+        // Get uncategorized PLOs with proper ordering
+        $unCategorizedPLOS = ProgramLearningOutcome::where('program_id', $program_id)
+            ->whereNull('plo_category_id')
+            ->orderBy('position', 'asc')
+            ->get();
+        $hasUncategorized = $unCategorizedPLOS->isNotEmpty();
 
-        //dd($ploCategories);
-        // get UnCategorized PLO's
-        $unCategorizedPLOS = DB::table('program_learning_outcomes')->leftJoin('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')->where('program_learning_outcomes.program_id', $program_id)->where('program_learning_outcomes.plo_category_id', null)->get();
-
-        //get defaultShortForms based on PLO Category, then Creation Order
+        //get sequential numbering (1,2,3,4) regardless of position values
         $defaultShortForms = [];
         $defaultShortFormsIndex = [];
-        $plosInOrderCat = [];
-
-        foreach ($ploCategories as $ploCat) {
-            $plosByCat = ProgramLearningOutcome::where('plo_category_id', $ploCat['plo_category_id'])->get();
-            array_push($plosInOrderCat, $plosByCat);
-
-        }
-
         $ploDefaultCount = 0;
-        for ($i = 0; $i < count($plosInOrderCat); $i++) {
-            for ($j = 0; $j < count($plosInOrderCat[$i]); $j++) {
-                $defaultShortForms[$plosInOrderCat[$i][$j]['pl_outcome_id']] = 'PLO #'.($ploDefaultCount + 1);
-                $defaultShortFormsIndex[$plosInOrderCat[$i][$j]['pl_outcome_id']] = $ploDefaultCount + 1;
+
+        // Process categorized PLOs first, maintaining category order
+        foreach ($ploCategories as $category) {
+            $categoryPLOs = $ploProgramCategories->where('plo_category_id', $category->plo_category_id);
+            foreach ($categoryPLOs as $plo) {
                 $ploDefaultCount++;
+                $defaultShortForms[$plo->pl_outcome_id] = 'PLO #' . $ploDefaultCount;
+                $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
             }
         }
 
-        foreach ($unCategorizedPLOS as $unCatPLO) {
-            $defaultShortForms[$unCatPLO->pl_outcome_id] = 'PLO #'.($ploDefaultCount + 1);
-            $defaultShortFormsIndex[$unCatPLO->pl_outcome_id] = $ploDefaultCount + 1;
+        // Then process uncategorized PLOs
+        foreach ($unCategorizedPLOS as $plo) {
             $ploDefaultCount++;
+            $defaultShortForms[$plo->pl_outcome_id] = 'PLO #' . $ploDefaultCount;
+            $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
         }
 
-        return view('programs.wizard.step1')->with('plos', $plos)->with('program', $program)->with('ploCategories', $ploCategories)
-            ->with('faculties', $faculties)->with('departments', $departments)->with('campuses', $campuses)->with('levels', $levels)->with('user', $user)->with('programUsers', $programUsers)
-            ->with('ploCount', $ploCount)->with('msCount', $msCount)->with('courseCount', $courseCount)->with('ploProgramCategories', $ploProgramCategories)
-            ->with('hasUncategorized', $hasUncategorized)->with('unCategorizedPLOS', $unCategorizedPLOS)->with('isEditor', $isEditor)->with('isViewer', $isViewer)->with('defaultShortForms', $defaultShortForms)->with('defaultShortFormsIndex', $defaultShortFormsIndex);
+        return view('programs.wizard.step1')
+            ->with('plos', $plos)
+            ->with('program', $program)
+            ->with('ploCategories', $ploCategories)
+            ->with('faculties', $faculties)
+            ->with('departments', $departments)
+            ->with('campuses', $campuses)
+            ->with('levels', $levels)
+            ->with('user', $user)
+            ->with('programUsers', $programUsers)
+            ->with('ploCount', $ploCount)
+            ->with('msCount', $msCount)
+            ->with('courseCount', $courseCount)
+            ->with('ploProgramCategories', $ploProgramCategories)
+            ->with('hasUncategorized', $hasUncategorized)
+            ->with('unCategorizedPLOS', $unCategorizedPLOS)
+            ->with('isEditor', $isEditor)
+            ->with('isViewer', $isViewer)
+            ->with('defaultShortForms', $defaultShortForms)
+            ->with('defaultShortFormsIndex', $defaultShortFormsIndex);
     }
 
     public function step2($program_id, Request $request)
@@ -1951,11 +1967,11 @@ class ProgramWizardController extends Controller
 
         if (count($programCourses) < 1) {
             $output .= '<div class="alert alert-warning wizard">
-                            <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.                   
+                            <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.
                         </div>';
         } elseif ($ploCount < 1) {
             $output .= '<div class="alert alert-warning wizard">
-                            <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no program learning outcomes for this program.                   
+                            <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no program learning outcomes for this program.
                         </div>';
         } else {
             $output .= '<table class="freq-table table table-bordered table-sm">

@@ -50,6 +50,9 @@ class LearningActivityController extends Controller
             $courseId = $request->input('course_id');
             $currentActivities = $request->input('current_l_activities');
             $newActivities = $request->input('new_l_activities');
+            $currentPercentages = $request->input('current_l_activities_percentage');
+            $newPercentages = $request->input('new_l_activities_percentage');
+
             // get the course
             $course = Course::find($courseId);
             // case: delete all teaching and learning activities
@@ -63,6 +66,12 @@ class LearningActivityController extends Controller
                 if (array_key_exists($learningActivity->l_activity_id, $currentActivities)) {
                     // save learning activity
                     $learningActivity->l_activity = $currentActivities[$learningActivity->l_activity_id];
+
+                    // save percentage if provided
+                    if (isset($currentPercentages[$learningActivity->l_activity_id])) {
+                        $learningActivity->percentage = $currentPercentages[$learningActivity->l_activity_id] ?: null;
+                    }
+
                     $learningActivity->save();
                 } else {
                     // remove learning activity from course
@@ -75,6 +84,12 @@ class LearningActivityController extends Controller
                     $newLearningActivity = new LearningActivity;
                     $newLearningActivity->l_activity = $newActivity;
                     $newLearningActivity->course_id = $courseId;
+
+                    // save percentage if provided
+                    if (isset($newPercentages[$index])) {
+                        $newLearningActivity->percentage = $newPercentages[$index] ?: null;
+                    }
+
                     $newLearningActivity->save();
                 }
             }

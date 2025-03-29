@@ -47,11 +47,11 @@
             <p><b>Class Location:</b> {{$syllabus->course_location}}</p>
             <p><b>Class Days:</b> {{$syllabus->class_meeting_days}}</p>
             <p><b>Class Hours:</b> {{$syllabus->class_start_time}} - {{$syllabus->class_end_time}}</p>
-            <p><b>Office Hours                     
+            <p><b>Office Hours
                 <span>
                     <i class="bi bi-info-circle-fill text-dark" data-toggle="tooltip" data-bs-placement="top" title="{{$inputFieldDescriptions['officeHours']}}"></i>
                 </span>
-                </b> 
+                </b>
                 {{$syllabus->office_hours}}
             </p>
         </div>
@@ -79,9 +79,9 @@
                             <td>{{$index + 1}}</td>
                             <td>{{$staff}}</td>
                         </tr>
-                    @endforeach                                               
+                    @endforeach
                 </tbody>
-            </table>                                    
+            </table>
         </div>
 
                <!-- course description -->
@@ -97,8 +97,8 @@
             @php ($course_description=explode("\n",$okanaganSyllabus->course_description))
             @foreach($course_description as $course_desc)
             <p>{{$course_desc}}</p>
-            @endforeach 
-            
+            @endforeach
+
         </div>
         <!-- course format -->
         <div class="mb-4">
@@ -113,7 +113,7 @@
             @php ($course_format=explode("\n",$okanaganSyllabus->course_format))
             @foreach($course_format as $course_form)
             <p>{{$course_form}}</p>
-            @endforeach 
+            @endforeach
         </div>
         <!-- Course Overview, Content and Objectives -->
         <div class="mb-4">
@@ -125,10 +125,10 @@
             @php ($course_overview=explode("\n",$okanaganSyllabus->course_overview))
             @foreach($course_overview as $course_over)
             <p>{{$course_over}}</p>
-            @endforeach 
+            @endforeach
         </div>
 
-        
+
         <!--  learning outcomes -->
         <div class="mb-4">
             <div>
@@ -153,9 +153,9 @@
                             <td>{{$index + 1}}</td>
                             <td>{{$learningOutcome}}</td>
                         </tr>
-                    @endforeach                                               
+                    @endforeach
                 </tbody>
-            </table>                                    
+            </table>
         </div>
         <!--  learning activities -->
         <div class="mb-4">
@@ -180,9 +180,9 @@
                             <td>{{$index + 1}}</td>
                             <td>{{$learningActivity}}</td>
                         </tr>
-                    @endforeach                                               
+                    @endforeach
                 </tbody>
-            </table>  
+            </table>
         </div>
         <!--  learning materials -->
         <div class="mb-4">
@@ -197,7 +197,7 @@
             @php ($learning_materials=explode("\n",$syllabus->learning_materials))
             @foreach($learning_materials as $learning_mat)
             <p>{{$learning_mat}}</p>
-            @endforeach 
+            @endforeach
         </div>
 
         <!-- learning resources -->
@@ -212,7 +212,7 @@
                 @php ($learning_resources=explode("\n",$syllabus->learning_resources))
                 @foreach($learning_resources as $learning_res)
                 <p>{{$learning_res}}</p>
-                @endforeach 
+                @endforeach
         </div>
 
         <!--  assessments of learning -->
@@ -238,15 +238,15 @@
                             <td>{{$index + 1}}</td>
                             <td>{{$learningAssessments}}</td>
                         </tr>
-                    @endforeach                                               
+                    @endforeach
                 </tbody>
-            </table>                                    
+            </table>
         </div>
 
- 
+
         <!--  course alignment table -->
         @if (isset($courseAlignment))
-        
+
             <div class="mb-4">
                 <div>
                     <h6 class="oSyllabusHeader">
@@ -270,28 +270,28 @@
                                 </td>
                                 <td>{{$clo->assessmentMethods->implode('a_method', ', ')}}</td>
                                 <td>{{$clo->learningActivities->implode('l_activity', ', ')}}</td>
-                            </tr>   
-                        @endforeach                 
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         @endif
         @if (isset($outcomeMaps))
-            <div class="p-0 m-0" id="outcomeMapsDiv">  
+            <div class="p-0 m-0" id="outcomeMapsDiv">
                 @foreach ($outcomeMaps as $programId => $outcomeMap)
-                    <div class="p-0 m-0" id="outcomeMapsDiv"> 
+                    <div class="p-0 m-0" id="outcomeMapsDiv">
                         <h5 class="fw-bold pt-4 mb-2 col-12 pt-4 mb-4 mt-2">
-                            {{$outcomeMap["program"]->program}}                 
-                            
-                        </h5>  
+                            {{$outcomeMap["program"]->program}}
+
+                        </h5>
 
                         @if ($outcomeMap['program']->mappingScaleLevels->count() < 1)
                             <div class="col-12">
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.                  
+                                    <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.
                                 </div>
                             </div>
-                        @else 
+                        @else
                             <div class="col-12">
                                 <table class="table table-bordered table-light">
                                     <thead>
@@ -332,13 +332,13 @@
                                                 <th></th>
                                                 @foreach ($outcomeMap['program']->ploCategories as $category)
                                                     @if ($category->plos->count() > 0)
-                                                        <th class="table-active w-auto" colspan="{{$category->plos->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{$category->plo_category}}</th>  
-                                                    @endif          
+                                                        <th class="table-active w-auto" colspan="{{$category->plos->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{$category->plo_category}}</th>
+                                                    @endif
                                                 @endforeach
                                                 @if ($outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null)->count() > 0)
                                                     <th class="table-active w-auto text-center" colspan="{{$outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null)->count()}}" style="min-width:5%; white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Uncategorized PLOs</th>
                                                 @endif
-                                            </tr> 
+                                            </tr>
                                             <tr>
                                                 <td></td>
                                                 @foreach ($outcomeMap['program']->ploCategories as $category)
@@ -347,7 +347,7 @@
                                                             <td style="height:0; text-align: left;">
                                                                 @if ($plo->plo_shortphrase)
                                                                     {{$plo->plo_shortphrase}}
-                                                                @else 
+                                                                @else
                                                                     {{$plo->pl_outcome}}
                                                                 @endif
                                                             </td>
@@ -359,19 +359,19 @@
                                                         <td style="height:0; text-align: left;">
                                                             @if ($uncategorizedPLO->plo_shortphrase)
                                                                 {{$uncategorizedPLO->plo_shortphrase}}
-                                                            @else 
+                                                            @else
                                                                 {{$uncategorizedPLO->pl_outcome}}
                                                             @endif
                                                         </td>
                                                     @endforeach
                                                 @endif
                                             </tr>
-                                            @foreach ($outcomeMap['clos'] as $clo) 
+                                            @foreach ($outcomeMap['clos'] as $clo)
                                                 <tr>
-                                                    <td class="w-auto"> 
+                                                    <td class="w-auto">
                                                         @if (isset($clo->clo_shortphrase))
                                                             {{$clo->clo_shortphrase}}
-                                                        @else 
+                                                        @else
                                                             {{$clo->l_outcome}}
                                                         @endif
                                                     </td>
@@ -380,10 +380,10 @@
                                                             @foreach ($category->plos as $plo)
                                                                 @if (!array_key_exists($plo->pl_outcome_id, $outcomeMap['outcomeMap']))
                                                                     <td></td>
-                                                                @else 
+                                                                @else
                                                                     @if (!array_key_exists($clo->l_outcome_id, $outcomeMap['outcomeMap'][$plo->pl_outcome_id]))
                                                                         <td></td>
-                                                                    @else 
+                                                                    @else
                                                                         <td class="text-center align-middle" style="background-color:{{$outcomeMap['outcomeMap'][$plo->pl_outcome_id][$clo->l_outcome_id]->colour}}">{{$outcomeMap['outcomeMap'][$plo->pl_outcome_id][$clo->l_outcome_id]->abbreviation}}</td>
                                                                     @endif
                                                                 @endif
@@ -394,33 +394,33 @@
                                                         @foreach ($outcomeMap['program']->programLearningOutcomes->where('plo_category_id', null) as $uncategorizedPLO)
                                                             @if (!array_key_exists($uncategorizedPLO->pl_outcome_id, $outcomeMap['outcomeMap']))
                                                                 <td></td>
-                                                            @else 
+                                                            @else
                                                                 @if (!array_key_exists($clo->l_outcome_id, $outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id]))
                                                                     <td></td>
-                                                                @else 
+                                                                @else
                                                                     <td class="text-center align-middle" style="background-color:{{$outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id][$clo->l_outcome_id]->colour}}">{{$outcomeMap['outcomeMap'][$uncategorizedPLO->pl_outcome_id][$clo->l_outcome_id]->abbreviation}}</td>
                                                                 @endif
                                                             @endif
                                                         @endforeach
-                                                    @endif                                
+                                                    @endif
                                                 </tr>
-                                            @endforeach 
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        @else 
+                        @else
                             <div class="col-12">
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.                 
+                                    <i class="bi bi-exclamation-circle-fill"></i>Course learning outcomes have not been mapped to program learning outcomes for this program.
                                 </div>
                             </div>
                         @endif
                     </div>
                 @endforeach
-            </div>  
-        @else 
-            <div class="p-0 m-0" id="outcomeMapsDiv"></div>    
+            </div>
+        @else
+            <div class="p-0 m-0" id="outcomeMapsDiv"></div>
         @endif
         <!--  course schedule table -->
         <div class="mb-4">
@@ -464,7 +464,7 @@
                 @endif
             </div>
         </div>
-       
+
         <!--  learning materials -->
         <div class="mb-4">
             <div>
@@ -478,9 +478,9 @@
             @php ($learning_materials=explode("\n",$syllabus->learning_materials))
             @foreach($learning_materials as $learning_mat)
             <p>{{$learning_mat}}</p>
-            @endforeach  
+            @endforeach
         </div>
-    
+
         <!-- other course policies -->
         <div class="mb-4">
             <div>
@@ -495,11 +495,11 @@
                     </span>
                 </h6>
             </div>
-            
+
             @php ($late_policy=explode("\n",$syllabus->late_policy))
             @foreach($late_policy as $late_pol)
             <p>{{$late_pol}}</p>
-            @endforeach  
+            @endforeach
         </div>
         <!--  missed exam policy -->
         <div class="mb-4">
@@ -509,8 +509,8 @@
             @php ($missed_exam_policy=explode("\n",$syllabus->missed_exam_policy))
             @foreach($missed_exam_policy as $missed_exam)
             <p>{{$missed_exam}}</p>
-            @endforeach  
-            
+            @endforeach
+
         </div>
         <!--  missed activity policy -->
         <div class="mb-4">
@@ -520,7 +520,7 @@
             @php ($missed_activity_policy=explode("\n",$syllabus->missed_activity_policy))
             @foreach($missed_activity_policy as $missed_activity)
             <p>{{$missed_activity}}</p>
-            @endforeach  
+            @endforeach
         </div>
         <!--  passing criteria -->
         <div class="mb-4">
@@ -530,10 +530,10 @@
             @php ($passing_criteria=explode("\n",$syllabus->passing_criteria))
             @foreach($passing_criteria as $passing_crit)
             <p>{{$passing_crit}}</p>
-            @endforeach  
+            @endforeach
         </div>
 </div>
-        
+
         <!-- Additional Course-Specific Information-->
         <div class="mb-4">
                     <div>
@@ -542,7 +542,7 @@
                     @php ($custom_resource=explode("\n",$syllabus->custom_resource))
                     @foreach($custom_resource as $custom_res)
                     <p>{{$custom_res}}</p>
-                    @endforeach  
+                    @endforeach
         </div>
 
         <!-- student services resources -->
@@ -550,8 +550,8 @@
             <div>
                 <h5 class="oSyllabusHeader mb-4 text-decoration-none">Student Service Resources</h5>
             </div>
-            
-            @foreach ($okanaganSyllabusResources as $index => $resource) 
+
+            @foreach ($okanaganSyllabusResources as $index => $resource)
                 @if (in_array($resource->id, $selectedOkanaganSyllabusResourceIds) && $index != 0)
                 <div class="mb-4">
                     <div @if ($resource->id_name == 'safewalk') style="text-align:center" @endif>
@@ -562,12 +562,12 @@
                         <!-- academic integrity statement -->
                         <p class="text-center">The academic enterprise is founded on honesty, civility, and integrity.  As members of this enterprise, all students are expected to know, understand, and follow the codes of conduct regarding academic integrity.  At the most basic level, this means submitting only original work done by you and acknowledging all sources of information or ideas and attributing them to others as required.  This also means you should not cheat, copy, or mislead others about what is your work.  Violations of academic integrity (i.e., misconduct) lead to the breakdown of the academic enterprise, and therefore serious consequences arise and harsh sanctions are imposed.  For example, incidences of plagiarism or cheating usually result in a failing grade or mark of zero on the assignment or in the course.  Careful records are kept to monitor and prevent recidivism.
                         <br>
-                        <br>    
+                        <br>
                         A more detailed description of academic integrity, including the University’s policies and procedures, may be found in the <a href="http://www.calendar.ubc.ca/okanagan/index.cfm?tree=3,54,111,0" target="_blank" rel="noopener noreferrer">Academic Calendar</a></p>
                         @break
 
                         @case('finals')
-                        <p class="text-center">The examination period for Term X of Fall 201X is XXXX.  Except in the case of examination clashes and hardships (three or more formal examinations scheduled within a 24-hour period) or unforeseen events, students will be permitted to apply for out-of-time final examinations only if they are representing the University, the province, or the country in a competition or performance; serving in the Canadian military; observing a religious rite; working to support themselves or their family; or caring for a family member.  Unforeseen events include (but may not be limited to) the following: ill health or other personal challenges that arise during a term and changes in the requirements of an ongoing job.  
+                        <p class="text-center">The examination period for Term X of Fall 201X is XXXX.  Except in the case of examination clashes and hardships (three or more formal examinations scheduled within a 24-hour period) or unforeseen events, students will be permitted to apply for out-of-time final examinations only if they are representing the University, the province, or the country in a competition or performance; serving in the Canadian military; observing a religious rite; working to support themselves or their family; or caring for a family member.  Unforeseen events include (but may not be limited to) the following: ill health or other personal challenges that arise during a term and changes in the requirements of an ongoing job.
                         <br>
                         <br>
                         Further information on Academic Concession can be found under Policies and Regulation in the Okanagan Academic Calendar <a href="http://www.calendar.ubc.ca/okanagan/index.cfm?tree=3,48,0,0">http://www.calendar.ubc.ca/okanagan/index.cfm?tree=3,48,0,0</a>
@@ -633,9 +633,9 @@
                         Come and see us – we are here to help! You may also contact <a href="geo.ubco@ubc.ca">geo.ubco@ubc.ca</a></p>
 
                         @break
-                        
+
                         @case('safewalk')
-                        <p class="text-center">Don't want to walk alone at night?  Not too sure how to get somewhere on campus? Call Safewalk at 250-807-8076. 
+                        <p class="text-center">Don't want to walk alone at night?  Not too sure how to get somewhere on campus? Call Safewalk at 250-807-8076.
                         <br>
                         For more information, see: <a href="www.security.ok.ubc.ca">www.security.ok.ubc.ca</a>
                         </p>
@@ -657,7 +657,7 @@
             @if($syllabus->cc_license!=NULL)
                 <p class="text-center">
                 <h6><strong><u>Creative Commons Open Copyright License</u></strong></h6></n>
-                {{$syllabus->course_code}} {{$syllabus->course_num}}: {{$syllabus->course_title}} © 2022 by {{$syllabus->course_instructor}} is licensed under {{$syllabus->cc_license}}. Visit the Creative Commons Website for more information (<a href="https://creativecommons.org/licenses/">click here</a>).<p>
+                {{$syllabus->course_code}} {{$syllabus->course_num}}: {{$syllabus->course_title}} © 2025 by {{$syllabus->course_instructor}} is licensed under {{$syllabus->cc_license}}. Visit the Creative Commons Website for more information (<a href="https://creativecommons.org/licenses/">click here</a>).<p>
             @endif
         @endif
 
@@ -669,7 +669,7 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <li>
                     <form method="POST" action="{{ action([\App\Http\Controllers\SyllabusController::class, 'download'], [$syllabus->id, 'pdf']) }}">
-                    @csrf        
+                    @csrf
                         <button type="submit" name="download" value="pdf" class="dropdown-item" type="button">
                             <i class="bi-file-pdf-fill text-danger"></i> PDF
                         </button>
@@ -677,13 +677,13 @@
                 </li>
                 <li>
                     <form method="POST" action="{{ action([\App\Http\Controllers\SyllabusController::class, 'download'], [$syllabus->id, 'word']) }}">
-                    @csrf        
+                    @csrf
                         <button type="submit" name="download" value="word" class="dropdown-item" type="button">
                             <i class="bi-file-earmark-word-fill text-primary"></i> Word
                         </button>
                     </form>
                 </li>
-        </ul>    
+        </ul>
     </div>
 </div>
 
