@@ -176,7 +176,7 @@
                     <!-- FAQ accordion header -->
                     <h2 class="accordion-header fs-2" id="FAQAccordionHeader8">
                         <button class="accordion-button collapsed program white-arrow" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQAccordion8" aria-expanded="false" aria-controls="collapseFAQAccordion8">
-                            <h5>How do I <b>create</b> a program?</h5>                
+                            <h5>How do I <b>create and map</b> a program?</h5>                
                         </button>
                     </h2>
                                                         
