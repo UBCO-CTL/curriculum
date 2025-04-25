@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\NotifyCourseAddedToProgramMail;
+use Illuminate\Support\Facades\Mail;
 
 class CourseProgramController extends Controller
 {
@@ -31,17 +33,8 @@ class CourseProgramController extends Controller
 
         $numCoursesAddedSuccessfully = 0;
 
-        // // get all courses that currently belong to this program
-        // $currentProgramCourseIds = Program::find($programId)->courses()->pluck('course_programs.course_id');
-        // foreach ($currentProgramCourseIds as $currentProgramCourseId) {
-        //     if (!in_array(strval($currentProgramCourseId), $courseIds)) {
-        //         // delete course program record for the courses that were removed from this program
-        //         CourseProgram::where([
-        //             ['course_id', $currentProgramCourseId],
-        //             ['program_id', $programId],
-        //         ])->delete();
-        //     }
-        // }
+        // Get program details
+        $program = Program::find($programId);
 
         // update or create a programCourse for each course
         foreach ($courseIds as $index => $courseId) {
@@ -51,13 +44,29 @@ class CourseProgramController extends Controller
                 ['course_id' => $courseId, 'program_id' => $programId],
                 ['course_required' => ($isCourseRequired) ? 1 : 0]
             );
-            $numCoursesAddedSuccessfully++;
 
+            // Get course details and course owner
+            $course = Course::find($courseId);
+            $courseOwners = $course->users()->where('permission', 1)->get();
+
+            // Send email notification to course owners
+            foreach ($courseOwners as $owner) {
+                Mail::to($owner->email)->send(new NotifyCourseAddedToProgramMail(
+                    $course->course_id,
+                    $course->course_code,
+                    $course->course_num ?? '',
+                    $course->course_title,
+                    $program->program,
+                    $program->program_id,
+                    (bool)$isCourseRequired
+                ));
+            }
+
+            $numCoursesAddedSuccessfully++;
         }
 
         if ($numCoursesAddedSuccessfully == count($courseIds)) {
             // update courses 'updated_at' field
-            $program = Program::find($request->input('program_id'));
             $program->touch();
 
             // get users name for last_modified_user
