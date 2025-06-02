@@ -7,12 +7,12 @@
 <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" rel="stylesheet" type="text/css" >
 
 
-<div class="row p-md-5 justify-content-center text-dark bg-secondary">
-    <div class="container">
-        <div class="row">
-            <div style="width: 100%;">
-                <h1 style="text-align:center;">FAQ</h1>
-            </div>
+    <div class="row p-md-5 justify-content-center text-dark bg-secondary">
+        <div class="container">
+            <div class="row">
+                <div style="width: 100%;">
+                    <h1 style="text-align:center;">FAQ</h1>
+                </div>
 
             <div class="accordion" id="FAQAccordion1">
                 <div class="accordion-item mb-2">
@@ -443,9 +443,35 @@
                     </div>
                 </div>
             </div> 
+
+            
         </div>
     </div>    
 </div>
+
+
+<!-- User Guides Section -->
+<div class="row p-md-5 justify-content-center text-dark bg-secondary">
+    <div class="container">
+        <div class="row">
+            <div style="width: 100%;">
+                <h1 style="text-align:center;">User Guides</h1>
+            </div>
+            <div class="container mt-5">
+                <a style="width: 100%;" href="https://1drv.ms/w/c/ad673709a6fecd84/EciCAU4MStpOjUfQywM87DsBYMvm2kvfNhm-v-01uiitAw?e=No3kPR" class="btn btn-primary btn-lg mb-3">
+                    Check Out Our Explanation of the Program <b>Raw Data Summary</b> <i class="bi bi-download"></i>
+                </a>
+            <a style="width: 100%; pointer-events: none; background-color: #ccc; border-color: #ccc; color: #6c757d; text-decoration: none;" 
+                href="#" 
+                class="btn btn-primary btn-lg disabled" 
+                aria-disabled="true">
+                Coming Soon: <b>Full Curriculum MAP User Guide</b> <i class="bi bi-download"></i>
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- End here -->
 @endsection
