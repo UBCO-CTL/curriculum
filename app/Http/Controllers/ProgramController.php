@@ -1016,7 +1016,7 @@ class ProgramController extends Controller
 
             // create each sheet in summary
             //$programLearningOutcomes = ProgramLearningOutcome::where('program_id', $programId)->get();
-
+            $readMeSheet = $this->makeReadMeSheetData($spreadsheet, $programId, $styles);
             $programSheet = $this->makeProgramInfoSheetData($spreadsheet, $programId, $styles);
             $plosSheet = $this->makeLearningOutcomesSheetData($spreadsheet, $programId, $styles);
             $courseSheet = $this->makeCourseInfoSheetData($spreadsheet, $programId, $styles, $columns);
@@ -1029,8 +1029,9 @@ class ProgramController extends Controller
             $strategicPrioritiesSheet = $this->strategicPrioritiesSheet($spreadsheet, $programId, $styles, $columns);
 
             // foreach sheet, set all possible columns in $columns to autosize
-            array_walk($columns, function ($letter, $index) use ($plosSheet, $courseSheet, $mappingScalesSheet, $mapSheet, $dominantMapSheet, $infoMapSheet, $studentAssessment, $learningActivitySheet, $programSheet, $strategicPrioritiesSheet) {
+            array_walk($columns, function ($letter, $index) use ($readMeSheet, $plosSheet, $courseSheet, $mappingScalesSheet, $mapSheet, $dominantMapSheet, $infoMapSheet, $studentAssessment, $learningActivitySheet, $programSheet, $strategicPrioritiesSheet) {
 
+                $readMeSheet->getColumnDimension($letter)->setAutoSize(true);
                 $plosSheet->getColumnDimension($letter)->setAutoSize(true);
                 $mappingScalesSheet->getColumnDimension($letter)->setAutoSize(true);
                 $courseSheet->getColumnDimension($letter)->setAutoSize(true);
@@ -2998,12 +2999,12 @@ class ProgramController extends Controller
         }
     }
 
-    private function makeProgramInfoSheetData(Spreadsheet $spreadsheet, int $programId, $styles): Worksheet
+    private function makePrograminfoSheetData(Spreadsheet $spreadsheet, int $programId, $styles): Worksheet
     {
         try {
             // Find the program by ID
             $program = Program::find($programId);
-            $sheet = $spreadsheet->getActiveSheet();
+            $sheet = $spreadsheet->createSheet();
 
             $sheet->setTitle('Program Information');
 
@@ -3022,6 +3023,46 @@ class ProgramController extends Controller
                 ];
                 // Insert the array into the sheet starting from row 2, column A
                 $sheet->fromArray($programData, null, 'A2');
+            }
+
+            return $sheet;
+
+        } catch (Throwable $exception) {
+            $message = 'There was an error downloading the spreadsheet overview for: '.($program ? $program->program : 'Unknown Program');
+            Log::error($message.' ...\n');
+            Log::error('Code - '.$exception->getCode());
+            Log::error('File - '.$exception->getFile());
+            Log::error('Line - '.$exception->getLine());
+            Log::error($exception->getMessage());
+
+            return $exception;
+        }
+    }
+
+
+    private function makeReadMeSheetData(Spreadsheet $spreadsheet, int $programId, $styles): Worksheet
+    {
+        try {
+            // Find the program by ID
+
+
+            $program = Program::find($programId);
+            $sheet = $spreadsheet->getActiveSheet();
+
+
+            $sheet->setTitle('Read Me');
+
+            if ($program !== null) {
+                // Update header row with the desired column names
+                $sheet->fromArray(['Click the link below to view a User Guide for this Raw Data Summary:'], null, 'A1');
+                $sheet->getStyle('A1:A1')->applyFromArray($styles['primaryHeading']);
+
+                // Insert the program data into the sheet
+                $readMeData = [
+                    "https://1drv.ms/w/c/ad673709a6fecd84/EciCAU4MStpOjUfQywM87DsBYMvm2kvfNhm-v-01uiitAw?e=No3kPR"
+                ];
+                // Insert the array into the sheet starting from row 2, column A
+                $sheet->fromArray($readMeData, null, 'A2');
             }
 
             return $sheet;

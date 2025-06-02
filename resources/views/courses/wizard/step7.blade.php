@@ -32,13 +32,27 @@
                 @include('modals.downloadProgressModal', ['course' => $course])
                 <h3 class="card-header wizard" >
                     <div class="row">
+                        <!-- 
                         <div class="col text-left">
                             <button id="downloadPDFBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadProgressModal" data-route="{{route('courses.pdf', $course->course_id)}}">
-                                Download<i class="bi bi-download pl-2"></i>
+                                Download Summary<i class="bi bi-download pl-2"></i>
                             </button>
                             <button id="downloadDataBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadProgressModal" data-route="{{route('courses.dataSpreadsheet', $course->course_id)}}">
                                 Download Data<i class="bi bi-download pl-2"></i>
                             </button>
+                        </div>
+                        -->
+                        <div class="col text-left">
+                        
+                                <button class="btn btn-primary dropdown-toggle me-2" type="button" id="downloadBtn" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Download Summary <br><i class="bi bi-download"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="downloadBtn">
+                                    <li><button id="downloadPDFBtn" type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#downloadProgressModal" data-route="{{route('courses.pdf', $course->course_id)}}"><i class="bi bi-file-pdf-fill text-danger"></i> PDF </button></li>
+                                    <li><button id="downloadDataBtn" type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#downloadProgressModal" data-route="{{route('courses.dataSpreadsheet', $course->course_id)}}"><i class="bi bi-file-earmark-spreadsheet-fill text-success"></i> Excel (Chrome and Firefox Only)</button></li>
+                                </ul>
+                                
+                                
                         </div>
                         <div class="col">
                             {{$course->course_code}} {{$course->course_num}}: Course Summary

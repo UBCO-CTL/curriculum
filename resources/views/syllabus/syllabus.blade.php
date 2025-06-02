@@ -966,6 +966,14 @@
 
 <div class="col-12" id="statementStudentSupport"></div>
 
+<!-- Statement on Academic Misconduct -->
+
+<div class="col-12" id="statementAcademicMisconduct"></div>
+
+<!-- Statement from AIM Program -->
+
+<div class="col-12" id="statementAIM"></div>
+
 
 <!-- Optional Statements -->
 <div class="col-12" id="optionalStatements"></div>
@@ -2671,6 +2679,26 @@
             </div>
             `;
 
+         var statementAcademicMisconduct = `
+
+            <label for="statementAcademicMisconduct"><h5 class="fw-bold">Statement On Academic Integrity</h5></label>
+            <br>
+            <div class="col-12">
+            <blockquote> Academic integrity is integral to UBC as an institution of higher learning and research. Violations of academic integrity (i.e., academic misconduct) harm the academic enterprise; as a result, serious consequences arise and penalties may be imposed. For example, incidences of plagiarism or cheating may result in a mark of zero on the assignment or exam and more serious consequences may apply if the matter is referred for consideration for academic discipline. Careful records are kept to monitor and prevent recurrences. Any instance of cheating or taking credit for someone else’s work, whether intentionally or unintentionally, can and often will result in at minimum a grade of zero for the assignment, and these cases will be reported to the Head of the Department and Associate Dean Academic of the Faculty.  
+                A more detailed description of academic integrity, including the University’s policies and procedures, may be found in the Academic Calendar.  
+            </blockquote>
+            </div>
+            `;
+
+            var statementAIM = `
+
+            <label for="statementAIM"><h5 class="fw-bold">Academic Integrity Matters (AIM) Program</h5></label>
+            <br>
+            <div class="col-12">
+            <blockquote> AIM is a program that provides help and supports with academic integrity (AI) issues for undergraduate and graduate students. Please contact aim.ok@ubc.ca for any questions or for a 1-on-1 appointment with an AIM consultant. </blockquote>
+            </div>
+            `;
+
         var policiesAndRegulations = `
 
             <label for="policiesAndRegulations"><h5 class="fw-bold">Statement on Policies and Regulations</h5></label><span class="requiredBySenateOK"></span>
@@ -2722,6 +2750,8 @@
             $('.requiredBySenateOK').empty();
             $('#statementUBCValues').empty();
             $('#statementStudentSupport').empty();
+            $('#statementAcademicMisconduct').empty();
+            $('#statementAIM').empty();
             $('#policiesAndRegulations').empty();
 
             // Hide prerequisites and corequisites inputs for Vancouver
@@ -2743,6 +2773,8 @@
             $('#courseSectionOK').html(courseSectionOK);
             $('#statementUBCValues').html(statementUBCValues);
             $('#statementStudentSupport').html(statementStudentSupport);
+            $('#statementAcademicMisconduct').html(statementAcademicMisconduct);
+            $('#statementAIM').html(statementAIM);
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
 

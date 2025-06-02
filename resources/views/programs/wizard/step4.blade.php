@@ -73,7 +73,7 @@
                                 <td>
                                 <!-- Download button for raw data function -->
                                 <button class="btn btn-primary" type="button" id="dataDownloadBtn"  data-bs-toggle="modal" data-bs-target="#dataConfirmDownloadModal" data-bs-auto-close="true" aria-expanded="false">
-                                    Download Data <br><i class="bi bi-download"></i>
+                                    Download Raw Data <br><i class="bi bi-download"></i>
                                 </button>
 </td>
                                 </tr>
