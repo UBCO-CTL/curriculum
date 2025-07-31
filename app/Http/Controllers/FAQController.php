@@ -15,7 +15,7 @@ class FAQController extends Controller
     {
         $this->middleware('auth', ['except' => ['index']]);
     }
-
+    //Testing Changes to main (remove comment later)
     /**
      * Show the application dashboard.
      */
