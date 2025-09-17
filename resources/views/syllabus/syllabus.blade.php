@@ -60,7 +60,7 @@
                     <a class="nav-link py-1 px-2 ms-3" href="#courseTitle">Course Information</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Instructor Info</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Description</a>
-                    <a class="nav-link py-1 px-2 ms-3" href="#courseStructure">Structure & Schedule</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#courseOverview">Structure & Schedule</a>
                 </div>
                 <div class="mb-2">
                     <div class="text-uppercase text-muted fw-bold small mb-1">Learning design</div>
@@ -1323,7 +1323,7 @@
                 <a class="nav-link py-1 px-2 ms-3" href="#courseDescription" data-bs-dismiss="offcanvas">Description</a>
             </div>
             <div class="mb-2">
-                <a class="nav-link py-1 px-2 ms-3" href="#courseStructure" data-bs-dismiss="offcanvas">Structure & Schedule</a>
+                <a class="nav-link py-1 px-2 ms-3" href="#courseOverview" data-bs-dismiss="offcanvas">Structure & Schedule</a>
             </div>
             <div class="mb-2">
                 <div class="text-uppercase text-muted fw-bold small mb-1">Learning design</div>
