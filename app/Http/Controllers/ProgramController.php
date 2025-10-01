@@ -3233,6 +3233,8 @@ class ProgramController extends Controller
             $historyCategories[$ploCategory->plo_category_id] = $newCategory->plo_category_id;
         }
 
+        // Track old->new PLO IDs for outcome map duplication
+        $historyPLOs = [];
         // duplicate plos
         $plos = $oldProgram->programLearningOutcomes;
         foreach ($plos as $plo) {
@@ -3246,8 +3248,11 @@ class ProgramController extends Controller
                 $newProgramLearningOutcome->plo_category_id = $historyCategories[$plo->plo_category_id];
             }
             $newProgramLearningOutcome->save();
+            $historyPLOs[$plo->pl_outcome_id] = $newProgramLearningOutcome->pl_outcome_id;
         }
 
+        // Track old->new mapping scale IDs
+        $historyMappingScales = [];
         // duplicate mapping scales
         $mapScalesProgram = $oldProgram->mappingScalePrograms;
         foreach ($mapScalesProgram as $mapScaleProgram) {
@@ -3267,12 +3272,41 @@ class ProgramController extends Controller
                 $newMappingScaleProgram->map_scale_id = $newMappingScale->map_scale_id;
                 $newMappingScaleProgram->program_id = $program->program_id;
                 $newMappingScaleProgram->save();
+
+                $historyMappingScales[$mapScale->map_scale_id] = $newMappingScale->map_scale_id;
             } else {
                 // create new mapping scale program
                 $newMappingScaleProgram = new MappingScaleProgram;
                 $newMappingScaleProgram->map_scale_id = $mapScaleProgram->map_scale_id;
                 $newMappingScaleProgram->program_id = $program->program_id;
                 $newMappingScaleProgram->save();
+
+                $historyMappingScales[$mapScale->map_scale_id] = $mapScale->map_scale_id;
+            }
+        }
+
+        // duplicate course-program relationships
+        $coursePrograms = CourseProgram::where('program_id', $oldProgram->program_id)->get();
+        foreach ($coursePrograms as $courseProgram) {
+            $newCourseProgram = new CourseProgram;
+            $newCourseProgram->course_id = $courseProgram->course_id;
+            $newCourseProgram->program_id = $program->program_id;
+            $newCourseProgram->course_required = $courseProgram->course_required;
+            $newCourseProgram->instructor_assigned = $courseProgram->instructor_assigned;
+            $newCourseProgram->map_status = 0;
+            $newCourseProgram->note = $courseProgram->note;
+            $newCourseProgram->save();
+        }
+
+        // duplicate outcome maps (PLO to CLO mappings)
+        foreach ($plos as $oldPLO) {
+            $oldOutcomeMaps = OutcomeMap::where('pl_outcome_id', $oldPLO->pl_outcome_id)->get();
+            foreach ($oldOutcomeMaps as $oldOutcomeMap) {
+                $newOutcomeMap = new OutcomeMap;
+                $newOutcomeMap->l_outcome_id = $oldOutcomeMap->l_outcome_id;
+                $newOutcomeMap->pl_outcome_id = $historyPLOs[$oldPLO->pl_outcome_id];
+                $newOutcomeMap->map_scale_id = $historyMappingScales[$oldOutcomeMap->map_scale_id] ?? $oldOutcomeMap->map_scale_id;
+                $newOutcomeMap->save();
             }
         }
 
@@ -4194,8 +4228,8 @@ class ProgramController extends Controller
             }
 
         return $sheet;
-    
-    
+
+
     }catch(Throwable $exception){
         // Log any errors
         $message = 'There was an error downloading the spreadsheet overview for: '.$program->program;
@@ -4210,7 +4244,7 @@ class ProgramController extends Controller
 
     }
 
-    
+
 
     private function strategicPrioritiesSheet(Spreadsheet $spreadsheet, int $programId, $styles, $columns): Worksheet
     {
