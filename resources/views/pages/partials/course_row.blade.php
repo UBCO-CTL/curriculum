@@ -171,9 +171,9 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('courses.duplicate', $course->course_id) }}" method="GET">
+                <form action="{{ route('courses.duplicate', $course->course_id) }}" method="POST">
                     @csrf
-                    {{method_field('GET')}}
+                    {{method_field('POST')}}
 
                     <div class="modal-body">
 
