@@ -64,6 +64,7 @@
                             <th scope="col">Program</th>
                             <th scope="col">Faculty and Department/School</th>
                             <th scope="col">Level</th>
+                            <th scope="col" class="text-center">Courses</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -71,7 +72,7 @@
 
                     @if (count($myPrograms->where('userPermission', 1)) > 0)
                     <tr>
-                        <th colspan="5" class="table-secondary">My Programs</th>
+                        <th colspan="6" class="table-secondary">My Programs</th>
                     </tr>
                     @endif
 
@@ -82,6 +83,28 @@
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
                             @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
@@ -198,6 +221,28 @@
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
                             @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
@@ -284,6 +329,28 @@
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
                             @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
@@ -339,8 +406,8 @@
                         </div>
 
                         <div class="btn-group btn-group-sm me-2" role="group" aria-label="Courses view toggle" style="float:right;">
-                            <button id="btnListView" type="button" class="btn btn-light">List</button>
-                            <button id="btnGroupView" type="button" class="btn btn-outline-light">Group</button>
+                            <button id="btnListView" type="button" class="btn btn-light">List all Courses</button>
+                            <button id="btnGroupView" type="button" class="btn btn-outline-light">Group by Program</button>
                         </div>
                     </h3>
                 </div>
@@ -406,7 +473,7 @@
                             </tbody>
                             @endforeach
                         </table>
-                        </div>
+                                                    </div>
 
                         <div id="courses-group-view" class="d-none">
                             @php
@@ -472,9 +539,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    @endif
+                                                    </div>
+                                                </div>
+                                            @endif
                                 @endforeach
 
                                 @if(count($unassignedCourses) > 0)
@@ -510,21 +577,21 @@
                                                         @endforeach
                                                     </tbody>
                                                 </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                                        </div>
+                                                </div>
+                                    @endif
+                                                    </div>
+                                                </div>
             <!-- End of Courses -->
 
             <!-- Course Modals (rendered here so they're accessible from both list and group views) -->
             @foreach($myCourses as $course)
-                @include('courses.courseCollabs')
-            @endforeach
+                                        @include('courses.courseCollabs')
+                            @endforeach
 
                 <!-- My Syllabi Section -->
                 <div class="card shadow rounded m-4" style="border-style: solid;
