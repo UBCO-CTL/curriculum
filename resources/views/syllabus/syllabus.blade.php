@@ -53,11 +53,12 @@
 <div class="row" id="cat-course-basics">
     <aside class="col-lg-3 d-none d-lg-block">
         <div class="border rounded bg-light p-3 toc-sticky">
-            <div class="fw-bold mb-2">On this page</div>
+            <div class="fw-bold mb-2">Quick Navigation</div>
             <nav class="nav flex-column small">
                 <div class="mb-2">
                     <div class="text-uppercase text-muted fw-bold small mb-1">Course basics</div>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseTitle">Course Information</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#landAcknowledgement">Land Acknowledgement</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Instructor Info</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Description</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#courseOverview">Structure & Schedule</a>
@@ -67,17 +68,14 @@
                     <a class="nav-link py-1 px-2 ms-3" href="#learningOutcome">Learning Outcomes</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#learningAssessments">Assessments</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#learningActivities">Activities</a>
-                    <a class="nav-link py-1 px-2 ms-3" href="#learningMaterials">Materials</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningMaterials">Learning Materials</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#learningResources">Resources</a>
-                    <a class="nav-link py-1 px-2 ms-3" href="#courseAlignment">Course Alignment</a>
-                    <a class="nav-link py-1 px-2 ms-3" href="#outcomeMapsDiv">PLO Mapping</a>
                 </div>
                 <div class="mb-2">
                     <div class="text-uppercase text-muted fw-bold small mb-1">Policies & statements</div>
                     <a class="nav-link py-1 px-2 ms-3" href="#policiesAndRegulations">Policies & Regulations</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#optionalStatements">Optional Statements</a>
                     <a class="nav-link py-1 px-2 ms-3" href="#crStatement">Copyright</a>
-                    <a class="nav-link py-1 px-2 ms-3" href="#landAcknowledgement">Land Acknowledgement</a>
                 </div>
             </nav>
         </div>
@@ -1300,51 +1298,6 @@
     </div> <!-- close col-lg-9 -->
 </div> <!-- close row -->
 
-<!-- Structure & schedule anchor follows the course basics block -->
-<div id="cat-structure-schedule"></div>
-
-<!-- Learning design anchor placed before outcomes/assessments/activities/materials/resources -->
-<div id="cat-learning-design"></div>
-
-<!-- Policies & statements anchor placed before policies/resources/etc. -->
-<div id="cat-policies-statements"></div>
-
-<div class="offcanvas offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="tocOffcanvasLabel">Sections</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-        <nav class="nav flex-column small p-2">
-            <div class="mb-2">
-                <div class="text-uppercase text-muted fw-bold small mb-1">Course basics</div>
-                <a class="nav-link py-1 px-2 ms-3" href="#courseTitle" data-bs-dismiss="offcanvas">Course Information</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#courseDescription" data-bs-dismiss="offcanvas">Instructor Info</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#courseDescription" data-bs-dismiss="offcanvas">Description</a>
-            </div>
-            <div class="mb-2">
-                <a class="nav-link py-1 px-2 ms-3" href="#courseOverview" data-bs-dismiss="offcanvas">Structure & Schedule</a>
-            </div>
-            <div class="mb-2">
-                <div class="text-uppercase text-muted fw-bold small mb-1">Learning design</div>
-                <a class="nav-link py-1 px-2 ms-3" href="#learningOutcome" data-bs-dismiss="offcanvas">Learning Outcomes</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#learningAssessments" data-bs-dismiss="offcanvas">Assessments</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#learningActivities" data-bs-dismiss="offcanvas">Activities</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#learningMaterials" data-bs-dismiss="offcanvas">Materials</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#learningResources" data-bs-dismiss="offcanvas">Resources</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#courseAlignment" data-bs-dismiss="offcanvas">Course Alignment</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#outcomeMapsDiv" data-bs-dismiss="offcanvas">PLO Mapping</a>
-            </div>
-            <div class="mb-2">
-                <div class="text-uppercase text-muted fw-bold small mb-1">Policies & statements</div>
-                <a class="nav-link py-1 px-2 ms-3" href="#policiesAndRegulations" data-bs-dismiss="offcanvas">Policies & Regulations</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#optionalStatements" data-bs-dismiss="offcanvas">Optional Statements</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#crStatement" data-bs-dismiss="offcanvas">Copyright</a>
-                <a class="nav-link py-1 px-2 ms-3" href="#landAcknowledgement" data-bs-dismiss="offcanvas">Land Acknowledgement</a>
-            </div>
-        </nav>
-    </div>
-</div>
 
 <div class="m-3">
     <div class="text-center row justify-content-center">
