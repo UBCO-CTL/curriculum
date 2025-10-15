@@ -185,6 +185,11 @@
                                 </table>
 
                                 <div class="mt-4">
+                                <a href="{{ route('courses.outcomes.export', $course->course_id) }}" class="btn btn-outline-primary btn-md mr-2 mb-2" title="Export a Canvas-compatible outcomes.csv">
+                                <i class="bi bi-download"></i> Export Canvas CSV
+                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Export a Canvas-compatible outcomes.csv">
+                                </span>
+                            </a>
                                     <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
                                 </div>
                             </form>
