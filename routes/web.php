@@ -130,6 +130,7 @@ Route::delete('/courses/{course}/destroy', [CourseController::class, 'destroy'])
 Route::resource('/lo', LearningOutcomeController::class);
 Route::post('/import/clos', [LearningOutcomeController::class, 'import'])->name('courses.outcomes.import');
 Route::post('/store/clos', [LearningOutcomeController::class, 'store'])->name('courses.outcomes.store');
+Route::get('/courses/{course}/outcomes/export-canvas', [LearningOutcomeController::class, 'exportCanvas'])->name('courses.outcomes.export');
 
 Route::resource('/plo', ProgramLearningOutcomeController::class);
 Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->name('program.outcomes.store');

@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Throwable;
@@ -268,5 +270,84 @@ class LearningOutcomeController extends Controller
         // return
         return redirect()->back();
 
+    }
+
+    public function exportCanvas(Course $course): StreamedResponse
+    {
+        $outcomes = $course->learningOutcomes()->orderBy('l_outcome_id')->get();
+
+        $filename = sprintf(
+            'canvas-outcomes-course-%s-%s.csv',
+            $course->course_code.$course->course_num,
+            now()->format('Ymd')
+        );
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = static function () use ($course, $outcomes): void {
+            $handle = fopen('php://output', 'wb');
+
+            $headerRow = [
+                'vendor_guid',
+                'object_type',
+                'title',
+                'description',
+                'display_name',
+                'calculation_method',
+                'calculation_int',
+                'parent_guids',
+                'workflow_state',
+                'mastery_points',
+                'ratings',
+            ];
+
+            fputcsv($handle, $headerRow);
+
+            $groupTitle = sprintf('%s Outcomes', $course->course_code . ' ' . $course->course_num);
+            $groupRow = [
+                1,
+                'group',
+                $groupTitle,
+                '',
+                '',
+                '',
+                '',
+                '',
+                'active',
+                '',
+                '',
+            ];
+
+            fputcsv($handle, $groupRow);
+
+            $baseVendorGuid = 2;
+
+            foreach ($outcomes as $index => $outcome) {
+                $title = $outcome->clo_shortphrase ?: Str::limit($outcome->l_outcome, 50, '...');
+                $description = $outcome->l_outcome;
+                $row = [
+                    $baseVendorGuid + $index,
+                    'outcome',
+                    $title,
+                    $description,
+                    '',
+                    '',
+                    '',
+                    1,
+                    'active',
+                    '',
+                    '',
+                ];
+
+                fputcsv($handle, $row);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->streamDownload($callback, $filename, $headers);
     }
 }
