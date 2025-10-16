@@ -274,7 +274,11 @@ class LearningOutcomeController extends Controller
 
     public function exportCanvas(Course $course): StreamedResponse
     {
-        $outcomes = $course->learningOutcomes()->orderBy('l_outcome_id')->get();
+        $outcomes = $course->learningOutcomes()
+            ->orderByRaw('CASE WHEN pos_in_alignment = 0 THEN 1 ELSE 0 END')
+            ->orderBy('pos_in_alignment', 'asc')
+            ->orderBy('l_outcome_id', 'asc')
+            ->get();
 
         $filename = sprintf(
             'canvas-outcomes-course-%s-%s.csv',
