@@ -44,6 +44,47 @@
     }
 </style>
 
+<style>
+    html { scroll-behavior: smooth; }
+    @media (min-width: 992px) { .toc-sticky { position: sticky; top: 100px; } }
+    [id] { scroll-margin-top: 140px; }
+</style>
+
+<div class="row" id="cat-course-basics">
+    <aside class="col-lg-3 d-none d-lg-block">
+        <div class="border rounded bg-light p-3 toc-sticky">
+            <div class="fw-bold mb-2">Quick Navigation</div>
+            <nav class="nav flex-column small">
+                <div class="mb-2">
+                    <div class="text-uppercase text-muted fw-bold small mb-1">Course basics</div>
+                    <a class="nav-link py-1 px-2 ms-3" href="#courseTitle">Course Information</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#landAcknowledgement">Land Acknowledgement</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Instructor Info</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#courseDescription">Description</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#courseOverview">Structure & Schedule</a>
+                </div>
+                <div class="mb-2">
+                    <div class="text-uppercase text-muted fw-bold small mb-1">Learning design</div>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningOutcome">Learning Outcomes</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningAssessments">Assessments</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningActivities">Activities</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningMaterials">Learning Materials</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#learningResources">Resources</a>
+                </div>
+                <div class="mb-2">
+                    <div class="text-uppercase text-muted fw-bold small mb-1">Policies & statements</div>
+                    <a class="nav-link py-1 px-2 ms-3" href="#policiesAndRegulations">Policies & Regulations</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#optionalStatements">Optional Statements</a>
+                    <a class="nav-link py-1 px-2 ms-3" href="#crStatement">Copyright</a>
+                </div>
+            </nav>
+        </div>
+    </aside>
+    <div class="col-lg-9">
+        <button class="btn btn-outline-primary d-lg-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas">
+            <i class="bi bi-list"></i> Sections
+        </button>
+
 <div class="m-auto" style="max-width:860px;height:100%;">
 
     <div class="m-3">
@@ -1252,6 +1293,11 @@
 <!-- Land Acknowledgement Statement -->
 <div class="col-12" id="landAcknowledgement"></div>
 </form>
+
+        </div> <!-- close m-auto -->
+    </div> <!-- close col-lg-9 -->
+</div> <!-- close row -->
+
 
 <div class="m-3">
     <div class="text-center row justify-content-center">
