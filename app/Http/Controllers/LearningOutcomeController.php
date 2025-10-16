@@ -310,9 +310,10 @@ class LearningOutcomeController extends Controller
 
             fputcsv($handle, $headerRow);
 
+            $groupVendorGuid = sprintf('group:course-%d', $course->course_id);
             $groupTitle = sprintf('%s Outcomes', $course->course_code . ' ' . $course->course_num);
             $groupRow = [
-                1,
+                $groupVendorGuid,
                 'group',
                 $groupTitle,
                 '',
@@ -327,20 +328,19 @@ class LearningOutcomeController extends Controller
 
             fputcsv($handle, $groupRow);
 
-            $baseVendorGuid = 2;
-
             foreach ($outcomes as $index => $outcome) {
+                $outcomeVendorGuid = sprintf('outcome:course-%d-lo-%d', $course->course_id, $outcome->l_outcome_id);
                 $title = $outcome->clo_shortphrase ?: Str::limit($outcome->l_outcome, 50, '...');
                 $description = $outcome->l_outcome;
                 $row = [
-                    $baseVendorGuid + $index,
+                    $outcomeVendorGuid,
                     'outcome',
                     $title,
                     $description,
                     '',
                     '',
                     '',
-                    1,
+                    $groupVendorGuid,
                     'active',
                     '',
                     '',
