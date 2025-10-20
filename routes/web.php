@@ -107,6 +107,7 @@ Route::post('/courses/{course}/assign', [CourseUserController::class, 'store'])-
 Route::delete('/courses/{course}/unassign', [CourseUserController::class, 'destroy'])->name('courses.unassign');
 Route::get('/courseUser', [CourseUserController::class, 'leave'])->name('courseUser.leave');
 Route::post('/courseUserTransfer', [CourseUserController::class, 'transferOwnership'])->name('courseUser.transferOwnership');
+Route::post('/courses/{course}/request-access', [CourseUserController::class, 'requestAccess'])->name('courses.requestAccess');
 
 Route::get('/courses/{course}/submit', [CourseController::class, 'submit'])->name('courses.submit');
 Route::post('/courses/{course}/outcomeDetails', [CourseController::class, 'outcomeDetails'])->name('courses.outcomeDetails');
