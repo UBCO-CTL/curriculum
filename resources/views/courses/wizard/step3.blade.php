@@ -134,11 +134,11 @@
                     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
                         <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div class="col mb-6">
-                            Input all teaching and learning activities or <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://teaching.cornell.edu/teaching-resources/teaching-cornell-guide/instructional-strategies"><i class="bi bi-box-arrow-up-right"></i> instructional strategies</a> of the course individually. Consider approaches to enhance inclusion in your classroom:
+                            Input all teaching and learning activities or <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://www.queensu.ca/ctl/resources/instructors/instructional-strategies"><i class="bi bi-box-arrow-up-right"></i> instructional strategies</a> of the course individually. Consider approaches to enhance inclusion in your classroom:
                             <ul>
                             <li>For increased accessibility and enhanced student participation, while still offering challenging learning opportunities,
                             use these <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://udlguidelines.cast.org/binaries/content/assets/udlguidelines/udlg-v2-2/udlg_graphicorganizer_v2-2_numbers-no.pdf"><i class="bi bi-box-arrow-up-right"></i> Universal Design for Learning Guidelines</a>
-                            (Offered by CAST) to design your course. You may also use <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://udlguidelines.cast.org/binaries/content/assets/common/publications/articles/cast-udl-planningq-a11y.pdf"><i class="bi bi-box-arrow-up-right"></i> these key questions to guide</a> you. </li>
+                            (Offered by CAST) to design your course. </li>
                             <li>For concrete ways to decolonize your curriculum and pedagogy, explore <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://www.concordia.ca/ctl/decolonization/strategies.html"><i class="bi bi-box-arrow-up-right"></i> these strategies</a>.</li>
                             <li>
                             Not sure how to teach/embed career-related outcomes? Request a workshop from The Career Development Team for your classroom <a class="alert-link" target="_blank" rel="noopener noreferrer" href="https://students.ok.ubc.ca/career-experience/faculty-workshops/"><i class="bi bi-box-arrow-up-right"></i> here</a>.
