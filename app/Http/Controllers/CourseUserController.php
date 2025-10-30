@@ -181,8 +181,7 @@ class CourseUserController extends Controller
 
                             Mail::to($newUser->email)->send(new NotifyNewInstructorMail($course->course_code, $courseNum, $course->course_title, $currentUser->name, implode($pass), $newUser->email));
                             // email the owner letting them know they have added a new collaborator
-                            Mail::to($currentUser->email)->send(new NotifyInstructorOwnerMail($course->course_code, $course->course_num, $course->course_title, $newUser->name));
-                        } else {
+                            Mail::to($currentUser->email)->send(new NotifyInstructorOwnerMail($course->course_code, $courseNum, $course->course_title, $newUser->name));                        } else {
                             $errorMessages->add('There was an error adding '.'<b>'.$newUser->email.'</b>'.' to course '.$course->course_title);
                         }
                         // $errorMessages->add('<b>' . $newCollab . '</b>' . ' has not registered on this site. ' . "<a target='_blank' href=" . route('requestInvitation') . ">Invite $newCollab</a> and add them once they have registered.");
