@@ -17,7 +17,7 @@ class MappingScale extends Model
 
     protected $primaryKey = 'map_scale_id';
 
-    protected $fillable = ['map_scale_id', 'title', 'abbreviation', 'description', 'colour', 'mapping_scale_categories_id'];
+    protected $fillable = ['map_scale_id', 'title', 'abbreviation', 'description', 'colour', 'mapping_scale_categories_id', 'source_map_scale_id'];
 
     public function programs(): BelongsToMany
     {
