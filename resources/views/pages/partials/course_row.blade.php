@@ -121,7 +121,9 @@
                     {{ count($courseUsers[$course->course_id]) }}
                 </span>
             </div>
-            <a class="dropdown-item" data-toggle="modal" data-target="#duplicateCourseConfirmation{{$modalPrefix ?? ''}}{{$course->course_id}}">Duplicate</a>
+            @if($course->userPermission == 1 || $course->userPermission == 2)
+                <a class="dropdown-item" data-toggle="modal" data-target="#duplicateCourseConfirmation{{$modalPrefix ?? ''}}{{$course->course_id}}">Duplicate</a>
+            @endif
             @if($course->userPermission == 1)
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteCourseConfirmation{{$modalPrefix ?? ''}}{{$course->course_id}}" href=#>Delete</a>
@@ -162,6 +164,7 @@
         </div>
     @endif
 
+    @if($course->userPermission == 1 || $course->userPermission == 2)
     <div class="modal fade" id="duplicateCourseConfirmation{{$modalPrefix}}{{$course->course_id}}" tabindex="-1" role="dialog" aria-labelledby="duplicateCourseConfirmation{{$modalPrefix}}{{$course->course_id}}" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -236,5 +239,6 @@
             </div>
         </div>
     </div>
+    @endif
 </td>
 
