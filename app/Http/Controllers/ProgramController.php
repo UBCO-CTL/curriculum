@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AssessmentMethod;
 use App\Models\Course;
+use App\Models\CourseCloneRequest;
 use App\Models\CourseOptionalPriorities;
 use App\Models\CourseProgram;
+use App\Models\CourseUser;
 use App\Models\LearningActivity;
 use App\Models\LearningOutcome;
 use App\Models\MappingScale;
@@ -20,6 +22,9 @@ use App\Models\StandardCategory;
 use App\Models\StandardScale;
 use App\Models\StandardsOutcomeMap;
 use App\Models\User;
+use App\Services\CourseCloneRequestNotifier;
+use App\Services\CourseCloneService;
+use App\Services\ProgramMappingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +32,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 use PDF;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -41,8 +48,19 @@ use Throwable;
 
 class ProgramController extends Controller
 {
-    public function __construct()
+    private const CLONE_REQUEST_EXPIRY_DAYS = 14;
+
+    private CourseCloneService $courseCloneService;
+
+    private ProgramMappingService $programMappingService;
+
+    private CourseCloneRequestNotifier $cloneRequestNotifier;
+
+    public function __construct(CourseCloneService $courseCloneService, ProgramMappingService $programMappingService, CourseCloneRequestNotifier $cloneRequestNotifier)
     {
+        $this->courseCloneService = $courseCloneService;
+        $this->programMappingService = $programMappingService;
+        $this->cloneRequestNotifier = $cloneRequestNotifier;
         $this->middleware(['auth', 'verified']);
     }
 
@@ -3198,132 +3216,329 @@ class ProgramController extends Controller
         return $store;
     }
 
+    public function showDuplicateForm(int $program_id): View
+    {
+        $user = User::findOrFail(Auth::id());
+        $program = Program::with(['courses'])->findOrFail($program_id);
+
+        $programUser = ProgramUser::where('program_id', $program->program_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($programUser === null || (int) $programUser->permission === 3) {
+            abort(403);
+        }
+
+        $coursePrograms = CourseProgram::with(['course.users'])
+            ->where('program_id', $program->program_id)
+            ->get();
+
+        $courseData = $coursePrograms->map(function (CourseProgram $courseProgram) use ($user) {
+            $course = $courseProgram->course;
+            if ($course === null) {
+                return null;
+            }
+
+            $pivotUser = $course->users->firstWhere('id', $user->id);
+            $permission = $pivotUser?->pivot?->permission;
+
+            $canClone = in_array((int) $permission, [1, 2], true);
+
+            return [
+                'courseProgram' => $courseProgram,
+                'course' => $course,
+                'can_clone' => $canClone,
+                'default_action' => $canClone ? 'clone' : 'request',
+                'permission' => $permission,
+            ];
+        })->filter()->values();
+
+        return view('programs.duplicate', [
+            'program' => $program,
+            'courseData' => $courseData,
+        ]);
+    }
+
     public function duplicate(Request $request, $program_id): RedirectResponse
     {
-        //
         $this->validate($request, [
-            'program' => 'required',
+            'program' => 'required|string',
+            'course_actions' => 'sometimes|array',
+            'course_actions.*.action' => 'in:clone,link,request,skip',
         ]);
 
-        $oldProgram = Program::find($program_id);
+        $user = User::findOrFail(Auth::id());
+        $oldProgram = Program::findOrFail($program_id);
+        $oldProgram->loadMissing(['ploCategories', 'programLearningOutcomes', 'mappingScalePrograms']);
 
-        $program = new Program;
-        $program->program = $request->input('program');
-        $program->level = $oldProgram->level;
-        $program->department = $oldProgram->department;
-        $program->faculty = $oldProgram->faculty;
-        $program->status = -1;
-
-        // get users name for last_modified_user
-        $user = User::find(Auth::id());
-        $program->last_modified_user = $user->name;
-
-        $program->save();
-
-        // This array is used to keep track of the id's for each category duplicated
-        // This is used for the program learning outcomes step to determine which plo belongs to which category
-        $historyCategories = [];
-        // duplicate plo categories
-        $ploCategories = $oldProgram->ploCategories;
-        foreach ($ploCategories as $ploCategory) {
-            $newCategory = new PLOCategory;
-            $newCategory->plo_category = $ploCategory->plo_category;
-            $newCategory->program_id = $program->program_id;
-            $newCategory->save();
-            $historyCategories[$ploCategory->plo_category_id] = $newCategory->plo_category_id;
-        }
-
-        // Track old->new PLO IDs for outcome map duplication
-        $historyPLOs = [];
-        // duplicate plos
-        $plos = $oldProgram->programLearningOutcomes;
-        foreach ($plos as $plo) {
-            $newProgramLearningOutcome = new ProgramLearningOutcome;
-            $newProgramLearningOutcome->plo_shortphrase = $plo->plo_shortphrase;
-            $newProgramLearningOutcome->pl_outcome = $plo->pl_outcome;
-            $newProgramLearningOutcome->program_id = $program->program_id;
-            if ($plo->plo_category_id == null) {
-                $newProgramLearningOutcome->plo_category_id = null;
-            } else {
-                $newProgramLearningOutcome->plo_category_id = $historyCategories[$plo->plo_category_id];
-            }
-            $newProgramLearningOutcome->save();
-            $historyPLOs[$plo->pl_outcome_id] = $newProgramLearningOutcome->pl_outcome_id;
-        }
-
-        // Track old->new mapping scale IDs
-        $historyMappingScales = [];
-        // duplicate mapping scales
-        $mapScalesProgram = $oldProgram->mappingScalePrograms;
-        foreach ($mapScalesProgram as $mapScaleProgram) {
-            $mapScale = MappingScale::find($mapScaleProgram->map_scale_id);
-            // if mapping scale category is NULL then it is a custom mapping scale. This means we will need to duplicate it in order to add it to the new program.
-            if ($mapScale->mapping_scale_categories_id == null) {
-                // create new mapping scale
-                $newMappingScale = new MappingScale;
-                $newMappingScale->title = $mapScale->title;
-                $newMappingScale->abbreviation = $mapScale->abbreviation;
-                $newMappingScale->description = $mapScale->description;
-                $newMappingScale->colour = $mapScale->colour;
-                $newMappingScale->save();
-
-                // create new mapping scale program
-                $newMappingScaleProgram = new MappingScaleProgram;
-                $newMappingScaleProgram->map_scale_id = $newMappingScale->map_scale_id;
-                $newMappingScaleProgram->program_id = $program->program_id;
-                $newMappingScaleProgram->save();
-
-                $historyMappingScales[$mapScale->map_scale_id] = $newMappingScale->map_scale_id;
-            } else {
-                // create new mapping scale program
-                $newMappingScaleProgram = new MappingScaleProgram;
-                $newMappingScaleProgram->map_scale_id = $mapScaleProgram->map_scale_id;
-                $newMappingScaleProgram->program_id = $program->program_id;
-                $newMappingScaleProgram->save();
-
-                $historyMappingScales[$mapScale->map_scale_id] = $mapScale->map_scale_id;
-            }
-        }
-
-        // duplicate course-program relationships
         $coursePrograms = CourseProgram::where('program_id', $oldProgram->program_id)->get();
-        foreach ($coursePrograms as $courseProgram) {
-            $newCourseProgram = new CourseProgram;
-            $newCourseProgram->course_id = $courseProgram->course_id;
-            $newCourseProgram->program_id = $program->program_id;
-            $newCourseProgram->course_required = $courseProgram->course_required;
-            $newCourseProgram->instructor_assigned = $courseProgram->instructor_assigned;
-            $newCourseProgram->map_status = 0;
-            $newCourseProgram->note = $courseProgram->note;
-            $newCourseProgram->save();
-        }
+        $courseIds = $coursePrograms->pluck('course_id')->all();
+        $courses = Course::whereIn('course_id', $courseIds)->get()->keyBy('course_id');
+        $coursePermissions = CourseUser::where('user_id', $user->id)
+            ->whereIn('course_id', $courseIds)
+            ->pluck('permission', 'course_id');
 
-        // duplicate outcome maps (PLO to CLO mappings)
-        foreach ($plos as $oldPLO) {
-            $oldOutcomeMaps = OutcomeMap::where('pl_outcome_id', $oldPLO->pl_outcome_id)->get();
-            foreach ($oldOutcomeMaps as $oldOutcomeMap) {
-                $newOutcomeMap = new OutcomeMap;
-                $newOutcomeMap->l_outcome_id = $oldOutcomeMap->l_outcome_id;
-                $newOutcomeMap->pl_outcome_id = $historyPLOs[$oldPLO->pl_outcome_id];
-                $newOutcomeMap->map_scale_id = $historyMappingScales[$oldOutcomeMap->map_scale_id] ?? $oldOutcomeMap->map_scale_id;
-                $newOutcomeMap->save();
+        $requestedActions = $this->normalizeCourseActions($request->input('course_actions', []));
+
+        $forcedRequests = [];
+        $pendingRequests = [];
+        $linkedCourseIds = [];
+
+        DB::beginTransaction();
+
+        try {
+            $program = $oldProgram->replicate();
+            $program->program = $request->input('program');
+            $program->status = -1;
+            $program->last_modified_user = $user->name;
+            $program->save();
+
+            $historyCategories = [];
+            foreach ($oldProgram->ploCategories as $ploCategory) {
+                $newCategory = new PLOCategory;
+                $newCategory->plo_category = $ploCategory->plo_category;
+                $newCategory->program_id = $program->program_id;
+                $newCategory->save();
+
+                $historyCategories[$ploCategory->plo_category_id] = $newCategory->plo_category_id;
             }
-        }
 
-        $user = User::find(Auth::id());
-        $programUser = new ProgramUser;
-        $programUser->user_id = $user->id;
+            $historyPLOs = [];
+            foreach ($oldProgram->programLearningOutcomes as $programLearningOutcome) {
+                $newProgramLearningOutcome = new ProgramLearningOutcome;
+                $newProgramLearningOutcome->plo_shortphrase = $programLearningOutcome->plo_shortphrase;
+                $newProgramLearningOutcome->pl_outcome = $programLearningOutcome->pl_outcome;
+                $newProgramLearningOutcome->program_id = $program->program_id;
+                $newProgramLearningOutcome->plo_category_id = $programLearningOutcome->plo_category_id === null
+                    ? null
+                    : ($historyCategories[$programLearningOutcome->plo_category_id] ?? null);
+                $newProgramLearningOutcome->source_pl_outcome_id = $programLearningOutcome->pl_outcome_id;
+                $newProgramLearningOutcome->save();
 
-        $programUser->program_id = $program->program_id;
-        // assign the creator of the program the owner permission
-        $programUser->permission = 1;
-        if ($programUser->save()) {
-            $request->session()->flash('success', 'Program has been successfully duplicated');
-        } else {
+                $historyPLOs[$programLearningOutcome->pl_outcome_id] = $newProgramLearningOutcome->pl_outcome_id;
+            }
+
+            $historyMappingScales = [];
+            foreach ($oldProgram->mappingScalePrograms as $mappingScaleProgram) {
+                $mapScale = MappingScale::find($mappingScaleProgram->map_scale_id);
+
+                if ($mapScale === null) {
+                    continue;
+                }
+
+                if ($mapScale->mapping_scale_categories_id === null) {
+                    $newMappingScale = new MappingScale;
+                    $newMappingScale->title = $mapScale->title;
+                    $newMappingScale->abbreviation = $mapScale->abbreviation;
+                    $newMappingScale->description = $mapScale->description;
+                    $newMappingScale->colour = $mapScale->colour;
+                    $newMappingScale->source_map_scale_id = $mapScale->map_scale_id;
+                    $newMappingScale->save();
+
+                    $newMappingScaleProgram = new MappingScaleProgram;
+                    $newMappingScaleProgram->map_scale_id = $newMappingScale->map_scale_id;
+                    $newMappingScaleProgram->program_id = $program->program_id;
+                    $newMappingScaleProgram->save();
+
+                    $historyMappingScales[$mapScale->map_scale_id] = $newMappingScale->map_scale_id;
+                } else {
+                    $newMappingScaleProgram = new MappingScaleProgram;
+                    $newMappingScaleProgram->map_scale_id = $mappingScaleProgram->map_scale_id;
+                    $newMappingScaleProgram->program_id = $program->program_id;
+                    $newMappingScaleProgram->save();
+
+                    $historyMappingScales[$mapScale->map_scale_id] = $mapScale->map_scale_id;
+                }
+            }
+
+            foreach ($coursePrograms as $courseProgram) {
+                $course = $courses->get($courseProgram->course_id);
+
+                if ($course === null) {
+                    continue;
+                }
+
+                $canClone = in_array((int) ($coursePermissions[$course->course_id] ?? 0), [1, 2], true);
+                $action = $this->sanitizeCourseAction(
+                    $requestedActions[$course->course_id] ?? ($canClone ? 'clone' : 'request')
+                );
+
+                if ($action === 'clone' && ! $canClone) {
+                    $forcedRequests[] = $course;
+                    $action = 'request';
+                }
+
+                switch ($action) {
+                    case 'clone':
+                        $cloneResult = $this->courseCloneService->cloneCourse($course, [], $user);
+
+                        $this->programMappingService->attachCourseToProgram($program, $cloneResult->clone->course_id, [
+                            'course_required' => $courseProgram->course_required,
+                            'instructor_assigned' => $courseProgram->instructor_assigned,
+                            'map_status' => 0,
+                            'note' => $courseProgram->note,
+                        ]);
+
+                        $this->programMappingService->duplicateOutcomeMapsForCourse(
+                            $historyPLOs,
+                            $historyMappingScales,
+                            $cloneResult
+                        );
+
+                        break;
+
+                    case 'link':
+                        $this->programMappingService->attachCourseToProgram($program, $course->course_id, [
+                            'course_required' => $courseProgram->course_required,
+                            'instructor_assigned' => $courseProgram->instructor_assigned,
+                            'map_status' => 0,
+                            'note' => $courseProgram->note,
+                        ]);
+
+                        $linkedCourseIds[] = $course->course_id;
+
+                        break;
+
+                    case 'request':
+                        $pendingRequests[] = $this->createCloneRequest($program, $course, $courseProgram, $user, $oldProgram->program_id);
+
+                        break;
+
+                    case 'skip':
+                    default:
+                        break;
+                }
+            }
+
+            if ($linkedCourseIds !== []) {
+                $linkedLearningOutcomeIds = LearningOutcome::whereIn('course_id', $linkedCourseIds)
+                    ->pluck('l_outcome_id')
+                    ->all();
+
+                if ($linkedLearningOutcomeIds !== []) {
+                    foreach ($oldProgram->programLearningOutcomes as $programLearningOutcome) {
+                        $newPloId = $historyPLOs[$programLearningOutcome->pl_outcome_id] ?? null;
+
+                        if ($newPloId === null) {
+                            continue;
+                        }
+
+                        $outcomeMaps = OutcomeMap::where('pl_outcome_id', $programLearningOutcome->pl_outcome_id)
+                            ->whereIn('l_outcome_id', $linkedLearningOutcomeIds)
+                            ->get();
+
+                        foreach ($outcomeMaps as $outcomeMap) {
+                            $newOutcomeMap = new OutcomeMap;
+                            $newOutcomeMap->l_outcome_id = $outcomeMap->l_outcome_id;
+                            $newOutcomeMap->pl_outcome_id = $newPloId;
+                            $newOutcomeMap->map_scale_id = $historyMappingScales[$outcomeMap->map_scale_id] ?? $outcomeMap->map_scale_id;
+                            $newOutcomeMap->save();
+                        }
+                    }
+                }
+            }
+
+            $programUser = new ProgramUser;
+            $programUser->user_id = $user->id;
+            $programUser->program_id = $program->program_id;
+            $programUser->permission = 1;
+            $programUser->save();
+
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+
+            Log::error('Unable to duplicate program', [
+                'program_id' => $program_id,
+                'user_id' => $user->id,
+                'exception' => $exception,
+            ]);
+
             $request->session()->flash('error', 'There was an error duplicating the program');
+
+            return redirect()->back()->withInput();
         }
+
+        if ($pendingRequests !== []) {
+            $this->cloneRequestNotifier->notifyMany($pendingRequests);
+        }
+
+        if ($forcedRequests !== []) {
+            $courseList = collect($forcedRequests)
+                ->map(fn (Course $course) => trim($course->course_code.' '.$course->course_num))
+                ->implode(', ');
+
+            $request->session()->flash(
+                'warning',
+                'You do not have permission to clone the following courses: '.$courseList.'. Clone requests were created instead.'
+            );
+        }
+
+        // TODO: dispatch approval emails for $pendingRequests within upcoming tasks.
+
+        $request->session()->flash('success', 'Program has been successfully duplicated');
 
         return redirect()->route('home');
+    }
+
+    /**
+     * @param  array<mixed>  $rawActions
+     * @return array<int,string>
+     */
+    private function normalizeCourseActions(array $rawActions): array
+    {
+        $normalized = [];
+
+        foreach ($rawActions as $courseId => $value) {
+            $action = null;
+
+            if (is_array($value)) {
+                $action = $value['action'] ?? null;
+            } elseif (is_string($value)) {
+                $action = $value;
+            }
+
+            if (! is_string($action)) {
+                continue;
+            }
+
+            $normalized[(int) $courseId] = strtolower($action);
+        }
+
+        return $normalized;
+    }
+
+    private function sanitizeCourseAction(?string $action): string
+    {
+        return match ($action) {
+            'clone', 'link', 'request', 'skip' => $action,
+            default => 'request',
+        };
+    }
+
+    /**
+     * @return array{0: CourseCloneRequest, 1: string}
+     */
+    private function createCloneRequest(Program $program, Course $course, CourseProgram $courseProgram, User $requester, int $originalProgramId): array
+    {
+        $token = Str::random(64);
+
+        $cloneRequest = CourseCloneRequest::create([
+            'program_id' => $program->program_id,
+            'original_course_id' => $course->course_id,
+            'original_program_id' => $originalProgramId,
+            'requested_by_user_id' => $requester->id,
+            'status' => CourseCloneRequest::STATUS_PENDING,
+            'token_hash' => hash('sha256', $token),
+            'expires_at' => now()->addDays(self::CLONE_REQUEST_EXPIRY_DAYS),
+            'last_notified_at' => now(),
+            'course_required' => $courseProgram->course_required,
+            'instructor_assigned' => $courseProgram->instructor_assigned,
+            'map_status' => 0,
+            'note' => $courseProgram->note,
+        ]);
+
+        return [$cloneRequest, $token];
     }
 
     // Helper method to display mapping scales
