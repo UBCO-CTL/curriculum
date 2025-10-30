@@ -1,10 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        $previousUrl = url()->previous();
+        $appUrl = config('app.url');
+        $safeBackUrl = route('programWizard.step1', $program->program_id);
+
+        if ($previousUrl) {
+            $isRelative = \Illuminate\Support\Str::startsWith($previousUrl, '/');
+            $startsWithAppUrl = \Illuminate\Support\Str::startsWith($previousUrl, $appUrl);
+
+            if ($isRelative) {
+                $safeBackUrl = $previousUrl;
+            } elseif ($startsWithAppUrl) {
+                $safeBackUrl = $previousUrl;
+            } else {
+                $previousHost = parse_url($previousUrl, PHP_URL_HOST);
+                $appHost = parse_url($appUrl, PHP_URL_HOST);
+
+                if ($previousHost === $appHost) {
+                    $safeBackUrl = $previousUrl;
+                }
+            }
+        }
+    @endphp
     <div class="container py-4">
         <div class="row mb-3">
             <div class="col">
-                <a href="{{ url()->previous() ?: route('programWizard.step1', $program->program_id) }}" class="btn btn-link p-0">&larr; Back</a>
+                <a href="{{ $safeBackUrl }}" class="btn btn-link p-0">&larr; Back</a>
             </div>
         </div>
 
@@ -77,7 +100,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <a href="{{ url()->previous() ?: route('programWizard.step1', $program->program_id) }}" class="btn btn-outline-secondary">Cancel</a>
+                    <a href="{{ $safeBackUrl }}" class="btn btn-outline-secondary">Cancel</a>
                     <button type="submit" class="btn btn-success">Duplicate Program</button>
                 </div>
             </div>
