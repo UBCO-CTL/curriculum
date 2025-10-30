@@ -11,6 +11,7 @@ use App\Services\CourseCloneRequestNotifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class CourseCloneRequestController extends Controller
@@ -43,9 +44,11 @@ class CourseCloneRequestController extends Controller
             return $this->renderResult('Already Processed', 'This clone request has already been processed. No further action is required.');
         }
 
-        $courseCloneRequest->markApproved($approver);
+        DB::transaction(function () use ($courseCloneRequest, $approver) {
+            $courseCloneRequest->markApproved($approver);
 
-        ProcessCourseClone::dispatch($courseCloneRequest->id);
+            ProcessCourseClone::dispatch($courseCloneRequest->id)->afterCommit();
+        });
 
         return $this->renderResult('Clone Approved', 'Thanks! We will clone the course and update the program automatically.');
     }
