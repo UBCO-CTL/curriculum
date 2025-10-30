@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AssessmentMethod;
 use App\Models\Campus;
 use App\Models\Course;
+use App\Models\CourseCloneRequest;
 use App\Models\CourseOptionalPriorities;
 use App\Models\CourseProgram;
 use App\Models\Department;
@@ -245,6 +246,11 @@ class ProgramWizardController extends Controller
             $programCoursesUsers[$programCourse->course_id] = $programCourse->users()->get();
         }
 
+        $cloneRequests = CourseCloneRequest::with(['originalCourse'])
+            ->where('program_id', $program_id)
+            ->orderByDesc('created_at')
+            ->get();
+
         // progress bar
         $ploCount = ProgramLearningOutcome::where('program_id', $program_id)->count();
         $msCount = MappingScale::join('mapping_scale_programs', 'mapping_scales.map_scale_id', '=', 'mapping_scale_programs.map_scale_id')
@@ -289,7 +295,8 @@ class ProgramWizardController extends Controller
         return view('programs.wizard.step3')->with('program', $program)->with('programCoursesUsers', $programCoursesUsers)
             ->with('faculties', $faculties)->with('departments', $departments)->with('campuses', $campuses)->with('levels', $levels)->with('user', $user)->with('programUsers', $programUsers)
             ->with('ploCount', $ploCount)->with('msCount', $msCount)->with('programCourses', $programCourses)->with('userCoursesNotInProgram', $userCoursesNotInProgram)->with('standard_categories', $standard_categories)
-            ->with('actualTotalOutcomes', $actualTotalOutcomes)->with('expectedTotalOutcomes', $expectedTotalOutcomes)->with('isEditor', $isEditor)->with('isViewer', $isViewer);
+            ->with('actualTotalOutcomes', $actualTotalOutcomes)->with('expectedTotalOutcomes', $expectedTotalOutcomes)->with('isEditor', $isEditor)->with('isViewer', $isViewer)
+            ->with('cloneRequests', $cloneRequests);
     }
 
     public function step4($program_id, Request $request): View
