@@ -13,7 +13,7 @@ class ProgramLearningOutcome extends Model
 
     protected $primaryKey = 'pl_outcome_id';
 
-    protected $fillable = ['program_id', 'pl_outcome', 'plo_shortphrase', 'pl_outcome_id', 'plo_category_id', 'position', 'source_pl_outcome_id'];
+    protected $fillable = ['program_id', 'pl_outcome', 'plo_shortphrase', 'plo_category_id', 'position', 'source_pl_outcome_id'];
 
     protected static function boot()
     {
