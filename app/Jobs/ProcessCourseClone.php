@@ -65,7 +65,7 @@ class ProcessCourseClone implements ShouldQueue
                 ]);
 
                 $programLearningOutcomeMap = $this->buildProgramLearningOutcomeMap($cloneRequest);
-                $mappingScaleMap = $this->buildMappingScaleMap();
+                $mappingScaleMap = $this->buildMappingScaleMap($cloneRequest);
 
                 $programMappingService->duplicateOutcomeMapsForCourse(
                     $programLearningOutcomeMap,
@@ -107,10 +107,13 @@ class ProcessCourseClone implements ShouldQueue
     /**
      * @return array<int,int>
      */
-    private function buildMappingScaleMap(): array
+    private function buildMappingScaleMap(CourseCloneRequest $cloneRequest): array
     {
-        return MappingScale::whereNotNull('source_map_scale_id')
-            ->pluck('map_scale_id', 'source_map_scale_id')
+        return MappingScale::join('mapping_scale_programs', 'mapping_scales.map_scale_id', '=', 'mapping_scale_programs.map_scale_id')
+            ->where('mapping_scale_programs.program_id', $cloneRequest->program_id)
+            ->whereNotNull('mapping_scales.source_map_scale_id')
+            ->distinct()
+            ->pluck('mapping_scales.map_scale_id', 'mapping_scales.source_map_scale_id')
             ->toArray();
     }
 }
