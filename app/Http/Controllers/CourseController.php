@@ -23,6 +23,7 @@ use App\Models\Standard;
 use App\Models\StandardScale;
 use App\Models\StandardsOutcomeMap;
 use App\Models\User;
+use App\Services\CourseCloneService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,8 +45,11 @@ use Throwable;
 
 class CourseController extends Controller
 {
-    public function __construct()
+    private CourseCloneService $courseCloneService;
+
+    public function __construct(CourseCloneService $courseCloneService)
     {
+        $this->courseCloneService = $courseCloneService;
         $this->middleware(['auth', 'verified']);
         $this->middleware('course')->only(['show', 'pdf', 'edit', 'submit', 'outcomeDetails']);
     }
@@ -830,134 +834,39 @@ class CourseController extends Controller
 
         ]);
 
-        $course_old = Course::find($course_id);
-        $course = new Course;
-        $course->course_title = $request->input('course_title');
-        $course->section = $request->input('course_section');
-        $course->course_code = strtoupper($request->input('course_code'));
-        // remove leading zeros from course number
-        $CNum = $request->input('course_num');
-        for ($i = 0; $i < strlen($CNum); $i++) {
-            if ($CNum[$i] == '0') {
-                $CNum = ltrim($CNum, $CNum[$i]);
-            } else {
-                // Found a value that's not '0'
-                break;
-            }
-        }
-        $course->course_num = $CNum;
-        // status of mapping process
-        $course->status = -1;
-        // course required for program
-        //TODO: Might need to remove these as they are depreciated
-        $course->required = null;
-        $course->type = 'unassigned';
+        $course_old = Course::findOrFail($course_id);
+        $user = User::findOrFail(Auth::id());
 
-        $course->delivery_modality = $course_old->delivery_modality;
-        $course->year = $course_old->year;
-        $course->semester = $course_old->semester;
-        $course->standard_category_id = $course_old->standard_category_id;
-        $course->scale_category_id = $course_old->scale_category_id;
-        // course assigned to user
-        $course->assigned = 1;
-        $course->save();
+        try {
+            $this->courseCloneService->cloneCourse(
+                $course_old,
+                [
+                    'course_title' => $request->input('course_title'),
+                    'course_code' => $request->input('course_code'),
+                    'course_num' => $request->input('course_num'),
+                    'section' => $request->input('course_section'),
+                    'status' => -1,
+                    'assigned' => 1,
+                    'type' => 'unassigned',
+                    'required' => null,
+                ],
+                $user
+            );
 
-        // This array is used to keep track of the id's for each assessment method duplicated
-        // This is used for the course alignment step to decide which assessment method will be aligned (checked) for each clo
-        $historyAssessmentMethods = [];
-        // duplicate student assessment methods if they exist
-        $assMeths = $course_old->assessmentMethods;
-        foreach ($assMeths as $assMeth) {
-            $newAssessmentMethod = new AssessmentMethod;
-            $newAssessmentMethod->a_method = $assMeth->a_method;
-            $newAssessmentMethod->weight = $assMeth->weight;
-            $newAssessmentMethod->course_id = $course->course_id;
-            $newAssessmentMethod->save();
-            $historyAssessmentMethods[$assMeth->a_method_id] = $newAssessmentMethod->a_method_id;
-        }
-
-        // This array is used to keep track of the id's for each learning activity duplicated
-        // This is used for the course alignment step to decide which learning activity will be aligned (checked) for each clo
-        $historyLearningActivities = [];
-        // duplicate Teaching and Learning Activities if they exist
-        $tlas = $course_old->learningActivities;
-        foreach ($tlas as $tla) {
-            $newLearningActivity = new LearningActivity;
-            $newLearningActivity->l_activity = $tla->l_activity;
-            $newLearningActivity->course_id = $course->course_id;
-            $newLearningActivity->save();
-            $historyLearningActivities[$tla->l_activity_id] = $newLearningActivity->l_activity_id;
-        }
-
-        // duplicate clos and add them to the new course if they exist
-        $clos = $course_old->learningOutcomes;
-        foreach ($clos as $clo) {
-            // CLOS
-            $newCLO = new LearningOutcome;
-            $newCLO->clo_shortphrase = $clo->clo_shortphrase;
-            $newCLO->l_outcome = $clo->l_outcome;
-            $newCLO->course_id = $course->course_id;
-            $newCLO->save();
-
-            // duplicate course alignment (Outcome Activities and Outcome Assessments) if they exist
-
-            // duplicate outcome activities
-            if ($clo->learningActivities()->exists()) {
-                $oldLearningActivities = $clo->learningActivities()->get();
-                foreach ($oldLearningActivities as $oldLearningActivity) {
-                    $newOutcomeActivity = new OutcomeActivity;
-                    $newOutcomeActivity->l_outcome_id = $newCLO->l_outcome_id;
-                    $newOutcomeActivity->l_activity_id = $historyLearningActivities[$oldLearningActivity->l_activity_id];
-                    $newOutcomeActivity->save();
-                }
-            }
-            // duplicate outcome assessments
-            if ($clo->assessmentMethods()->exists()) {
-                $oldAssessmentMethods = $clo->assessmentMethods()->get();
-                foreach ($oldAssessmentMethods as $oldAssessmentMethod) {
-                    $newOutcomeAssessment = new OutcomeAssessment;
-                    $newOutcomeAssessment->l_outcome_id = $newCLO->l_outcome_id;
-                    $newOutcomeAssessment->a_method_id = $historyAssessmentMethods[$oldAssessmentMethod->a_method_id];
-                    $newOutcomeAssessment->save();
-                }
-            }
-        }
-
-        $courseStandardCategory = $course->standardCategory;
-        $courseStandardOutcomes = $courseStandardCategory->standards;
-        // dd($courseStandardOutcomes);
-        foreach ($courseStandardOutcomes as $standardOutcome) {
-            if (StandardsOutcomeMap::where('standard_id', $standardOutcome->standard_id)->where('course_id', $course->course_id)->exists()) {
-                $newStandardOutcomeMap = new StandardsOutcomeMap;
-                $newStandardOutcomeMap->course_id = $course->course_id;
-                $newStandardOutcomeMap->standard_id = $standardOutcome->standard_id;
-                $newStandardOutcomeMap->standard_scale_id = StandardsOutcomeMap::where('standard_id', $standardOutcome->standard_id)->where('course_id', $course_old->course_id)->value('standard_scale_id');
-                $newStandardOutcomeMap->save();
-            }
-        }
-
-        // duplicate strategic (Optional) priorities
-        $ops = $course_old->optionalPriorities;
-        foreach ($ops as $op) {
-            $newOptionalPriority = new CourseOptionalPriorities;
-            $newOptionalPriority->op_id = $op->op_id;
-            $newOptionalPriority->course_id = $course->course_id;
-            $newOptionalPriority->save();
-        }
-
-        $user = User::find(Auth::id());
-        $courseUser = new CourseUser;
-        $courseUser->course_id = $course->course_id;
-        $courseUser->user_id = $user->id;
-        // assign the creator of the course the owner permission
-        $courseUser->permission = 1;
-        if ($courseUser->save()) {
             $request->session()->flash('success', 'Course has been duplicated');
-        } else {
-            $request->session()->flash('error', 'There was an error duplicating the course');
-        }
 
-        return redirect()->route('home');
+            return redirect()->route('home');
+        } catch (\Throwable $exception) {
+            Log::error('Unable to duplicate course', [
+                'course_id' => $course_id,
+                'user_id' => $user->id,
+                'exception' => $exception,
+            ]);
+
+            $request->session()->flash('error', 'There was an error duplicating the course');
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /*
