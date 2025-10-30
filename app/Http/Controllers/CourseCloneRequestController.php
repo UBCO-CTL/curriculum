@@ -85,13 +85,16 @@ class CourseCloneRequestController extends Controller
             abort(403);
         }
 
+        if (! $courseCloneRequest->isPending() && ! $courseCloneRequest->isExpired()) {
+            return redirect()->back()->with('warning', 'Clone request has already been processed and cannot be resent.');
+        }
+
         $token = $courseCloneRequest->issueToken(self::EXPIRY_DAYS);
 
         $this->cloneRequestNotifier->notify($courseCloneRequest, $token);
 
         return redirect()->back()->with('success', 'Clone request notification has been resent.');
     }
-
     public function cancel(Request $request, CourseCloneRequest $courseCloneRequest): RedirectResponse
     {
         $user = Auth::user();
@@ -101,9 +104,8 @@ class CourseCloneRequestController extends Controller
         }
 
         if (! $courseCloneRequest->isPending() && ! $courseCloneRequest->isExpired()) {
-            return redirect()->back()->with('warning', 'Only pending clone requests can be cancelled.');
+            return redirect()->back()->with('warning', 'Only pending or expired clone requests can be cancelled.');
         }
-
         $courseCloneRequest->markCancelled($user);
 
         return redirect()->back()->with('success', 'Clone request has been cancelled.');
