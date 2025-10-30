@@ -19,13 +19,23 @@ class Course extends Model
 
     protected $primaryKey = 'course_id';
 
-    protected $fillable = ['course_code', 'course_num', 'course_title', 'status', 'assigned', 'type', 'year', 'semester', 'section', 'delivery_modality', 'standard_category_id', 'scale_category_id', 'AMtable', 'CLOtable', 'LAtable'];
+    protected $fillable = ['course_code', 'course_num', 'course_title', 'status', 'assigned', 'type', 'year', 'semester', 'section', 'delivery_modality', 'standard_category_id', 'scale_category_id', 'source_course_id', 'AMtable', 'CLOtable', 'LAtable'];
 
     protected $guarded = ['course_id'];
 
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'course_users', 'course_id', 'user_id')->withPivot('permission');
+    }
+
+    public function sourceCourse(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'source_course_id', 'course_id');
+    }
+
+    public function clonedCourses(): HasMany
+    {
+        return $this->hasMany(self::class, 'source_course_id', 'course_id');
     }
 
     public function owners(): BelongsToMany

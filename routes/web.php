@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminEmailController;
 use App\Http\Controllers\AssessmentMethodController;
+use App\Http\Controllers\CourseCloneRequestController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseProgramController;
 use App\Http\Controllers\CourseUserController;
@@ -98,7 +99,22 @@ Route::get('/programs/{program}/downloadUserGuide', [ProgramController::class, '
 // Program Summary raw data spreadsheet routes
 Route::get('/programs/{program}/dataSpreadsheet', [ProgramController::class, 'dataSpreadsheet'])->name('programs.dataSpreadsheet');
 
-Route::get('/programs/{program}/duplicate', [ProgramController::class, 'duplicate'])->name('programs.duplicate');
+Route::get('/programs/{program}/duplicate', [ProgramController::class, 'showDuplicateForm'])->name('programs.duplicate');
+Route::post('/programs/{program}/duplicate', [ProgramController::class, 'duplicate'])->name('programs.duplicate.store');
+
+Route::get('/course-clone-requests/{courseCloneRequest}/approve', [CourseCloneRequestController::class, 'approve'])
+    ->name('courseCloneRequests.approve')
+    ->middleware('signed');
+Route::get('/course-clone-requests/{courseCloneRequest}/deny', [CourseCloneRequestController::class, 'deny'])
+    ->name('courseCloneRequests.deny')
+    ->middleware('signed');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/course-clone-requests/{courseCloneRequest}/resend', [CourseCloneRequestController::class, 'resend'])
+        ->name('courseCloneRequests.resend');
+    Route::post('/course-clone-requests/{courseCloneRequest}/cancel', [CourseCloneRequestController::class, 'cancel'])
+        ->name('courseCloneRequests.cancel');
+});
 
 Route::resource('/courses', CourseController::class);
 Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');

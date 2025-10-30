@@ -46,6 +46,82 @@
                         </div>
                     </div>
 
+                    @if ($cloneRequests->isNotEmpty())
+                        @php
+                            $statusStyles = [
+                                'pending' => 'warning',
+                                'approved' => 'success',
+                                'denied' => 'danger',
+                                'expired' => 'secondary',
+                                'cancelled' => 'secondary',
+                                'failed' => 'danger',
+                            ];
+                        @endphp
+                        <div class="card border-info mb-4">
+                            <div class="card-header bg-info text-white">
+                                Course Clone Requests
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-sm mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Course</th>
+                                                <th>Status</th>
+                                                <th>Requested</th>
+                                                <th>Expires</th>
+                                                <th class="text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($cloneRequests as $request)
+                                                @php
+                                                    $course = $request->originalCourse;
+                                                    $status = $request->status;
+                                                    $badgeClass = $statusStyles[$status] ?? 'light';
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        @if ($course)
+                                                            <strong>{{ $course->course_code }} {{ $course->course_num }}</strong>
+                                                            <div class="text-muted">{{ $course->course_title }}</div>
+                                                        @else
+                                                            <span class="text-muted">Course removed</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-{{ $badgeClass }} text-capitalize">{{ $status }}</span>
+                                                        @if ($status === \App\Models\CourseCloneRequest::STATUS_APPROVED && $request->cloned_course_id === null)
+                                                            <div class="text-muted small">Cloning in progress…</div>
+                                                        @elseif ($request->cloned_course_id)
+                                                            <div class="text-muted small">Clone created</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $request->created_at?->toDayDateTimeString() ?? '—' }}</td>
+                                                    <td>{{ $request->expires_at?->toDayDateTimeString() ?? '—' }}</td>
+                                                    <td class="text-right">
+                                                        @if (! $isViewer && in_array($status, [\App\Models\CourseCloneRequest::STATUS_PENDING, \App\Models\CourseCloneRequest::STATUS_EXPIRED]))
+                                                            <form method="POST" action="{{ route('courseCloneRequests.resend', $request->id) }}" class="d-inline">
+                                                                @csrf
+                                                                <button class="btn btn-link btn-sm">Resend</button>
+                                                            </form>
+                                                            <form method="POST" action="{{ route('courseCloneRequests.cancel', $request->id) }}" class="d-inline">
+                                                                @csrf
+                                                                <button class="btn btn-link btn-sm text-danger">Cancel</button>
+                                                            </form>
+                                                        @else
+                                                            <span class="text-muted">—</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div id="courses">
                         <div class="row">
                             <div class="col">
@@ -137,7 +213,10 @@
                                                     Add Note
                                                 </button>
 
-                                                @if($programCourse->owners[0]->id == $user->id)
+                                                @php
+                                                    $primaryOwner = $programCourse->owners->first();
+                                                @endphp
+                                                @if($primaryOwner && $primaryOwner->id == $user->id)
                                                     <!-- Allow owner to be redirected to the course to map it -->
                                                     @if ($programCourse->learningOutcomes->count() > 0)
                                                         <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>

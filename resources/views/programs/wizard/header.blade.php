@@ -11,50 +11,11 @@
         @if (!$isViewer)
             <div class="row my-2">
                 <div class="col">
-                    <button type="button" style="width:200px" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#duplicateConfirmation">Duplicate Program</button>
-                    <!-- Duplicate Confirmation Modal -->
-                    <div class="modal fade" id="duplicateConfirmation" tabindex="-1" role="dialog" aria-labelledby="duplicateConfirmation" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Duplicate Program</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <form action="{{ route('programs.duplicate', $program->program_id) }}" method="GET">
-                                    @csrf
-                                    {{method_field('GET')}}
-
-                                    <div class="modal-body">
-
-                                        <div class="form-group row">
-                                            <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>
-                                            <div class="col-md-8">
-                                                <input id="program" type="text" class="form-control @error('program') is-invalid @enderror" name="program" value="{{$program->program}} - Copy" required autofocus>
-                                                @error('program')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                        <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="{{ route('programs.duplicate', $program->program_id) }}" style="width:200px" class="btn btn-success btn-sm float-right">Duplicate Program</a>
                 </div>
             </div>
         @endif
-        @if (!$isEditor && !$isViewer) 
+        @if (!$isEditor && !$isViewer)
             <div class="row">
                 <div class="col">
                         <!-- Edit button -->
@@ -71,7 +32,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        
+
                                         <form method="POST" action="{{route('programs.update', $program->program_id)}}">
                                             @csrf
                                             {{method_field('POST')}}
@@ -95,7 +56,7 @@
 
                                                     <div class="col-md-8">
                                                         <select id='campus' class="custom-select" name="campus">
-                                                            
+
                                                         </select>
                                                         <input id='campus-text' class="form-control" name="campus" type="text" placeholder="(Optional) Enter the Campus" disabled hidden></input>
                                                         @error('faculty')
@@ -146,7 +107,7 @@
                                                     <div class="col-md-8">
                                                         <div class="form-check ">
                                                             <label class="form-check-label">
-                                                            @if ($program->level == "Undergraduate" || $program->level == "Bachelors") 
+                                                            @if ($program->level == "Undergraduate" || $program->level == "Bachelors")
                                                             <input type="radio" class="form-check-input" name="level" value="Bachelors" checked>
                                                                 Bachelors
                                                             @else
@@ -157,7 +118,7 @@
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                            @if ($program->level == "Masters") 
+                                                            @if ($program->level == "Masters")
                                                                 <input type="radio" class="form-check-input" name="level" value="Masters" checked>
                                                                 Masters
                                                             @else
@@ -179,7 +140,7 @@
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                @if ($program->level == "Other") 
+                                                                @if ($program->level == "Other")
                                                                     <input type="radio" class="form-check-input" name="level" value="Other" checked>
                                                                     Other
                                                                 @else
@@ -210,7 +171,7 @@
                     <div class="col">
                         <!-- Assign Collaborator button  -->
                         <button type="button" class="btn btn-outline-primary btn-sm float-right" style="width:200px" data-bs-toggle="modal" data-bs-target="#addProgramCollaboratorsModal{{$program->program_id}}">Add Collaborators</button>
-                        <!-- Program Collaborators Modal -->  
+                        <!-- Program Collaborators Modal -->
                         @include('programs.programCollabs')
                     </div>
                 </div>
@@ -248,7 +209,7 @@
         </div>
 
     </div>
-    @if (! $isViewer) 
+    @if (! $isViewer)
     <!-- progress bar -->
     <div class="mt-5">
         <table class="table table-borderless text-center table-sm" style="table-layout: fixed; width: 100%">
@@ -405,7 +366,7 @@
         if ($('#campus').find(':selected').text() == 'Vancouver') {
             // Hide text / show select
             campusDefaultOption();
-            
+
             //Displays Vancouver Faculties
             // delete drop down items
             $('#faculty').empty();
@@ -482,7 +443,7 @@
 
         });
 
-        $('#department').change( function() { 
+        $('#department').change( function() {
             if ($('#department').find(':selected').val() !== 'Other') {
                 departmentDefaultOption();
             } else {
@@ -566,9 +527,9 @@
             var currentLength = event.target.value.length;
             var whiteSpace = event.target.value.split(/\n/).length;
             if((currentLength+(whiteSpace))>MAX_LENGTH)
-            { 
+            {
                 //Goes to MAX_LENGTH-(whiteSpace)+1 because it starts at 1
-                event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);	        
+                event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);
             }
         }
     });

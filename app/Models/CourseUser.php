@@ -11,11 +11,9 @@ class CourseUser extends Model
 
     protected $table = 'course_users';
 
-    protected $primary = 'id';
+    protected $primaryKey = 'id';
 
-    protected $guarded = ['permission'];
+    protected $guarded = ['id'];
 
-    protected $fillable = ['user_id', 'course_id'];
-
-    public $incrementing = false;
+    protected $fillable = ['user_id', 'course_id', 'permission'];
 }
