@@ -24,25 +24,13 @@ class CourseCloneRequestController extends Controller
 
     public function approve(Request $request, CourseCloneRequest $courseCloneRequest): View
     {
-        $approver = $this->resolveApprover($request, $courseCloneRequest);
+        $validationResult = $this->validateRequest($request, $courseCloneRequest, 'approval');
 
-        if ($approver === null) {
-            return $this->renderResult('Invalid Approval Link', 'We could not verify this approval link.');
+        if ($validationResult instanceof View) {
+            return $validationResult;
         }
 
-        if (! $courseCloneRequest->matchesToken($request->query('token'))) {
-            return $this->renderResult('Invalid Approval Link', 'This approval link is invalid or has already been used.');
-        }
-
-        if ($courseCloneRequest->isExpired()) {
-            $courseCloneRequest->markExpired();
-
-            return $this->renderResult('Request Expired', 'This clone request has expired. The requester will need to send a new approval link.');
-        }
-
-        if (! $courseCloneRequest->isPending()) {
-            return $this->renderResult('Already Processed', 'This clone request has already been processed. No further action is required.');
-        }
+        $approver = $validationResult;
 
         DB::transaction(function () use ($courseCloneRequest, $approver) {
             $courseCloneRequest->markApproved($approver);
@@ -55,14 +43,30 @@ class CourseCloneRequestController extends Controller
 
     public function deny(Request $request, CourseCloneRequest $courseCloneRequest): View
     {
+        $validationResult = $this->validateRequest($request, $courseCloneRequest, 'denial');
+
+        if ($validationResult instanceof View) {
+            return $validationResult;
+        }
+
+        $approver = $validationResult;
+
+        $courseCloneRequest->markDenied($approver);
+
+        return $this->renderResult('Clone Request Denied', 'We have recorded your decision. The requester has been notified.');
+    }
+
+    private function validateRequest(Request $request, CourseCloneRequest $courseCloneRequest, string $actionType): View|User
+    {
+        $linkType = ucfirst($actionType) . ' Link';
         $approver = $this->resolveApprover($request, $courseCloneRequest);
 
         if ($approver === null) {
-            return $this->renderResult('Invalid Denial Link', 'We could not verify this denial link.');
+            return $this->renderResult("Invalid {$linkType}", "We could not verify this {$actionType} link.");
         }
 
         if (! $courseCloneRequest->matchesToken($request->query('token'))) {
-            return $this->renderResult('Invalid Denial Link', 'This denial link is invalid or has already been used.');
+            return $this->renderResult("Invalid {$linkType}", "This {$actionType} link is invalid or has already been used.");
         }
 
         if ($courseCloneRequest->isExpired()) {
@@ -75,9 +79,7 @@ class CourseCloneRequestController extends Controller
             return $this->renderResult('Already Processed', 'This clone request has already been processed. No further action is required.');
         }
 
-        $courseCloneRequest->markDenied($approver);
-
-        return $this->renderResult('Clone Request Denied', 'We have recorded your decision. The requester has been notified.');
+        return $approver;
     }
 
     public function resend(Request $request, CourseCloneRequest $courseCloneRequest): RedirectResponse
