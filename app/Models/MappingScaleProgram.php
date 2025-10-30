@@ -14,6 +14,8 @@ class MappingScaleProgram extends Model
 
     public $incrementing = false;
 
+    protected $fillable = ['map_scale_id', 'program_id'];
+
     public function mappingScales(): BelongsTo
     {
         return $this->belongsTo(MappingScale::class);
