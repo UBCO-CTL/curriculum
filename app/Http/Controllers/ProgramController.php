@@ -3271,6 +3271,14 @@ class ProgramController extends Controller
         $oldProgram = Program::findOrFail($program_id);
         $oldProgram->loadMissing(['ploCategories', 'programLearningOutcomes', 'mappingScalePrograms']);
 
+        $programUser = ProgramUser::where('program_id', $oldProgram->program_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($programUser === null || (int) $programUser->permission === 3) {
+            abort(403);
+        }
+
         $coursePrograms = CourseProgram::where('program_id', $oldProgram->program_id)->get();
         $courseIds = $coursePrograms->pluck('course_id')->all();
         $courses = Course::whereIn('course_id', $courseIds)->get()->keyBy('course_id');
