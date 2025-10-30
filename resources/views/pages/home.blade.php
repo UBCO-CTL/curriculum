@@ -126,52 +126,12 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <a class="dropdown-item" data-toggle="modal" data-target="#duplicateProgramConfirmation{{$program->program_id}}">Duplicate</a>
+                                        <a class="dropdown-item" href="{{ route('programs.duplicate', $program->program_id) }}">Duplicate</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteProgram{{$index}}" href=#>Delete</a>
                                     </div>
                                 </div>
                                 <!-- end drop down -->
-
-                                <!-- Duplicate Confirmation Modal -->
-                                <div class="modal fade" id="duplicateProgramConfirmation{{$program->program_id}}" tabindex="-1" role="dialog" aria-labelledby="duplicateProgramConfirmation" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Duplicate Program</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form action="{{ route('programs.duplicate', $program->program_id) }}" method="GET">
-                                                @csrf
-                                                {{method_field('GET')}}
-
-                                                <div class="modal-body">
-
-                                                    <div class="form-group row">
-                                                        <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>
-                                                        <div class="col-md-8">
-                                                            <input id="program" type="text" class="form-control @error('program') is-invalid @enderror" name="program" value="{{$program->program}} - Copy" required autofocus>
-                                                            @error('program')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                                    <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <!-- program collaborators modal -->
                                 @include('programs.programCollabs', ['program-' . $program->program_id, $program->program_id])
@@ -264,50 +224,12 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <a class="dropdown-item" data-toggle="modal" data-target="#duplicateProgramConfirmation{{$program->program_id}}">Duplicate</a>
+                                        <a class="dropdown-item" href="{{ route('programs.duplicate', $program->program_id) }}">Duplicate</a>
                                     </div>
                                 </div>
                                 <!-- end drop down -->
 
                                 <!-- Duplicate Confirmation Modal -->
-                                <div class="modal fade" id="duplicateProgramConfirmation{{$program->program_id}}" tabindex="-1" role="dialog" aria-labelledby="duplicateProgramConfirmation" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Duplicate Program</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form action="{{ route('programs.duplicate', $program->program_id) }}" method="GET">
-                                                @csrf
-                                                {{method_field('GET')}}
-
-                                                <div class="modal-body">
-
-                                                    <div class="form-group row">
-                                                        <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>
-                                                        <div class="col-md-8">
-                                                            <input id="program" type="text" class="form-control @error('program') is-invalid @enderror" name="program" value="{{$program->program}} - Copy" required autofocus>
-                                                            @error('program')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                                    <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <!-- program collaborators modal -->
                                 @include('programs.programCollabs', ['program-' . $program->program_id, $program->program_id])
