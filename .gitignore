@@ -15,3 +15,9 @@ database/seeders/UserSeeder.php
 resources/views/emails/
 public/*.xlsx
 storage/app/public
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+.env.testing
