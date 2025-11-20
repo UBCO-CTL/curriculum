@@ -49,8 +49,7 @@ class ProgramAIController extends Controller
             return redirect()
                 ->route('programWizard.step4', $program->program_id)
                 ->withInput()
-                ->with('aiComparisonError', $exception->getMessage());
-        } catch (Throwable $exception) {
+                ->with('aiComparisonError', 'The AI comparison could not be completed. Please verify your inputs and try again.');        } catch (Throwable $exception) {
             report($exception);
 
             return redirect()
