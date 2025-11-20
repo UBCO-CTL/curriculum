@@ -18,19 +18,23 @@ class HasAccessMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $course_id = $request->route()->parameter('course');
-        $program_id = $request->route()->parameter('program');
-        $syllabus_id = $request->route()->parameter('syllabusId');
+        $courseParam = $request->route()->parameter('course');
+        $programParam = $request->route()->parameter('program');
+        $syllabusParam = $request->route()->parameter('syllabusId');
         // get current user
         $user = User::where('id', Auth::id())->first();
 
-        if ($course_id != null) {
+        $course = $this->resolveCourse($courseParam);
+        $program = $this->resolveProgram($programParam);
+        $syllabus = $this->resolveSyllabus($syllabusParam);
+
+        if ($course instanceof Course) {
             // get all users for the course
-            $courseUsers = Course::find($course_id)->users;
+            $courseUsers = $course->users;
             // check if the current user belongs to this course
             if (! in_array($user->id, $courseUsers->pluck('id')->toArray())) {
                 // user does not belong to this course
-                $request->session()->flash('error', 'You do not have access to this course');
+                session()->flash('error', 'You do not have access to this course');
 
                 return redirect()->route('home');
             } else {
@@ -52,13 +56,13 @@ class HasAccessMiddleware
                         // default
                 }
             }
-        } elseif ($program_id != null) {
+        } elseif ($program instanceof Program) {
             // get all users for the program
-            $programUsers = Program::find($program_id)->users;
+            $programUsers = $program->users;
             // check if the current user belongs to this program
             if (! in_array($user->id, $programUsers->pluck('id')->toArray())) {
                 // user does not belong to this program
-                $request->session()->flash('error', 'You do not have access to this program');
+                session()->flash('error', 'You do not have access to this program');
 
                 return redirect()->route('home');
             } else {
@@ -81,19 +85,57 @@ class HasAccessMiddleware
                 }
             }
 
-        } elseif ($syllabus_id != null) {
-            $syllabus = Syllabus::find($syllabus_id);
+        } elseif ($syllabus instanceof Syllabus) {
             // get all users for the syllabus
-            $syllabusUsers = Syllabus::find($syllabus_id)->users;
+            $syllabusUsers = $syllabus->users;
             // check if the current user belongs to this syllabus
             if (! in_array($user->id, $syllabusUsers->pluck('id')->toArray())) {
                 // user does not belong to this syllabus
-                $request->session()->flash('error', 'You do not have access to this syllabus');
+                session()->flash('error', 'You do not have access to this syllabus');
 
                 return redirect()->route('home');
             }
         }
 
         return $next($request);
+    }
+
+    private function resolveCourse($courseParam): ?Course
+    {
+        if ($courseParam instanceof Course) {
+            return $courseParam;
+        }
+
+        if ($courseParam) {
+            return Course::find($courseParam);
+        }
+
+        return null;
+    }
+
+    private function resolveProgram($programParam): ?Program
+    {
+        if ($programParam instanceof Program) {
+            return $programParam;
+        }
+
+        if ($programParam) {
+            return Program::find($programParam);
+        }
+
+        return null;
+    }
+
+    private function resolveSyllabus($syllabusParam): ?Syllabus
+    {
+        if ($syllabusParam instanceof Syllabus) {
+            return $syllabusParam;
+        }
+
+        if ($syllabusParam) {
+            return Syllabus::find($syllabusParam);
+        }
+
+        return null;
     }
 }
