@@ -1,9 +1,16 @@
-@extends(backpack_user() && (Str::startsWith(\Request::path(), config('backpack.base.route_prefix'))) ? 'backpack::layouts.top_left' : 'backpack::layouts.plain')
-{{-- show error using sidebar layout if looged in AND on an admin page; otherwise use a blank page --}}
-
 @php
-  $title = 'Error '.$error_number;
+    $useBackpackLayout = false;
+    if (function_exists('backpack_user') && class_exists(\Backpack\Base\app\Http\Middleware\CheckIfAdmin::class)) {
+        try {
+            $useBackpackLayout = backpack_user() && Str::startsWith(\Request::path(), config('backpack.base.route_prefix', 'admin'));
+        } catch (\Exception $e) {
+            $useBackpackLayout = false;
+        }
+    }
+    $title = 'Error '.$error_number;
 @endphp
+@extends($useBackpackLayout ? 'backpack::layouts.top_left' : 'layouts.app')
+{{-- show error using sidebar layout if logged in AND on an admin page; otherwise use standard app layout --}}
 
 @section('after_styles')
   <style>
