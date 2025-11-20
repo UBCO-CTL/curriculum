@@ -9,25 +9,22 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-
         "backpack/crud": "^6.8",
         "barryvdh/laravel-dompdf": "^2.1",
         "consoletvs/charts": "6.7",
-
         "doctrine/dbal": "^3.5",
         "dompdf/dompdf": "^2.0.4",
         "google/recaptcha": "1.2.*",
         "guzzlehttp/guzzle": "^7.8",
         "laminas/laminas-escaper": "^2.11",
-
         "laravel/framework": "^11.39",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.4",
-
         "maennchen/zipstream-php": "^2.4.0",
         "myclabs/php-enum": "^1.8",
         "phpoffice/phpspreadsheet": "^1.29",
-        "phpoffice/phpword": "^0.18.1"
+        "phpoffice/phpword": "^0.18.1",
+        "prism-php/prism": "^0.98.2"
     },
     "require-dev": {
 
