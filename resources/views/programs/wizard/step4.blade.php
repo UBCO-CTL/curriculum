@@ -104,122 +104,140 @@
                                 $hasComparisonPrograms = isset($comparisonPrograms) && $comparisonPrograms->count() > 0;
                                 $aiReportHtml = $aiComparisonReportHtml ?? null;
                             @endphp
-                            <div class="mb-4 p-4 border rounded-4 shadow-sm bg-light-subtle">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
-                                    <div>
-                                        <p class="text-uppercase text-muted small fw-semibold mb-1">AI Program Comparison</p>
-                                        <h4 class="mb-0">Benchmark two curricula with AI</h4>
-                                    </div>
-                                    <span class="badge text-bg-primary-subtle text-primary border border-primary">{{ $aiModelDisplay }}</span>
-                                </div>
+                            <div class="mb-4 border rounded-4 shadow-sm bg-light-subtle">
+                                <h2 class="accordion-header" id="aiComparisonHeader">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aiComparisonCollapse" aria-expanded="true" aria-controls="aiComparisonCollapse">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between w-100 me-3">
+                                            <div>
+                                                <p class="text-uppercase text-muted small fw-semibold mb-1">AI Program Comparison</p>
+                                                </div>
+                                                <div>
+                                                <h4 class="mb-0 d-inline-flex align-items-center">Benchmark two curricula with AI<span class="badge bg-info text-dark ms-2" style="font-size: 0.65em; padding: 0.25em 0.5em;">Beta</span></h4>
+                                            </div>
+                                            <span class="badge text-bg-primary-subtle text-primary border border-primary">{{ $aiModelDisplay }}</span>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="aiComparisonCollapse" class="accordion-collapse collapse show" aria-labelledby="aiComparisonHeader">
+                                    <div class="accordion-body p-4">
+                                        <div class="row g-4">
+                                            <div class="col-lg-5">
+                                                <div class="mb-4">
+                                                    <div class="row g-2 mb-3">
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Program PLOs</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $ploCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Reference program</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Mapped courses</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $courseCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Courses linked</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Mapping scales</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $msCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Active entries</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                <div class="row g-3 mb-4">
-                                    <div class="col-md-4">
-                                        <div class="h-100 border rounded-4 bg-white p-3">
-                                            <div class="text-muted small">Program PLOs</div>
-                                            <div class="fs-3 fw-bold text-primary">{{ $ploCount }}</div>
-                                            <div class="small text-muted">Reference program</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="h-100 border rounded-4 bg-white p-3">
-                                            <div class="text-muted small">Mapped courses</div>
-                                            <div class="fs-3 fw-bold text-primary">{{ $courseCount }}</div>
-                                            <div class="small text-muted">Courses linked to this program</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="h-100 border rounded-4 bg-white p-3">
-                                            <div class="text-muted small">Mapping scales</div>
-                                            <div class="fs-3 fw-bold text-primary">{{ $msCount }}</div>
-                                            <div class="small text-muted">Active scale entries</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                <div class="bg-white border rounded-3 p-3 mb-3">
+                                                    <h6 class="text-uppercase text-muted small mb-2">What leaves the system</h6>
+                                                    <ul class="small text-muted mb-2 ps-3">
+                                                        <li>Program metadata (name, faculty, level, campus, status)</li>
+                                                        <li>PLO statements with categories + alignment counts (truncated & capped)</li>
+                                                        <li>Course codes, titles, level bucket, required/elective flag</li>
+                                                    </ul>
+                                                    <p class="text-muted small mb-0">
+                                                        No user names, emails, or annotations are sent. See our <a href="{{ route('terms') }}" target="_blank" rel="noopener noreferrer">Terms</a> for privacy and cost details.
+                                                    </p>
+                                                </div>
 
-                                <div class="row g-4 mb-3">
-                                    <div class="col-lg-7">
-                                        <div class="bg-white border rounded-3 p-3 h-100">
-                                            <h6 class="text-uppercase text-muted small mb-2">What leaves the system</h6>
-                                            <ul class="small text-muted mb-0 ps-3">
-                                                <li>Program metadata (name, faculty, level, campus, status)</li>
-                                                <li>PLO statements with categories + alignment counts (truncated & capped)</li>
-                                                <li>Course codes, titles, level bucket, required/elective flag</li>
-                                            </ul>
-                                            <p class="text-muted small mt-2 mb-0">
-                                                No user names, emails, or annotations are sent. See our <a href="{{ route('terms') }}" target="_blank" rel="noopener noreferrer">Terms</a> for privacy and cost details.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <div class="bg-white border rounded-3 p-3 h-100">
-                                            <form method="POST" action="{{ route('programs.ai.compare', $program->program_id) }}">
-                                                @csrf
-                                                <div class="mb-3">
-                                                    <label for="comparison_program_id" class="form-label fw-semibold">Compare against</label>
-                                                    <select id="comparison_program_id" name="comparison_program_id" class="form-select" @if (! $hasComparisonPrograms) disabled @endif required>
-                                                        <option value="" selected hidden>Select a program</option>
-                                                        @foreach ($comparisonPrograms as $candidateProgram)
-                                                            <option value="{{ $candidateProgram->program_id }}" {{ (int) $selectedProgramId === (int) $candidateProgram->program_id ? 'selected' : '' }}>
-                                                                {{ $candidateProgram->program }} • {{ $candidateProgram->faculty ?? 'Faculty N/A' }} • {{ $candidateProgram->level ?? 'Level N/A' }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('comparison_program_id')
-                                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                                    @enderror
-                                                    @if (! $hasComparisonPrograms)
-                                                        <div class="text-muted small mt-1">Add or request access to another program to unlock comparisons.</div>
+                                                <div class="bg-white border rounded-3 p-4">
+                                                    <form method="POST" action="{{ route('programs.ai.compare', $program->program_id) }}">
+                                                        @csrf
+                                                        <div class="mb-3">
+                                                            <label for="comparison_program_id" class="form-label fw-semibold">Compare against</label>
+                                                            <select id="comparison_program_id" name="comparison_program_id" class="form-select" @if (! $hasComparisonPrograms) disabled @endif required>
+                                                                <option value="" selected hidden>Select a program</option>
+                                                                @foreach ($comparisonPrograms as $candidateProgram)
+                                                                    <option value="{{ $candidateProgram->program_id }}" {{ (int) $selectedProgramId === (int) $candidateProgram->program_id ? 'selected' : '' }}>
+                                                                        {{ $candidateProgram->program }} • {{ $candidateProgram->faculty ?? 'Faculty N/A' }} • {{ $candidateProgram->level ?? 'Level N/A' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('comparison_program_id')
+                                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                                            @enderror
+                                                            @if (! $hasComparisonPrograms)
+                                                                <div class="text-muted small mt-1">Add or request access to another program to unlock comparisons.</div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-check mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="ai_opt_in" name="ai_opt_in" value="1" {{ old('ai_opt_in') ? 'checked' : '' }} required>
+                                                            <label class="form-check-label small" for="ai_opt_in">
+                                                                I consent to send the summarized curriculum data above to {{ $aiProviderName }} for analysis.
+                                                            </label>
+                                                            @error('ai_opt_in')
+                                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary w-100" @if (! $hasComparisonPrograms) disabled @endif>
+                                                            Generate comparison
+                                                        </button>
+                                                        @if (session('aiComparisonError'))
+                                                            <div class="alert alert-danger mt-3 mb-0">{{ session('aiComparisonError') }}</div>
+                                                        @endif
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-7">
+                                                <div class="bg-white border rounded-3 p-4 h-100" style="min-height: 400px; max-height: 800px; overflow-y: auto;">
+                                                    @if ($aiReportHtml)
+                                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                                            <div>
+                                                                <h5 class="mb-0">Latest AI output</h5>
+                                                                @if ($aiComparisonProgramName)
+                                                                    <small class="text-muted">Compared against {{ $aiComparisonProgramName }}</small>
+                                                                @endif
+                                                            </div>
+                                                            <span class="badge bg-warning text-dark">Human review required</span>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="markdown-body">
+                                                            {!! $aiReportHtml !!}
+                                                        </div>
+                                                        <p class="text-muted small mt-3 mb-0">Validate insights with your curriculum team before acting.</p>
+                                                    @elseif ($hasComparisonPrograms)
+                                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                                            <div class="text-center">
+                                                                <i class="bi bi-magic text-primary fs-1 mb-3"></i>
+                                                                <h5>No AI report yet</h5>
+                                                                <p class="text-muted">Select a comparison program and generate your first set of AI insights.</p>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                                            <div class="text-center">
+                                                                <i class="bi bi-info-circle text-muted fs-1 mb-3"></i>
+                                                                <h5>No comparison programs available</h5>
+                                                                <p class="text-muted">Add or request access to another program to unlock comparisons.</p>
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 </div>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="checkbox" id="ai_opt_in" name="ai_opt_in" value="1" {{ old('ai_opt_in') ? 'checked' : '' }} required>
-                                                    <label class="form-check-label small" for="ai_opt_in">
-                                                        I consent to send the summarized curriculum data above to {{ $aiProviderName }} for analysis.
-                                                    </label>
-                                                    @error('ai_opt_in')
-                                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                                <button type="submit" class="btn btn-primary w-100" @if (! $hasComparisonPrograms) disabled @endif>
-                                                    Generate comparison
-                                                </button>
-                                                @if (session('aiComparisonError'))
-                                                    <div class="alert alert-danger mt-3 mb-0">{{ session('aiComparisonError') }}</div>
-                                                @endif
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                @if ($aiReportHtml)
-                                    <div class="border rounded-4 bg-white p-4">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                                            <div>
-                                                <h5 class="mb-0">Latest AI output</h5>
-                                                @if ($aiComparisonProgramName)
-                                                    <small class="text-muted">Compared against {{ $aiComparisonProgramName }}</small>
-                                                @endif
-                                            </div>
-                                            <span class="badge bg-warning text-dark">Human review required</span>
-                                        </div>
-                                        <hr>
-                                        <div class="markdown-body">
-                                            {!! $aiComparisonReportHtml !!}
-                                        </div>
-                                        <p class="text-muted small mt-3 mb-0">Validate insights with your curriculum team before acting.</p>
-                                    </div>
-                                @elseif ($hasComparisonPrograms)
-                                    <div class="bg-white border rounded-3 p-4">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-magic text-primary fs-4 me-3"></i>
-                                            <div>
-                                                <strong>No AI report yet</strong>
-                                                <p class="text-muted small mb-0">Select a comparison program and generate your first set of AI insights.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         @endif
                         <nav class="mt-2">
@@ -2636,6 +2654,7 @@
             $(this).find(":submit").attr('disabled', 'disabled');
             $(this).find(":submit").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
         });
+
     });
 </script>
 
@@ -2872,6 +2891,18 @@ th {
     display: table;
     width: 100%;
 }
+
+/* AI Comparison responsive styles */
+@media (max-width: 991.98px) {
+    #aiComparisonCollapse .col-lg-5,
+    #aiComparisonCollapse .col-lg-7 {
+        margin-bottom: 1.5rem;
+    }
+    #aiComparisonCollapse .col-lg-7 {
+        min-height: 300px;
+    }
+}
+
 
 </style>
 
