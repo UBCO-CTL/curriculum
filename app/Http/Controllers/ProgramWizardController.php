@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AiComparisonLog;
 use App\Models\AssessmentMethod;
 use App\Models\Campus;
 use App\Models\Course;
@@ -27,6 +28,7 @@ use Doctrine\DBAL\Schema\Index;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -316,6 +318,11 @@ class ProgramWizardController extends Controller
             $programUsers[$program->program_id] = $programsUsers;
         }
 
+        $comparisonPrograms = $myPrograms
+            ->where('program_id', '!=', $program_id)
+            ->sortBy('program')
+            ->values();
+
         //
         $program = Program::where('program_id', $program_id)->first();
 
@@ -471,11 +478,29 @@ class ProgramWizardController extends Controller
             $ploDefaultCount++;
         }
 
+        $latestComparisonLog = AiComparisonLog::where('program_id', $program_id)
+            ->latest()
+            ->first();
+
+        $aiComparisonReport = optional($latestComparisonLog)->report_markdown;
+        $aiComparisonReportHtml = $aiComparisonReport ? Str::markdown($aiComparisonReport) : null;
+        $aiComparisonProgramName = optional($latestComparisonLog)->comparison_program_name;
+        $aiModel = optional($latestComparisonLog)->model ?: config('prism.providers.gemini.model', 'gemini-2.5-flash-preview');
+        $aiModelDisplay = Str::headline(str_replace(['-', '_'], ' ', $aiModel));
+        $aiProviderName = config('prism.providers.gemini.display_name', 'Google Gemini');
+
         return view('programs.wizard.step4')->with('program', $program)
             ->with('faculties', $faculties)->with('departments', $departments)->with('campuses', $campuses)->with('levels', $levels)->with('user', $user)->with('programUsers', $programUsers)
             ->with('ploCount', $ploCount)->with('msCount', $msCount)->with('courseCount', $courseCount)->with('programCourses', $programCourses)->with('numCatUsed', $numCatUsed)->with('unCategorizedPLOS', $unCategorizedPLOS)
             ->with('ploCategories', $ploCategories)->with('plos', $plos)->with('hasUncategorized', $hasUncategorized)->with('ploProgramCategories', $ploProgramCategories)
             ->with('mappingScales', $mappingScales)->with('isEditor', $isEditor)->with('isViewer', $isViewer)
+            ->with('comparisonPrograms', $comparisonPrograms)
+            ->with('aiComparisonReport', $aiComparisonReport)
+            ->with('aiComparisonReportHtml', $aiComparisonReportHtml)
+            ->with('aiComparisonProgramId', optional($latestComparisonLog)->comparison_program_id)
+            ->with('aiComparisonProgramName', $aiComparisonProgramName)
+            ->with('aiModelDisplay', $aiModelDisplay)
+            ->with('aiProviderName', $aiProviderName)
             ->with(compact('programMappingScales'))->with(compact('programMappingScalesColours'))->with(compact('plosInOrder'))->with(compact('freqForMS'))->with('hasUnMappedCourses', $hasUnMappedCourses)->with('defaultShortForms', $defaultShortForms)->with('defaultShortFormsIndex', $defaultShortFormsIndex);
     }
 
