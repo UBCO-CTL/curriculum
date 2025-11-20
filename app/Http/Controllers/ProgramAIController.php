@@ -34,7 +34,8 @@ class ProgramAIController extends Controller
             'ai_opt_in' => ['accepted'],
         ]);
 
-        $comparisonProgram = Program::where('program_id', $validated['comparison_program_id'])->firstOrFail();
+        $program = Program::withCount(['courses', 'programLearningOutcomes'])->findOrFail($program->program_id);
+        $comparisonProgram = Program::withCount(['courses', 'programLearningOutcomes'])->findOrFail($validated['comparison_program_id']);
         $this->guardAccess($comparisonProgram);
 
         try {

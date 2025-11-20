@@ -29,8 +29,8 @@ class ProgramComparisonFormatter
             'level' => $this->clean($program->level),
             'campus' => $this->clean($program->campus ?? null),
             'status' => $this->clean($program->status ?? null),
-            'course_count' => $program->courses()->count(),
-            'plo_count' => $program->programLearningOutcomes()->count(),
+            'course_count' => $program->courses_count ?? $program->courses()->count(),
+            'plo_count' => $program->program_learning_outcomes_count ?? $program->programLearningOutcomes()->count(),
         ];
     }
 
