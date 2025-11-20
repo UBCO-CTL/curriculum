@@ -6,37 +6,38 @@ class ProgramComparisonPromptBuilder
 {
     public function buildSystemPrompt(): string
     {
-        return <<<PROMPT
-You are an impartial expert in curriculum design. Compare two academic programs to:
-- highlight overlapping strengths,
-- identify gaps or areas needing development in the comparison program versus the reference program,
-- suggest concrete improvements (new PLO emphases, course adjustments, sequencing, or assessment refinements).
-
-Ground your analysis strictly in the provided data; do not invent institutional facts or reference individuals.
-PROMPT;
+        return implode("\n", [
+            'You are an experienced curriculum designer.',
+            'Focus on clarity, evidence-based reasoning, and actionable insights.',
+            'Never mention internal IDs or speculate about individuals.',
+            'Highlight when data is missing rather than guessing.',
+            'Format your entire response using Markdown. Use headers, bullet points, and bold text as appropriate for maximum clarity and structure.',
+        ]);
     }
 
-    public function buildUserPrompt(array $referenceProgram, array $comparisonProgram): string
+    public function buildUserPrompt(array $reference, array $comparison): string
     {
-        $payload = [
-            'reference_program' => $referenceProgram,
-            'comparison_program' => $comparisonProgram,
-        ];
+        $referenceJson = json_encode($reference, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $comparisonJson = json_encode($comparison, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-        $instructions = <<<PROMPT
-Using the structured data below, compare `comparison_program` against `reference_program`.
-Respond with three markdown sections titled:
-1. Alignment & Shared Strengths
-2. Gaps or Risks
-3. Recommended Improvements
+        return <<<PROMPT
+You will compare two academic programs. Program A is the reference; Program B is the candidate we want to improve.
 
-Each section should use concise bullet points that cite specific PLOs, course tiers, or alignment counts when possible.
+Program A (Reference):
+{$referenceJson}
+
+Program B (Comparison):
+{$comparisonJson}
+
+Provide a structured response with these sections:
+1. Overview - concise summary of both programs and the biggest deltas.
+2. Strength Overlaps - what Program B already matches from Program A.
+3. Gaps & Risks - missing PLO coverage, course sequencing issues, or assessment gaps.
+4. Improvement Ideas - specific, actionable recommendations to close the gaps (limit to 5).
+5. Suggested Next Checks - human follow-up questions or data you would validate manually.
+
+Use plain text bullet lists, avoid repeating raw JSON, and never invent stakeholder names.
 PROMPT;
-
-        return $instructions . "\n\nDATA:\n" . json_encode(
-            $payload,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-        );
     }
 }
 
