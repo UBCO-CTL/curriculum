@@ -22,8 +22,12 @@ class HasAccessMiddleware
         $programParam = $request->route()->parameter('program');
         $syllabusParam = $request->route()->parameter('syllabusId');
         // get current user
-        $user = User::where('id', Auth::id())->first();
+        $user = Auth::user();
 
+        if (!$user) {
+            session()->flash('error', 'Authentication required');
+            return redirect()->route('home');
+        }
         $course = $this->resolveCourse($courseParam);
         $program = $this->resolveProgram($programParam);
         $syllabus = $this->resolveSyllabus($syllabusParam);
