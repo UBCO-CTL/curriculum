@@ -1285,7 +1285,8 @@ class ProgramController extends Controller
 
             }
 
-            $pdf = PDF::loadView('programs.downloadSummary', compact('charts', 'coursesByLevels', 'ploIndexArray', 'program', 'ploCount', 'msCount', 'courseCount', 'mappingScales', 'programCourses', 'ploCategories', 'ploProgramCategories', 'allPLO', 'plos', 'unCategorizedPLOS', 'numCatUsed', 'uniqueCategories', 'plosPerCategory', 'numUncategorizedPLOS', 'hasUncategorized', 'store', 'tableMS', 'programContent', 'defaultShortForms', 'defaultShortFormsIndex'));
+            $maxPlosPerTable = 15;
+            $pdf = PDF::loadView('programs.downloadSummary', compact('charts', 'coursesByLevels', 'ploIndexArray', 'program', 'ploCount', 'msCount', 'courseCount', 'mappingScales', 'programCourses', 'ploCategories', 'ploProgramCategories', 'allPLO', 'plos', 'unCategorizedPLOS', 'numCatUsed', 'uniqueCategories', 'plosPerCategory', 'numUncategorizedPLOS', 'hasUncategorized', 'store', 'tableMS', 'programContent', 'defaultShortForms', 'defaultShortFormsIndex', 'maxPlosPerTable'));
             // get the content of the pdf document
             $content = $pdf->output();
             // set name of pdf
@@ -1340,8 +1341,8 @@ class ProgramController extends Controller
             $program = Program::find($programId);
             // create the spreadsheet
             $spreadsheet = new Spreadsheet;
-            // create array of column names
-            $columns = range('A', 'Z');
+            // create array of column names (A-Z, then AA-AZ for up to 52 columns)
+            $columns = array_merge(range('A', 'Z'), array_map(fn($c) => 'A' . $c, range('A', 'Z')));
             // create array of styles for spreadsheet
             $styles = [
                 'primaryHeading' => [
@@ -1413,8 +1414,8 @@ class ProgramController extends Controller
             $program = Program::find($programId);
             // create the spreadsheet
             $spreadsheet = new Spreadsheet;
-            // create array of column names
-            $columns = range('A', 'Z');
+            // create array of column names (A-Z, then AA-AZ for up to 52 columns)
+            $columns = array_merge(range('A', 'Z'), array_map(fn($c) => 'A' . $c, range('A', 'Z')));
             // create array of styles for spreadsheet
             $styles = [
                 'primaryHeading' => [
