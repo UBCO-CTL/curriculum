@@ -137,6 +137,10 @@
                                                     Add Note
                                                 </button>
 
+                                                @php
+                                                    $userHasCourseAccess = $programCourse->users->contains('id', $user->id);
+                                                @endphp
+
                                                 @if($programCourse->owners[0]->id == $user->id)
                                                     <!-- Allow owner to be redirected to the course to map it -->
                                                     @if ($programCourse->learningOutcomes->count() > 0)
@@ -156,6 +160,51 @@
                                                         @endif
                                                     @endif
                                                 @endforeach
+
+                                                @foreach($programCourse->viewers as $viewer)
+                                                    @if($viewer->id == $user->id)
+                                                        <a href="{{ route('courseWizard.step7', $programCourse->course_id) }}" class="btn btn-outline-secondary btn-sm ml-2 float-right">View Course</a>
+                                                    @endif
+                                                @endforeach
+
+                                                @if(!$userHasCourseAccess)
+                                                    <button type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" data-toggle="modal" data-target="#requestAccess{{$programCourse->course_id}}">Request access</button>
+
+                                                    <div class="modal fade" id="requestAccess{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="requestAccessLabel{{$programCourse->course_id}}" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="requestAccessLabel{{$programCourse->course_id}}">Request access</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                </div>
+                                                                <form method="POST" action="{{ route('courses.requestAccess', $programCourse->course_id) }}">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="access" id="access-view-{{$programCourse->course_id}}" value="view" checked>
+                                                                            <label class="form-check-label" for="access-view-{{$programCourse->course_id}}">
+                                                                                View
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="access" id="access-edit-{{$programCourse->course_id}}" value="edit">
+                                                                            <label class="form-check-label" for="access-edit-{{$programCourse->course_id}}">
+                                                                                Edit
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="mt-3">
+                                                                            <textarea class="form-control" name="message" rows="3" maxlength="500" placeholder="Optional message to the course owner"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-primary btn-sm">Send request</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
 
                                                 <!-- Delete Confirmation Modal -->
                                                 <div class="modal fade" id="deleteConfirmationCourse{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationCourse" aria-hidden="true">
