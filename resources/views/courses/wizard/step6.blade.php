@@ -14,7 +14,7 @@
 
             <div class="card">
                 <h3 class="card-header wizard" >
-                    BC Degree Standards and Strategic Priorities
+                    BC Degree Standards and UBC Strategic Priorities
                     <div style="float: right;">
                             <button id="standardsHelp" style="border: none; background: none; outline: none;" data-bs-toggle="modal" href="#guideModal">
                                 <i class="bi bi-question-circle" style="color:#002145;"></i>
@@ -29,7 +29,7 @@
                     <nav class="mt-2">
                         <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                             <button class="nav-link active" id="nav-standards-tab" data-bs-toggle="tab" data-bs-target="#nav-standards" type="button" role="tab" aria-controls="nav-standards" aria-selected="true">BC Degree Standards</button>
-                            <button class="nav-link" id="nav-priorities-tab" data-bs-toggle="tab" data-bs-target="#nav-priorities" type="button" role="tab" aria-controls="nav-priorities" aria-selected="false">Strategic Priorities</button>
+                            <button class="nav-link" id="nav-priorities-tab" data-bs-toggle="tab" data-bs-target="#nav-priorities" type="button" role="tab" aria-controls="nav-priorities" aria-selected="false">UBC Strategic Priorities</button>
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
@@ -43,7 +43,7 @@
                                 <div class="alert alert-primary d-flex align-items-center mt-3" role="alert" style="text-align:justify">
                                     <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                                     <div>
-                                        In lieu of specific PLOs, the below are the <a class="alert-link" href="https://www2.gov.bc.ca/assets/gov/education/post-secondary-education/institution-resources-administration/degree-authorization/bc_public_institution_quality_assessment_handbook.pdf#page=48" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right"></i> standards provided by the BC Ministry of Post-Secondary Education and Future Skills</a>. Using the mapping scale provided, identify the alignment between this course against the ministry standards for the degree level.
+                                        In lieu of specific PLOs, the below are the <a class="alert-link" href="https://www2.gov.bc.ca/assets/gov/education/post-secondary-education/institution-resources-administration/degree-authorization/bc_public_institution_quality_assessment_handbook.pdf#page=49" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right"></i> standards provided by the BC Ministry of Post-Secondary Education and Future Skills</a>. Using the mapping scale provided, identify the alignment between this course against the ministry standards for the degree level.
                                     </div>
                                 </div>
 

@@ -25,7 +25,7 @@
                     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
                         <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div>
-                            Input all <a href="https://ctlt.ubc.ca/resources/webliography/assessmentevaluation/" target="_blank" rel="noopener noreferrer" class="alert-link">
+                            Input all <a href="https://ctl.ok.ubc.ca/teaching/course-design/assessment/assessment-strategies/" target="_blank" rel="noopener noreferrer" class="alert-link">
                                 <i class="bi bi-box-arrow-up-right"></i> assessment methods
                             </a>
                             of the course individually. You may also choose to use the

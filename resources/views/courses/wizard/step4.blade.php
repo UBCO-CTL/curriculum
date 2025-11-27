@@ -15,7 +15,7 @@
                                 <i class="bi bi-question-circle" style="color:#002145;"></i>
                             </button>
                         </div>
-                        
+
                         <div class="text-left">
                             @include('layouts.guide')
                         </div>
@@ -24,20 +24,20 @@
 
                     <div class="card-body">
                         <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-                            <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                            <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                             <div>
-                                This step, requires instructors to intentionally evaluate all course elements to achieve <a class="alert-link"target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=uPP9U-crnfQ"><i class="bi bi-box-arrow-up-right"></i> course alignment.</a> This means, ensuring that the targeted learning outcomes are in alignment with the assessment methods and teaching/instructional practices. This can be an iterative process and may take a long time. Intentional evaluation and re-thinking of some course elements is encouraged to achieve better alignment. <b>Review CLOs/competencies you have identified, and map assessment methods to teaching and learning activities to initiate curriculum alignment.</b>      
+                                This step, requires instructors to intentionally evaluate all course elements to achieve <a class="alert-link"target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=uPP9U-crnfQ"><i class="bi bi-box-arrow-up-right"></i> course alignment</a> (12 min video). This means, ensuring that the targeted learning outcomes are in alignment with the assessment methods and teaching/instructional practices. This can be an iterative process and may take a long time. Intentional evaluation and re-thinking of some course elements is encouraged to achieve better alignment. <b>Review CLOs/competencies you have identified, and map assessment methods to teaching and learning activities to initiate curriculum alignment.</b>
                             </div>
                         </div>
 
                         @if(count($l_outcomes)<1)
                             <div class="alert alert-warning wizard">
-                                <i class="bi bi-exclamation-circle-fill"></i>There are no course learning outcomes set for this course.                    
+                                <i class="bi bi-exclamation-circle-fill"></i>There are no course learning outcomes set for this course.
                             </div>
                         @else
                             @if(count($l_activities)<1 && count($a_methods)<1)
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill"></i>There are no teaching/learning activities and assessment methods set for this course.                    
+                                    <i class="bi bi-exclamation-circle-fill"></i>There are no teaching/learning activities and assessment methods set for this course.
                                 </div>
                             @else
                                 <div>
@@ -51,7 +51,7 @@
                                         @csrf
                                         <table class="table table-light reorder-tbl-rows align-table">
                                             <thead>
-                                                <tr class="table-primary"> 
+                                                <tr class="table-primary">
                                                     <th class="w-auto"></th>
                                                     <th class="w-50">Course Learning Outcomes or Competencies</th>
                                                     <th class="w-25">Student Assessment Methods</th>
@@ -100,7 +100,7 @@
                             @endif
                         @endif
                     </div>
-                        
+
                     <!-- card footer -->
                     <div class="card-footer justify-content-center">
                         <div class="card-body mb-4">
@@ -111,9 +111,9 @@
                                 <button class="btn btn-primary btn-sm col-3 float-right">Program Outcome Mapping <i class="bi bi-arrow-right ml-2"></i></button>
                             </a>
                         </div>
-                    </div>    
+                    </div>
                 </div>
-            </div>        
+            </div>
         </div>
 </div>
 

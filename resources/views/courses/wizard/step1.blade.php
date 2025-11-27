@@ -118,7 +118,7 @@
                                 <i class="bi bi-box-arrow-up-right"></i> Course Learning Outcomes (CLOs)
                             </a>
                             or
-                            <a href="https://sph.uth.edu/content/uploads/2012/01/Competencies-and-Learning-Objectives.pdf" target="_blank" rel="noopener noreferrer" class="alert-link">
+                            <a href="https://carleton.ca/employability-framework/areas-of-focus/career-competencies/" target="_blank" rel="noopener noreferrer" class="alert-link">
                                 <i class="bi bi-box-arrow-up-right"></i> Competencies
                             </a>
                             are the knowledge, skills and attributes that students are expected to attain by the end of a course. Add, edit and delete CLOs below.
