@@ -9,7 +9,13 @@
 
     </div>
 </div>
-
+<div class="alert alert-warning">
+        <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <div>
+            The UBC Curriculum MAP will have scheduled downtime on <b>Friday, December 5th from 9:00AM to 12:00PM </b> for regular maintenance. We apologize for this inconvenience. Please email ctl.helpdesk@ubc.ca with any questions or concerns.
+        </div>
+    </div>
 <!-- Notification -->
 @if ($user->has_temp == 1)
     <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastPlacement" style="z-index: 11">

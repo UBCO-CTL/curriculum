@@ -6,6 +6,13 @@
 <!--Link for FontAwesome Font for the arrows for the accordions.-->
 <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" rel="stylesheet" type="text/css" >
 
+<div class="alert alert-warning">
+        <!-- <i class="bi bi-info-circle-fill pr-2 fs-3"></i> -->
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <div>
+            The UBC Curriculum MAP will have scheduled downtime on <b>Friday, December 5th from 9:00AM to 12:00PM </b> for regular maintenance. We apologize for this inconvenience. Please email ctl.helpdesk@ubc.ca with any questions or concerns.
+        </div>
+    </div>
 
 <div class="row p-md-5 justify-content-center text-dark bg-secondary">
     <div class="container">
