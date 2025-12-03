@@ -14,3 +14,9 @@ database/seeders/UserSeeder.php
 /nbproject
 public/*.xlsx
 storage/app/public
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+.env.testing
