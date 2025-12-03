@@ -8,17 +8,16 @@
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:11">
         <div id="errorToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header " style="padding:1em;color:#842029;background-color:#f8d7da;border-color:#f5c2c7">
-                <i class="bi bi-exclamation-circle-fill pr-2 text-danger"></i>            
+                <i class="bi bi-exclamation-circle-fill pr-2 text-danger"></i>
                 <strong class="me-auto">Error</strong>
                 <button type="button" class="btn-close" onclick="hideErrorToast()" aria-label="Close"></button>
             </div>
             <div class="toast-body alert-danger">
-                We were unable to the download the program overview for {{$program->program}}. 
-                <div class="d-flex flex-row-reverse bd-highlight mt-2 pt-2">
+                We were unable to download the program overview for {{$program->program}}.                <div class="d-flex flex-row-reverse bd-highlight mt-2 pt-2">
                     <a href="mailto:ctl.helpdesk@ubc.ca?subject=UBC Curriculum MAP: Error Generating Program Overview&cc=matthew.penner@ubc.ca&body=There was an error downloading the program overview for {{$program->program}}">
-                        <button type="button" class="btn btn-secondary btn-sm">Get Help</button>      
-                    </a>      
-                </div>        
+                        <button type="button" class="btn btn-secondary btn-sm">Get Help</button>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -54,7 +53,7 @@
                 @include('modals.downloadProgressModal', ['program' => $program])
 
                 @include('modals.dataConfirmDownloadModal', ['program' => $program])
-    
+
                 <h3 class="card-header wizard">
                     <div class="row">
                         <div class="col text-left">
@@ -85,8 +84,8 @@
                         <div class="col">
                             Program Overview
                         </div>
-                        
-                        <div class="col text-right"> 
+
+                        <div class="col text-right">
                             <button id="programOverviewHelp" style="border: none; background: none; outline: none;" data-bs-toggle="modal" href="#guideModal">
                                 <i class="bi bi-question-circle" style="color:#002145;"></i>
                             </button>
@@ -99,6 +98,148 @@
                 <!-- New Content goes here -->
                     <!-- Buttons  -->
                     <div class="card-body">
+                        @if (! $isViewer)
+                            @php
+                                $selectedProgramId = old('comparison_program_id', $aiComparisonProgramId);
+                                $hasComparisonPrograms = isset($comparisonPrograms) && $comparisonPrograms->count() > 0;
+                                $aiReportHtml = $aiComparisonReportHtml ?? null;
+                            @endphp
+                            <div class="mb-4 border rounded-4 shadow-sm bg-light-subtle">
+                                <h2 class="accordion-header" id="aiComparisonHeader">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aiComparisonCollapse" aria-expanded="true" aria-controls="aiComparisonCollapse">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between w-100 me-3">
+                                            <div>
+                                                <p class="text-uppercase text-muted small fw-semibold mb-1">AI Program Comparison</p>
+                                                </div>
+                                                <div>
+                                                <h4 class="mb-0 d-inline-flex align-items-center">Benchmark two curricula with AI<span class="badge bg-info text-dark ms-2" style="font-size: 0.65em; padding: 0.25em 0.5em;">Beta</span></h4>
+                                            </div>
+                                            <span class="badge text-bg-primary-subtle text-primary border border-primary">{{ $aiModelDisplay }}</span>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="aiComparisonCollapse" class="accordion-collapse collapse show" aria-labelledby="aiComparisonHeader">
+                                    <div class="accordion-body p-4">
+                                        <div class="row g-4">
+                                            <div class="col-lg-5">
+                                                <div class="mb-4">
+                                                    <div class="row g-2 mb-3">
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Program PLOs</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $ploCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Reference program</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Mapped courses</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $courseCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Courses linked</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="border rounded-3 bg-white text-center d-flex flex-column" style="height: 140px; padding: 1rem;">
+                                                                <div class="text-muted" style="font-size: 0.75rem; height: 2rem; display: flex; align-items: center; justify-content: center;">Mapping scales</div>
+                                                                <div class="fs-3 fw-bold text-primary d-flex align-items-center justify-content-center flex-grow-1" style="line-height: 1;">{{ $msCount }}</div>
+                                                                <div class="text-muted" style="font-size: 0.7rem; height: 1.5rem; display: flex; align-items: center; justify-content: center;">Active entries</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="bg-white border rounded-3 p-3 mb-3">
+                                                    <h6 class="text-uppercase text-muted small mb-2">What leaves the system</h6>
+                                                    <ul class="small text-muted mb-2 ps-3">
+                                                        <li>Program metadata (name, faculty, level, campus, status)</li>
+                                                        <li>PLO statements with categories + alignment counts (truncated & capped)</li>
+                                                        <li>Course codes, titles, level bucket, required/elective flag</li>
+                                                    </ul>
+                                                    <p class="text-muted small mb-0">
+                                                        No user names, emails, or annotations are sent. See our <a href="{{ route('terms') }}" target="_blank" rel="noopener noreferrer">Terms</a> for privacy and cost details.
+                                                    </p>
+                                                </div>
+
+                                                <div class="bg-white border rounded-3 p-4">
+                                                    <form method="POST" action="{{ route('programs.ai.compare', $program->program_id) }}">
+                                                        @csrf
+                                                        <div class="mb-3">
+                                                            <label for="comparison_program_id" class="form-label fw-semibold">Compare against</label>
+                                                            <select id="comparison_program_id" name="comparison_program_id" class="form-select" @if (! $hasComparisonPrograms) disabled @endif required>
+                                                                <option value="" selected hidden>Select a program</option>
+                                                                @foreach ($comparisonPrograms as $candidateProgram)
+                                                                    <option value="{{ $candidateProgram->program_id }}" {{ (int) $selectedProgramId === (int) $candidateProgram->program_id ? 'selected' : '' }}>
+                                                                        {{ $candidateProgram->program }} • {{ $candidateProgram->faculty ?? 'Faculty N/A' }} • {{ $candidateProgram->level ?? 'Level N/A' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('comparison_program_id')
+                                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                                            @enderror
+                                                            @if (! $hasComparisonPrograms)
+                                                                <div class="text-muted small mt-1">Add or request access to another program to unlock comparisons.</div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-check mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="ai_opt_in" name="ai_opt_in" value="1" {{ old('ai_opt_in') ? 'checked' : '' }} required>
+                                                            <label class="form-check-label small" for="ai_opt_in">
+                                                                I consent to send the summarized curriculum data above to {{ $aiProviderName }} for analysis.
+                                                            </label>
+                                                            @error('ai_opt_in')
+                                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary w-100" @if (! $hasComparisonPrograms) disabled @endif>
+                                                            Generate comparison
+                                                        </button>
+                                                        @if (session('aiComparisonError'))
+                                                            <div class="alert alert-danger mt-3 mb-0">{{ session('aiComparisonError') }}</div>
+                                                        @endif
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-7">
+                                                <div class="bg-white border rounded-3 p-4 h-100" style="min-height: 400px; max-height: 800px; overflow-y: auto;">
+                                                    @if ($aiReportHtml)
+                                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                                            <div>
+                                                                <h5 class="mb-0">Latest AI output</h5>
+                                                                @if ($aiComparisonProgramName)
+                                                                    <small class="text-muted">Compared against {{ $aiComparisonProgramName }}</small>
+                                                                @endif
+                                                            </div>
+                                                            <span class="badge bg-warning text-dark">Human review required</span>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="markdown-body">
+                                                            {!! $aiReportHtml !!}
+                                                        </div>
+                                                        <p class="text-muted small mt-3 mb-0">Validate insights with your curriculum team before acting.</p>
+                                                    @elseif ($hasComparisonPrograms)
+                                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                                            <div class="text-center">
+                                                                <i class="bi bi-magic text-primary fs-1 mb-3"></i>
+                                                                <h5>No AI report yet</h5>
+                                                                <p class="text-muted">Select a comparison program and generate your first set of AI insights.</p>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                                            <div class="text-center">
+                                                                <i class="bi bi-info-circle text-muted fs-1 mb-3"></i>
+                                                                <h5>No comparison programs available</h5>
+                                                                <p class="text-muted">Add or request access to another program to unlock comparisons.</p>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <nav class="mt-2">
                             <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                                 <button class="nav-link active w-25" id="nav-bar-charts-tab" href="javascript:;" data-bs-toggle="tab" data-bs-target="#nav-bar-charts" type="button" role="tab" aria-controls="nav-bar-charts" aria-selected="false">Bar Charts</button>
@@ -107,9 +248,9 @@
                                 <button class="nav-link w-25" id="nav-mapping-scale-tab" data-bs-toggle="tab" data-bs-target="#nav-mapping-scale" type="button" role="tab" aria-controls="nav-mapping-scale" aria-selected="false">Mapping Scale</button>
                             </div>
                         </nav>
-                        
+
                         <div class="tab-content" id="nav-tabContent">
-                            
+
                             <!-- Program Learning Outcome Tab -->
                             <div class="tab-pane fade" id="nav-plo" role="tabpanel" aria-labelledby="nav-plo-tab">
                                 <div class="card-body">
@@ -118,7 +259,7 @@
                                     </h5> -->
                                     @if ( count($plos) < 1)
                                         <div class="alert alert-warning wizard">
-                                            <i class="bi bi-exclamation-circle-fill"></i>There are no program learning outcomes for this program.                  
+                                            <i class="bi bi-exclamation-circle-fill"></i>There are no program learning outcomes for this program.
                                         </div>
                                     @else
                                         <p>Program-level learning outcomes (PLOs) are the knowledge, skills and attributes that students are expected to attain by the end of a program of study.</p>
@@ -132,8 +273,8 @@
                                                     @if ($plo->plo_category != NULL)
                                                         @if ($plo->plos->count() > 0)
                                                             <tr class="table-secondary">
-                                                                <th class="text-left" colspan="2">{{$plo->plo_category}} 
-                                                                <!-- @if ($numCatUsed > 3)    
+                                                                <th class="text-left" colspan="2">{{$plo->plo_category}}
+                                                                <!-- @if ($numCatUsed > 3)
                                                                     : (C - {{$catIndex + 1}})</th>
                                                                 @endif -->
                                                             </tr>
@@ -193,11 +334,11 @@
                                     <!-- <h5 class="card-title">
                                         Mapping Scale
                                     </h5> -->
-                                    @if ( count($mappingScales) < 1) 
+                                    @if ( count($mappingScales) < 1)
                                         <div class="alert alert-warning wizard">
-                                            <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.                  
+                                            <i class="bi bi-exclamation-circle-fill"></i>A mapping scale has not been set for this program.
                                         </div>
-                                    @else 
+                                    @else
                                         <p>The mapping scale indicates the degree to which a program learning outcome is addressed by a course learning outcome.</p>
                                         <table class="table table-bordered table-sm" style="width: 95%; margin: auto; table-layout:auto;">
                                             <tr class="table-primary">
@@ -243,7 +384,7 @@
                                         <!-- Column Chart -->
                                         <div class="mt-3" id="plo-clo-chart">
                                             <p>This chart shows how many CLOs (course learning outcomes) are aligned with each of the PLOs (program-level learning outcomes)</p>
-                                            @if (!(count($programCourses) < 1) && !(count($plos) < 1) && !(count($mappingScales) < 1) ) 
+                                            @if (!(count($programCourses) < 1) && !(count($plos) < 1) && !(count($mappingScales) < 1) )
                                                 <form action="">
                                                     <div class=" mx-5 mt-2 text-center">
                                                         <div class="form-check form-check-inline">
@@ -256,7 +397,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            @else 
+                                            @else
                                                 <input class="form-check-input" type="radio" name="chart_select" id="Cluster" checked hidden>
                                                 <input class="form-check-input" type="radio" name="chart_select" id="Stacked" hidden>
                                             @endif
@@ -269,11 +410,11 @@
 
                                     <!-- Assessment Methods Tab -->
                                     <div class="tab-pane fade" id="nav-assessment-methods" role="tabpanel" aria-labelledby="nav-assessment-methods">
-                                        
+
                                         <div class="mt-3" id="assessment-methods-chart">
 
                                             <p>This chart shows the frequencies of the assessment methods for courses belonging to this program.</p>
-                                            @if (!(count($programCourses) < 1)) 
+                                            @if (!(count($programCourses) < 1))
                                                 <form action="">
                                                     <div class=" mx-5 mt-2 text-center">
                                                         <div class="form-check form-check-inline">
@@ -302,12 +443,12 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            @else  
+                                            @else
                                                 <!-- THIS IS REQUIRED FOR JQUERY statement document.getElementById("all-am").checked = true; -->
                                                 <!-- Without the hidden input the error message will not show because the above statement cannot find the input with id = 'all-am'  -->
                                                 <input class="form-check-input" type="radio" name="am_select" id="all-am" checked hidden>
                                             @endif
-                                            
+
                                             <div id='loading-div-am'>
                                                 <h3 class="text-center">
                                                     Loading ...
@@ -325,14 +466,14 @@
 
                                     </div>
                                     <!-- End Assessment Methods Tab -->
-                                    
+
                                     <!-- Learning Activities Tab -->
                                     <div class="tab-pane fade" id="nav-learning-activity" role="tabpanel" aria-labelledby="nav-learning-activity">
-                                        
+
                                         <div class="mt-3" id="learning-activity-chart">
 
                                             <p>This chart shows the frequencies of the learning activities for courses belonging to this program.</p>
-                                            @if (!(count($programCourses) < 1)) 
+                                            @if (!(count($programCourses) < 1))
                                                 <form action="">
                                                     <div class=" mx-5 mt-2 text-center">
                                                         <div class="form-check form-check-inline">
@@ -361,7 +502,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            @else  
+                                            @else
                                                 <!-- THIS IS REQUIRED FOR JQUERY statement document.getElementById("all-la").checked = true; -->
                                                 <!-- Without the hidden input the error message will not show because the above statement cannot find the input with id = 'all-la'  -->
                                                 <input class="form-check-input" type="radio" name="la_select" id="all-la" checked hidden>
@@ -373,7 +514,7 @@
                                                 </h3>
                                                 <div class="loader" style="margin: auto;"></div>
                                             </div>
-                                            
+
                                             <div class="container mt-0">
                                                 <div id="high-chart-la"></div>
                                             </div>
@@ -390,7 +531,7 @@
                                         <!-- Column Chart -->
                                         <div class="mt-3" id="ministry-standards-chart">
                                             <p>This chart shows how the ministry standards are aligned with each course belonging to this program</p>
-                                                @if (!(count($programCourses) < 1)) 
+                                                @if (!(count($programCourses) < 1))
                                                     <form action="">
                                                         <div class=" mx-5 mt-2 text-center">
                                                             <div class="form-check form-check-inline">
@@ -403,18 +544,18 @@
                                                             </div>
                                                         </div>
                                                     </form>
-                                                @else 
+                                                @else
                                                     <input class="form-check-input" type="radio" name="chart_select-ms" id="Cluster-ms" checked hidden>
                                                     <input class="form-check-input" type="radio" name="chart_select-ms" id="Stacked-ms" hidden>
                                                 @endif
-                                            
+
                                             <div id='loading-div-ms'>
                                                 <h3 class="text-center">
                                                     Loading ...
                                                 </h3>
                                                 <div class="loader" style="margin: auto;"></div>
                                             </div>
-                                            
+
                                             <div class="container mt-0">
                                                 <div id="high-chart-ms"></div>
                                             </div>
@@ -427,13 +568,13 @@
 
                                     <!-- Optional Priorities Tab -->
                                     <div class="tab-pane fade" id="nav-optional-priorities" role="tabpanel" aria-labelledby="nav-optional-priorities">
-    
+
                                         <div class="mt-3" id="optional-priority-chart">
 
                                             <p>This chart shows the frequencies of the strategic priorities for courses belonging to this program.</p>
 
                                             <!-- *** If there are courses for this program *** -->
-                                            @if (!(count($programCourses) < 1)) 
+                                            @if (!(count($programCourses) < 1))
                                                 <form action="">
                                                     <div class=" mx-5 mt-2 text-center">
                                                         <div class="form-check form-check-inline">
@@ -462,12 +603,12 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            @else  
+                                            @else
                                                 <!-- THIS IS REQUIRED FOR JQUERY statement document.getElementById("all-op").checked = true; -->
                                                 <!-- Without the hidden input the error message will not show because the above statement cannot find the input with id = 'all-op'  -->
                                                 <input class="form-check-input" type="radio" name="op_select" id="all-op" checked hidden>
                                             @endif
-                                            
+
                                             <div id='loading-div-op'>
                                                 <h3 class="text-center">
                                                     Loading ...
@@ -529,7 +670,7 @@
                                         <div class="alert alert-warning wizard">
                                             <i class="bi bi-exclamation-circle-fill"></i>There are no mapping scales for this program.
                                         </div>
-                                    @elseif (count($programCourses) < 1) 
+                                    @elseif (count($programCourses) < 1)
                                         <div class="alert alert-warning wizard">
                                             <i class="bi bi-exclamation-circle-fill"></i>There are no courses for this program.
                                         </div>
@@ -655,7 +796,7 @@
                             <!-- End Charts Tab -->
 
                         </div>
-                        
+
                     </div>
                     <div class="card-footer">
                         <div class="card-body mb-4">
@@ -681,10 +822,10 @@
 <script type=text/javascript>
     $(document).ready(function() {
 
-        $("#getData").click(function() { 
+        $("#getData").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-courses/",       
+                url: "get-courses/",
                 success: function (data) {
                     $("#loading-div").fadeOut("fast");
                     $("#allCoursesInput").html(data);
@@ -694,10 +835,10 @@
             });
         });
 
-        $("#nav-required-tab").click(function() { 
+        $("#nav-required-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-required/",       
+                url: "get-required/",
                 success: function (data) {
                     $("#loading-div-required").fadeOut("fast");
                     $("#requiredCoursesInput").html(data);
@@ -707,10 +848,10 @@
             });
         });
 
-        $("#nav-non-required-tab").click(function() { 
+        $("#nav-non-required-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-non-required/",       
+                url: "get-non-required/",
                 success: function (data) {
                     $("#loading-div-non-required").fadeOut("fast");
                     $("#nonRequiredCoursesInput").html(data);
@@ -720,10 +861,10 @@
             });
         });
 
-        $("#nav-first-tab").click(function() { 
+        $("#nav-first-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-first/",       
+                url: "get-first/",
                 success: function (data) {
                     $("#loading-div-first").fadeOut("fast");
                     $("#firstCoursesInput").html(data);
@@ -733,10 +874,10 @@
             });
         });
 
-        $("#nav-second-tab").click(function() { 
+        $("#nav-second-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-second/",       
+                url: "get-second/",
                 success: function (data) {
                     $("#loading-div-second").fadeOut("fast");
                     $("#secondCoursesInput").html(data);
@@ -746,10 +887,10 @@
             });
         });
 
-        $("#nav-third-tab").click(function() { 
+        $("#nav-third-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-third/",       
+                url: "get-third/",
                 success: function (data) {
                     $("#loading-div-third").fadeOut("fast");
                     $("#thirdCoursesInput").html(data);
@@ -759,10 +900,10 @@
             });
         });
 
-        $("#nav-fourth-tab").click(function() { 
+        $("#nav-fourth-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-fourth/",       
+                url: "get-fourth/",
                 success: function (data) {
                     $("#loading-div-fourth").fadeOut("fast");
                     $("#fourthCoursesInput").html(data);
@@ -772,10 +913,10 @@
             });
         });
 
-        $("#nav-graduate-tab").click(function() { 
+        $("#nav-graduate-tab").click(function() {
             $.ajax({
                 type: "GET",
-                url: "get-graduate/",       
+                url: "get-graduate/",
                 success: function (data) {
                     $("#loading-div-graduate").fadeOut("fast");
                     $("#graduateCoursesInput").html(data);
@@ -784,15 +925,15 @@
                 }
             });
         });
-        
-        $("#nav-assessment-methods-tab").click(function() { 
+
+        $("#nav-assessment-methods-tab").click(function() {
             // This is required to set the radio button to checked
             document.getElementById("all-am").checked = true;
             $("#high-chart-am").hide();
             $("#loading-div-am").show();
             $.ajax({
                 type: "GET",
-                url: "get-am/",       
+                url: "get-am/",
                 success: function (data) {
                     $("#loading-div-am").fadeOut("fast");
 
@@ -801,19 +942,19 @@
                     var amTitles = $.map(amFreq, function(element,index) {return index});
                     var amValues = $.map(amFreq, function(element,index) {return element});
                     series = generateData();
-                                
+
                     function generateData() {
                         var series = [];
-                    
+
                         series.push({
                             name: '# of Occurrences',
                             data: amValues,
                             colorByPoint: true,
                         });
-                        
+
                         return series;
                     }
-                
+
                     var programCourses = <?php echo json_encode($programCourses)?>;
                     if (programCourses.length < 1) {
                         $('#high-chart-am').html(`
@@ -828,7 +969,7 @@
                             </div>
                         `);
                     } else {
-                    
+
                         $('#high-chart-am').highcharts({
                             chart: {
                                 type: 'column'
@@ -857,7 +998,7 @@
                             },
                             series: series
                         });
-                    
+
                         // delete all child nodes
                         $('#am-table').empty();
                         // Append to table for all assessment methods frequencies
@@ -874,7 +1015,7 @@
             });
         });
 
-        $("#nav-learning-activity-tab").click(function() { 
+        $("#nav-learning-activity-tab").click(function() {
             // This is required to set the radio button to checked
             document.getElementById("all-la").checked = true;
             $("#high-chart-la").hide();
@@ -882,7 +1023,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "get-la/",       
+                url: "get-la/",
                 success: function (data) {
                     $("#loading-div-la").fadeOut("fast");
                     // $("#graduateCoursesInput").html(data);
@@ -894,7 +1035,7 @@
 
                     function generateData() {
                         var series = [];
-                    
+
                         series.push({
                             name: '# of Occurrences',
                             data: laValues,
@@ -903,7 +1044,7 @@
 
                         return series;
                     }
-                
+
                     var programCourses = <?php echo json_encode($programCourses)?>;
                     if (programCourses.length < 1) {
                         $('#high-chart-la').html(`
@@ -918,7 +1059,7 @@
                             </div>
                         `);
                     } else {
-                    
+
                         $('#high-chart-la').highcharts({
                             chart: {
                                 type: 'column'
@@ -964,7 +1105,7 @@
             });
         });
 
-        $("#nav-ministry-standards-tab").click(function() { 
+        $("#nav-ministry-standards-tab").click(function() {
             // This is required to set the radio button to checked
             document.getElementById("Cluster-ms").checked = true;
             $("#high-chart-ms").hide();
@@ -972,10 +1113,10 @@
 
             $.ajax({
                 type: "GET",
-                url: "get-ms/",       
+                url: "get-ms/",
                 success: function (data) {
                     $("#loading-div-ms").fadeOut("fast");
-                    
+
                     var standardsMappingScales = data[3];
                     var standardMappingScalesColours = data[4];
                     var frequencyOfMinistryStandardIds = data[5];
@@ -985,7 +1126,7 @@
 
                     function generateDataMS() {
                         var seriesMS = [];
-                    
+
                         for (var i = 0; i < standardsMappingScales.length; i++) {
                             seriesMS.push({
                                 name: standardsMappingScales[i],
@@ -1054,7 +1195,7 @@
             });
         });
 
-        $("#Stacked-ms").click(function() { 
+        $("#Stacked-ms").click(function() {
             // This is required to set the radio button to checked
             document.getElementById("Stacked-ms").checked = true;
             $("#high-chart-ms").hide();
@@ -1062,10 +1203,10 @@
 
             $.ajax({
                 type: "GET",
-                url: "get-ms/",       
+                url: "get-ms/",
                 success: function (data) {
                     $("#loading-div-ms").fadeOut("fast");
-                    
+
                     var standardsMappingScales = data[3];
                     var standardMappingScalesColours = data[4];
                     var frequencyOfMinistryStandardIds = data[5];
@@ -1075,7 +1216,7 @@
 
                     function generateDataMS() {
                         var seriesMS = [];
-                    
+
                         for (var i = 0; i < standardsMappingScales.length; i++) {
                             seriesMS.push({
                                 name: standardsMappingScales[i],
@@ -1106,7 +1247,7 @@
                             chart: {
                                 type: 'column'
                             },
-                            
+
                             title: {
                                 text: 'Alignment with Ministry Standards'
                             },
@@ -1142,7 +1283,7 @@
             });
         });
 
-        $("#Cluster-ms").click(function() { 
+        $("#Cluster-ms").click(function() {
             // This is required to set the radio button to checked
             document.getElementById("Cluster-ms").checked = true;
             $("#high-chart-ms").hide();
@@ -1150,10 +1291,10 @@
 
             $.ajax({
                 type: "GET",
-                url: "get-ms/",       
+                url: "get-ms/",
                 success: function (data) {
                     $("#loading-div-ms").fadeOut("fast");
-                    
+
                     var standardsMappingScales = data[3];
                     var standardMappingScalesColours = data[4];
                     var frequencyOfMinistryStandardIds = data[5];
@@ -1163,7 +1304,7 @@
 
                     function generateDataMS() {
                         var seriesMS = [];
-                    
+
                         for (var i = 0; i < standardsMappingScales.length; i++) {
                             seriesMS.push({
                                 name: standardsMappingScales[i],
@@ -1194,7 +1335,7 @@
                             chart: {
                                 type: 'column'
                             },
-                            
+
                             title: {
                                 text: 'Alignment with Ministry Standards'
                             },
@@ -1232,7 +1373,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "get-op/",       
+                url: "get-op/",
                 success: function (data) {
                     $("#loading-div-op").fadeOut("fast");
                     var opFreq = data;
@@ -1246,7 +1387,7 @@
             });
         });
 
-        $('#nav-bar-charts-tab').click(function() { 
+        $('#nav-bar-charts-tab').click(function() {
             // hide other charts and remove classes/set attributes
             $("#assessment-methods-chart").hide();
             $("#learning-activity-chart").hide();
@@ -1277,8 +1418,8 @@
             $("#plo-clo-chart").show();
         });
 
-        $("#nav-plo-clo-tab").click(function() { 
-            // hide other charts 
+        $("#nav-plo-clo-tab").click(function() {
+            // hide other charts
             $("#assessment-methods-chart").hide();
             $("#learning-activity-chart").hide();
             $("#optional-priority-chart").hide();
@@ -1287,7 +1428,7 @@
             $("#plo-clo-chart").show();
         });
 
-        $("#nav-assessment-methods-tab").click(function() { 
+        $("#nav-assessment-methods-tab").click(function() {
             // hide other charts
             $("#plo-clo-chart").hide();
             $("#learning-activity-chart").hide();
@@ -1297,7 +1438,7 @@
             $("#assessment-methods-chart").show();
         });
 
-        $("#nav-learning-activity-tab").click(function() { 
+        $("#nav-learning-activity-tab").click(function() {
             // hide other charts
             $("#plo-clo-chart").hide();
             $("#assessment-methods-chart").hide();
@@ -1332,7 +1473,7 @@
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op/",       
+            url: "get-op/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1346,11 +1487,11 @@
         });
     }
 
-    function firstYearOP() {     
+    function firstYearOP() {
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op-first-year/",      
+            url: "get-op-first-year/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1368,7 +1509,7 @@
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op-second-year/",      
+            url: "get-op-second-year/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1386,7 +1527,7 @@
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op-third-year/",      
+            url: "get-op-third-year/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1404,7 +1545,7 @@
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op-fourth-year/",      
+            url: "get-op-fourth-year/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1422,7 +1563,7 @@
         $("#loading-div-op").show();
         $.ajax({
             type: "GET",
-            url: "get-op-graduate/",      
+            url: "get-op-graduate/",
             success: function (data) {
                 $("#loading-div-op").fadeOut("fast");
                 var opFreq = data;
@@ -1441,7 +1582,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am/",       
+            url: "get-am/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1449,19 +1590,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1476,7 +1617,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1505,7 +1646,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1524,7 +1665,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am-first-year/",       
+            url: "get-am-first-year/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1532,19 +1673,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1559,7 +1700,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1588,7 +1729,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1608,7 +1749,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am-second-year/",       
+            url: "get-am-second-year/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1616,19 +1757,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1643,7 +1784,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1672,7 +1813,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1692,7 +1833,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am-third-year/",       
+            url: "get-am-third-year/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1700,19 +1841,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1727,7 +1868,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1756,7 +1897,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1776,7 +1917,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am-fourth-year/",       
+            url: "get-am-fourth-year/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1784,19 +1925,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1811,7 +1952,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1840,7 +1981,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1860,7 +2001,7 @@
         $("#loading-div-am").show();
         $.ajax({
             type: "GET",
-            url: "get-am-graduate/",       
+            url: "get-am-graduate/",
             success: function (data) {
                 $("#loading-div-am").fadeOut("fast");
                 // high chart for assessment methods
@@ -1868,19 +2009,19 @@
                 var amTitles = $.map(amFreq, function(element,index) {return index});
                 var amValues = $.map(amFreq, function(element,index) {return element});
                 series = generateData();
-                            
+
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: amValues,
                         colorByPoint: true,
                     });
-                    
+
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-am').html(`
@@ -1895,7 +2036,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-am').highcharts({
                         chart: {
                             type: 'column'
@@ -1924,7 +2065,7 @@
                         },
                         series: series
                     });
-                
+
                     // Append to table for all assessment methods frequencies
                     $('#am-table').append('<tr class="table-primary"><th>Assessment Method</th><th>Frequency</th></tr>');
                     for (var i = 0; i < amTitles.length; i++) {
@@ -1944,7 +2085,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la/",       
+            url: "get-la/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -1955,7 +2096,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -1963,7 +2104,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -1978,7 +2119,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2028,7 +2169,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la-first-year/",       
+            url: "get-la-first-year/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -2039,7 +2180,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -2047,7 +2188,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -2062,7 +2203,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2112,7 +2253,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la-second-year/",       
+            url: "get-la-second-year/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -2123,7 +2264,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -2131,7 +2272,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -2146,7 +2287,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2196,7 +2337,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la-third-year/",       
+            url: "get-la-third-year/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -2207,7 +2348,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -2215,7 +2356,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -2230,7 +2371,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2280,7 +2421,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la-fourth-year/",       
+            url: "get-la-fourth-year/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -2291,7 +2432,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -2299,7 +2440,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -2314,7 +2455,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2364,7 +2505,7 @@
         $("#loading-div-la").show();
         $.ajax({
             type: "GET",
-            url: "get-la-graduate/",       
+            url: "get-la-graduate/",
             success: function (data) {
                 $("#loading-div-la").fadeOut("fast");
                 // $("#graduateCoursesInput").html(data);
@@ -2375,7 +2516,7 @@
                 series = generateData();
                 function generateData() {
                     var series = [];
-                
+
                     series.push({
                         name: '# of Occurrences',
                         data: laValues,
@@ -2383,7 +2524,7 @@
                     });
                     return series;
                 }
-            
+
                 var programCourses = <?php echo json_encode($programCourses)?>;
                 if (programCourses.length < 1) {
                     $('#high-chart-la').html(`
@@ -2398,7 +2539,7 @@
                         </div>
                     `);
                 } else {
-                
+
                     $('#high-chart-la').highcharts({
                         chart: {
                             type: 'column'
@@ -2513,6 +2654,7 @@
             $(this).find(":submit").attr('disabled', 'disabled');
             $(this).find(":submit").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
         });
+
     });
 </script>
 
@@ -2524,7 +2666,7 @@
         $("#optional-priority-chart").hide();
         $("#ministry-standards-chart").hide();
     });
-    // high chart for PLOs to CLOs 
+    // high chart for PLOs to CLOs
     // This is required to set the radio button to checked, this is a known firefox bug.
     window.onload=check;
     function check() {
@@ -2536,7 +2678,7 @@
     var plosInOrder = <?php echo json_encode($plosInOrder)?>;
     var freq = <?php echo json_encode($freqForMS)?>;
     var seriesPLOCLO = [];
-    
+
     seriesPLOCLO = generateData();
 
     function generateData() {
@@ -2698,7 +2840,7 @@
 th, td {
     border: 1px solid white;
     color: black;
-    
+
 }
 th {
         text-align: center;
@@ -2736,19 +2878,31 @@ th {
 }
 
 .freq-table {
-    margin:auto; 
+    margin:auto;
     /* table-layout: fixed;  */
-    border: 1px solid white; 
-    color: black; 
+    border: 1px solid white;
+    color: black;
     /* display: block;  */
-    overflow-x: auto;  
+    overflow-x: auto;
     white-space: nowrap;
 }
 
 .freq-tbody .freq-table {
     display: table;
-    width: 100%; 
+    width: 100%;
 }
+
+/* AI Comparison responsive styles */
+@media (max-width: 991.98px) {
+    #aiComparisonCollapse .col-lg-5,
+    #aiComparisonCollapse .col-lg-7 {
+        margin-bottom: 1.5rem;
+    }
+    #aiComparisonCollapse .col-lg-7 {
+        min-height: 300px;
+    }
+}
+
 
 </style>
 

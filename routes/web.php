@@ -18,6 +18,7 @@ use App\Http\Controllers\MappingScaleController;
 use App\Http\Controllers\OptionalPriorities;
 use App\Http\Controllers\OutcomeMapController;
 use App\Http\Controllers\PLOCategoryController;
+use App\Http\Controllers\ProgramAIController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProgramLearningOutcomeController;
 use App\Http\Controllers\ProgramUserController;
@@ -86,6 +87,7 @@ Route::post('/programs', [ProgramController::class, 'store'])->name('programs.st
 Route::get('/programs/{program}/submit', [ProgramController::class, 'submit'])->name('programs.submit');
 Route::post('/programs/{program}/update', [ProgramController::class, 'update'])->name('programs.update');
 Route::delete('/programs/{program}/delete', [ProgramController::class, 'destroy'])->name('programs.destroy');
+Route::post('/programs/{program}/ai-compare', [ProgramAIController::class, 'compare'])->name('programs.ai.compare');
 // Program Summary PDF routes
 Route::get('/programs/{program}/pdf', [ProgramController::class, 'pdf'])->name('programs.pdf');
 Route::delete('/programs/{program}/pdf', [ProgramController::class, 'deletePDF'])->name('programs.delete.pdf');
