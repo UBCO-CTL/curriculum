@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard;
@@ -48,6 +49,22 @@ class CourseController extends Controller
     {
         $this->middleware(['auth', 'verified']);
         $this->middleware('course')->only(['show', 'pdf', 'edit', 'submit', 'outcomeDetails']);
+    }
+
+    /**
+     * Generate an array of Excel column names (A, B, ..., Z, AA, AB, ..., etc.)
+     * Supports up to 1000 columns by default (Excel max is 16,384)
+     *
+     * @param int $maxColumns Maximum number of columns to generate (default: 1000)
+     * @return array Array of column names indexed from 0
+     */
+    private function generateColumnNames(int $maxColumns = 1000): array
+    {
+        $columns = [];
+        for ($i = 0; $i < $maxColumns; $i++) {
+            $columns[$i] = Coordinate::stringFromColumnIndex($i + 1);
+        }
+        return $columns;
     }
 
     /**
@@ -629,8 +646,8 @@ class CourseController extends Controller
             $course = Course::where('course_id', $course_id)->first();
             // create the spreadsheet
             $spreadsheet = new Spreadsheet;
-            // create array of column names
-            $columns = range('A', 'Z');
+            // create array of column names (supports up to 1000 columns)
+            $columns = $this->generateColumnNames();
             // create array of styles for spreadsheet
             $styles = [
                 'primaryHeading' => [
