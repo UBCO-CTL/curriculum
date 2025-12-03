@@ -1522,9 +1522,22 @@ class ProgramController extends Controller
             foreach ($charts as $chartName => $chartUrl) {
                 $sheet = $spreadsheet->createSheet();
                 $sheet->setTitle($chartName);
+
+                // Add note about chart comprehensibility if program has more than 20 PLOs (only for Program MAP Chart)
+                $hasWarning = $program->programLearningOutcomes->count() > 20 && $chartName == 'Program MAP Chart';
+                if ($hasWarning) {
+                    $sheet->setCellValue('A1', 'Note: Programs with more than 20 PLOs may cause charts to be less comprehensible due to space constraints.');
+                    $sheet->getStyle('A1')->getFont()->setBold(true);
+                    $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID);
+                    $sheet->getStyle('A1')->getFill()->getStartColor()->setRGB('FFF3CD');
+                    $sheet->getRowDimension(1)->setRowHeight(30);
+                    $sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+                    $sheet->mergeCells('A1:J1');
+                }
+
                 $imageDrawing = new Drawing;
                 $imageDrawing->setPath($chartUrl);
-                $imageDrawing->setCoordinates('A1');
+                $imageDrawing->setCoordinates($hasWarning ? 'A3' : 'A1');
                 $imageDrawing->setWorksheet($sheet);
                 // Add ministry standards table to Ministry standards sheet
                 if ($chartName == 'Ministry Standards Chart') {
