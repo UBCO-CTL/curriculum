@@ -23,7 +23,7 @@
 
                 <div class="card-body">
                     <div class="alert alert-primary d-flex align-items-center ml-3 mr-3" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div class="ml-2">
                             <div class="mt-2 mb-2">
                                 <li class="m-0 p-0">Add required and non-required courses to the program.</li>
@@ -38,7 +38,7 @@
                     <ul class="mr-2">
                         <li class="my-2"><b>Button - Map Course:</b> You will see this button if you are the owner or editor of the course to complete the course to program mapping.</li>
                     </ul>
-                    
+
                     <div class="row mb-2">
                         <div class="col">
                             <button type="button" class="btn btn-primary btn-md col-2 mt-2 float-right" data-toggle="modal" data-target="#createCourseModal" style="background-color:#002145;color:white;"><i class="bi bi-plus pr-2"></i>New Course</button>
@@ -51,9 +51,9 @@
                             <div class="col">
                                 @if ($programCourses->count() < 1)
                                     <div class="alert alert-warning wizard">
-                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.</div>                    
+                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.</div>
                                     </div>
-                                @else 
+                                @else
                                     <table class="table table-light table-bordered" >
                                         <tr class="table-primary">
                                             <th class="w-25">Course Title</th>
@@ -69,28 +69,46 @@
                                                 <td>
                                                     {{$programCourse->course_title}}
                                                     <br>
-                                                    <p class="mb-0 form-text text-muted">
-                                                        @if($programCourse->pivot->course_required == 1)
-                                                            Required 
-                                                        @elseif($programCourse->pivot->course_required == 0)
-                                                            Not Required 
-                                                        @endif
+                                                    <div class="d-flex align-items-center mt-2">
+                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="mr-2">
+                                                            @csrf
+                                                            <input type="hidden" name="course_id" value="{{$programCourse->course_id}}">
+                                                            <input type="hidden" name="program_id" value="{{$program->program_id}}">
+                                                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
+                                                            <input type="hidden" name="note" value="{{$programCourse->pivot->note}}">
+                                                            <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
+                                                            <div class="form-check form-switch d-flex align-items-center course-switch">
+                                                                <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
+                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                    <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
+                                                                </label>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <p class="form-text text-muted mt-2">
+                                                        <b>Note: </b>{{$programCourse->pivot->note}}
                                                     </p>
-                                                    <p class="form-text text-muted">
-                                                        <b>Note: </b>{{$programCourse->pivot->note}}   
-                                                    </p>                                    
                                                 </td>
                                             @else
                                                 <td>
                                                     {{$programCourse->course_title}}
                                                     <br>
-                                                    <p class="form-text text-muted">
-                                                        @if($programCourse->pivot->course_required == 1)
-                                                            Required 
-                                                        @elseif($programCourse->pivot->course_required == 0)
-                                                            Not Required 
-                                                        @endif
-                                                    </p>                                   
+                                                    <div class="d-flex align-items-center mt-2">
+                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="mr-2">
+                                                            @csrf
+                                                            <input type="hidden" name="course_id" value="{{$programCourse->course_id}}">
+                                                            <input type="hidden" name="program_id" value="{{$program->program_id}}">
+                                                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
+                                                            <input type="hidden" name="note" value="">
+                                                            <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
+                                                            <div class="form-check form-switch d-flex align-items-center course-switch">
+                                                                <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
+                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                    <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
+                                                                </label>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             @endif
                                             <td>
@@ -114,45 +132,80 @@
                                                     Remove
                                                 </button>
 
-                                                <!-- Edit button -->
-                                                <button type="button" style="width:60px" class="btn btn-secondary btn-sm float-right ml-2" data-toggle="modal" data-target="#editCourseModal{{$programCourse->course_id}}">
-                                                    Edit
+                                                <!-- Add Note button -->
+                                                <button type="button" style="width:80px" class="btn btn-secondary btn-sm float-right ml-2" data-toggle="modal" data-target="#editCourseModal{{$programCourse->course_id}}">
+                                                    Add Note
                                                 </button>
 
-                                                @if($actualTotalOutcomes[$programCourse->course_id] != $expectedTotalOutcomes[$programCourse->course_id])
-                                                    <!-- If the User has been notified previously -->
-                                                    @if($programCourse->pivot->map_status == 1)
-                                                        <button type="button" class="btn btn-success btn-sm ml-2 float-right" disabled>
-                                                            <i class="bi bi-check2-circle"></i> Notified
-                                                        </button>
-                                                    @elseif($programCourse->owners[0]->id == $user->id)
-                                                        <!-- Allow owner to be redirected to the course to map it -->
+                                                @php
+                                                    $userHasCourseAccess = $programCourse->users->contains('id', $user->id);
+                                                @endphp
+
+                                                @if($programCourse->owners[0]->id == $user->id)
+                                                    <!-- Allow owner to be redirected to the course to map it -->
+                                                    @if ($programCourse->learningOutcomes->count() > 0)
+                                                        <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                    @else
+                                                        <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                    @endif
+                                                @endif
+
+                                                @foreach($programCourse->editors as $editor)
+                                                    @if($editor->id == $user->id)
+                                                        <!-- Show for editors -->
                                                         @if ($programCourse->learningOutcomes->count() > 0)
-                                                            <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step5', $programCourse->course_id) }}">
-                                                                Map Course
-                                                            </a>
+                                                            <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
                                                         @else
-                                                            <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step1', $programCourse->course_id) }}">
-                                                                Map Course
-                                                            </a>
+                                                            <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
                                                         @endif
                                                     @endif
-                                                    @foreach($programCourse->editors as $editor)
-                                                        @if($editor->id == $user->id && $programCourse->pivot->map_status != 1)
-                                                            <!-- Show Only If the User is not the Owner and if they haven't previously notified the instructor -->
-                                                            @if ($programCourse->learningOutcomes->count() > 0)
-                                                                <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step5', $programCourse->course_id) }}">
-                                                                    Map Course
-                                                                </a>
-                                                            @else
-                                                                <a type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" href="{{ route('courseWizard.step1', $programCourse->course_id) }}">
-                                                                    Map Course
-                                                                </a>
-                                                            @endif
-                                                        @endif
-                                                    @endforeach
+                                                @endforeach
+
+                                                @foreach($programCourse->viewers as $viewer)
+                                                    @if($viewer->id == $user->id)
+                                                        <a href="{{ route('courseWizard.step7', $programCourse->course_id) }}" class="btn btn-outline-secondary btn-sm ml-2 float-right">View Course</a>
+                                                    @endif
+                                                @endforeach
+
+                                                @if(!$userHasCourseAccess)
+                                                    <button type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" data-toggle="modal" data-target="#requestAccess{{$programCourse->course_id}}">Request access</button>
+
+                                                    <div class="modal fade" id="requestAccess{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="requestAccessLabel{{$programCourse->course_id}}" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="requestAccessLabel{{$programCourse->course_id}}">Request access</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                </div>
+                                                                <form method="POST" action="{{ route('courses.requestAccess', $programCourse->course_id) }}">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="access" id="access-view-{{$programCourse->course_id}}" value="view" checked>
+                                                                            <label class="form-check-label" for="access-view-{{$programCourse->course_id}}">
+                                                                                View
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="access" id="access-edit-{{$programCourse->course_id}}" value="edit">
+                                                                            <label class="form-check-label" for="access-edit-{{$programCourse->course_id}}">
+                                                                                Edit
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="mt-3">
+                                                                            <textarea class="form-control" name="message" rows="3" maxlength="500" placeholder="Optional message to the course owner"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-primary btn-sm">Send request</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endif
-                                                
+
                                                 <!-- Delete Confirmation Modal -->
                                                 <div class="modal fade" id="deleteConfirmationCourse{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationCourse" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
@@ -181,62 +234,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
-                                                <!-- Edit Course Required Modal -->
+
+                                                <!-- Edit Course Note Modal -->
                                                 <div class="modal fade" id="editCourseModal{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+                                                                <h5 class="modal-title" id="editCourseModalLabel">Add/Edit Note</h5>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                             </div>
                                                             <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}">
                                                                 @csrf
 
                                                                 <div class="modal-body">
-
-                                                                    <div class="form-group row">
-                                                                        <label for="required"
-                                                                            class="col-md-3 col-form-label text-md-right">Required</label>
-                                                                        <div class="col-md-6">
-
-                                                                                @if($programCourse->pivot->course_required == 0)
-                                                                                    <div class="form-check ">
-                                                                                        <label class="form-check-label">
-                                                                                            <input type="radio" class="form-check-input" name="required" value="1">
-                                                                                            Required
-                                                                                        </label>
-                                                                                    </div>
-                                                                                    <div class="form-check">
-                                                                                        <label class="form-check-label">
-                                                                                            <input type="radio" class="form-check-input" name="required" value="0" checked>
-                                                                                            Not Required
-                                                                                        </label>
-                                                                                    </div>
-                                                                                @else
-                                                                                    <div class="form-check ">
-                                                                                        <label class="form-check-label">
-                                                                                            <input type="radio" class="form-check-input" name="required" value="1" checked>
-                                                                                            Required
-                                                                                        </label>
-                                                                                    </div>
-                                                                                    <div class="form-check">
-                                                                                        <label class="form-check-label">
-                                                                                            <input type="radio" class="form-check-input" name="required" value="0" >
-                                                                                            Not Required
-                                                                                        </label>
-                                                                                    </div>
-                                                                                @endif
-                                                                                <small class="form-text text-muted">
-                                                                                    Is this course required by the program?
-                                                                                </small>
-                                                                        </div>
-                                                                    </div>
-
                                                                     <div class="form-group row">
                                                                         <label for="required" class="col-md-3 col-form-label text-md-right">Note</label>
-                                                                        <div class="col-md-6">
-
+                                                                        <div class="col-md-8">
                                                                             <div class="form">
                                                                                 @if ($programCourse->pivot->note != NULL)
                                                                                     <textarea name="note" class="form-textarea w-100" rows="2" maxlength="40">{{$programCourse->pivot->note}}</textarea>
@@ -247,14 +260,13 @@
                                                                                     You may add a note to further categorize courses (E.g. Chemistry Specialization). The note can not be greater than <b>40 characters.</b>
                                                                                 </small>
                                                                             </div>
-
                                                                         </div>
                                                                     </div>
-                                                                    
-                                                                    <input type="hidden" class="form-input" name="course_id" value="{{$programCourse->course_id}}">
-                                                                    <input type="hidden" class="form-input" name="program_id" value="{{$program->program_id}}">
-                                                                    <input type="hidden" class="form-check-input" name="user_id" value="{{Auth::id()}}">
 
+                                                                    <input type="hidden" name="course_id" value="{{$programCourse->course_id}}">
+                                                                    <input type="hidden" name="program_id" value="{{$program->program_id}}">
+                                                                    <input type="hidden" name="user_id" value="{{Auth::id()}}">
+                                                                    <input type="hidden" name="required" value="{{$programCourse->pivot->course_required}}">
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
@@ -264,7 +276,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </td>                                        
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </table>
@@ -312,10 +324,10 @@
 
                                         <div class="form-group row">
                                             <label for="course_num" class="col-md-3 col-form-label text-md-right">Course Number</label>
-            
+
                                             <div class="col-md-8">
                                                 <input id="course_num" type="text" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="30" class="form-control @error('course_num') is-invalid @enderror" name="course_num" autofocus>
-            
+
                                                 @error('course_num')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -348,7 +360,7 @@
                                                 <select id="course_semester" class="form-control @error('course_semester') is-invalid @enderror"
                                                     name="course_semester" required autofocus>
                                                     <option value="W1">Winter Term 1</option>
-                                                    <option value="W2">Winter Term 2</option>
+                                                    <option value="W2" selected >Winter Term 2</option>
                                                     <option value="S1">Summer Term 1</option>
                                                     <option value="S2">Summer Term 2</option>
 
@@ -369,9 +381,9 @@
                                                     <option value="2027">2027</option>
                                                     <option value="2026">2026</option>
                                                     <option value="2025">2025</option>
-                                                    <option value="2024">2024</option>
+                                                    <option value="2024" selected >2024</option>
                                                     <option value="2023">2023</option>
-                                                    <option value="2022" selected>2022</option>
+                                                    <option value="2022">2022</option>
                                                     <option value="2021">2021</option>
                                                     <option value="2020">2020</option>
                                                     <option value="2019">2019</option>
@@ -412,9 +424,9 @@
                                             <div class="col-md-3 float-right">
                                                 <select id="delivery_modality" class="form-control @error('delivery_modality') is-invalid @enderror"
                                                 name="delivery_modality" required autofocus>
-                                                    <option value="O">online</option>
-                                                    <option value="I">in-person</option>
-                                                    <option value="B">hybrid</option>
+                                                    <option value="O">Online</option>
+                                                    <option value="I">In-person</option>
+                                                    <option value="B">Hybrid</option>
                                                     <option value="M">Multi-Access</option>
 
                                                 @error('delivery_modality')
@@ -510,7 +522,7 @@
                                 </div>
                                 @if (count($userCoursesNotInProgram) < 1)
                                     <div class="alert alert-warning wizard">
-                                        <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses to assign.                    
+                                        <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses to assign.
                                     </div>
                                 @else
                                     <div class="modal-body">
@@ -543,13 +555,13 @@
                                                     <td>
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input ml-0" name="require{{$course->course_id}}" type="checkbox" id="flexSwitchCheck{{$course->course_id}}">
-                                                        </div>                                           
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 @endforeach
                                             </table>
                                         </form>
-                                    </div> 
+                                    </div>
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
@@ -590,11 +602,39 @@
     });
 </script>
 
-<style> 
+<style>
 .tooltip-inner {
     text-align: left;
     max-width: 600px;
-    width: auto; 
+    width: auto;
+}
+
+/* Custom styles for the form switch */
+.form-check.form-switch {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.form-check.form-switch .form-check-input {
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.form-check.form-switch .form-check-label {
+    padding-left: 30px;
+    font-size: 0.875rem;
+}
+
+/* .switch-input {
+    position: relative;
+    width: 40px;
+    height: 20px;
+} */
+
+.course-switch {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
 }
 </style>
 @endsection

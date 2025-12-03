@@ -23,20 +23,20 @@
 
                 <div class="card-body">
                     <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                         <div>
-                            Input all <a href="https://ctlt.ubc.ca/resources/webliography/assessmentevaluation/" target="_blank" rel="noopener noreferrer" class="alert-link">
+                            Input all <a href="https://ctl.ok.ubc.ca/teaching/course-design/assessment/assessment-strategies/" target="_blank" rel="noopener noreferrer" class="alert-link">
                                 <i class="bi bi-box-arrow-up-right"></i> assessment methods
-                            </a> 
-                            of the course individually. You may also choose to use the 
+                            </a>
+                            of the course individually. You may also choose to use the
                             <a href="https://ubcoapps.elearning.ubc.ca/" target="_blank" rel="noopener noreferrer" class="alert-link"><i class="bi bi-box-arrow-up-right">
                                 </i> UBCO's Workload Calculator
-                            </a> 
-                            to estimate the student time commitment in this course based on the chosen assignments.              
+                            </a>
+                            to estimate the student time commitment in this course based on the chosen assignments.
                         </div>
                     </div>
 
-                    
+
                     <div class="row">
                         <div class="col">
                             <h6 class="card-subtitle mb-4 lh-lg">
@@ -61,23 +61,23 @@
                                     <th class="text-center"></th>
                                     <th>Student Assesment Methods</th>
                                     <th>Weight</th>
-                                    <th class="text-center w-25">Actions</th>                                    
+                                    <th class="text-center w-25">Actions</th>
                                 </tr>
                             </thead>
                             @if(count($a_methods)<1)
                                 <tr>
                                     <td colspan="4">
                                         <div class="alert alert-warning wizard">
-                                            <i class="bi bi-exclamation-circle-fill"></i>There are no student assessment methods set for this course.                    
+                                            <i class="bi bi-exclamation-circle-fill"></i>There are no student assessment methods set for this course.
                                         </div>
                                     </td>
                                 </tr>
                             @else
                                 @foreach($a_methods as $index=>$a_method)
                                     <tr>
-                                        <td class="text-center fw-bold" style="width:5%">↕</td>                                                
+                                        <td class="text-center fw-bold" style="width:5%">↕</td>
                                         <td>
-                                            {{$a_method->a_method}}                                                    
+                                            {{$a_method->a_method}}
                                         </td>
                                         <td >
                                             {{$a_method->weight}}%
@@ -116,6 +116,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addAssessmentMethodModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> Student Assessment Methods</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
                                 <div class="modal-body">
@@ -126,7 +127,7 @@
                                                 <input id="assessmentMethod" class="form-control" list="assessmentMethodOptions" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="191" placeholder="Type to search or add your own..." required>
                                                 <div class="invalid-tooltip">
                                                     Please provide an assessment method.
-                                                </div>                                            
+                                                </div>
                                                 <datalist id="assessmentMethodOptions">
                                                     <option value="Annotated bibliography">
                                                     <option value="Assignment">
@@ -172,7 +173,7 @@
                                                         @foreach($custom_methods as $method)
                                                         <option value={{$method->custom_methods}}>
                                                         @endforeach
-                                                    @endif                                            
+                                                    @endif
                                                 </datalist>
                                             </div>
                                             <div class="col-4">
@@ -191,7 +192,7 @@
                                         <div class="col-8">
                                             <hr>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="row m-1">
                                         <table id="addAssessmentMethodsTbl" class="table table-light table-borderless">
                                             <thead>
@@ -209,28 +210,29 @@
                                                         <input list="assessmentMethodOptions" id="a_method{{$a_method->a_method_id}}" type="text" class="form-control @error('a_method') is-invalid @enderror" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="191"
                                                         name="current_a_methods[{{$a_method->a_method_id}}]" value = "{{$a_method->a_method}}" placeholder="Choose from the dropdown list or type your own" form="saveAssessmentMethodChanges" required>
                                                     </td>
-                                                    <td>                                                 
+                                                    <td>
                                                         <input class="p-1" id="a_method_weight{{$a_method->a_method_id}}" type="number" step="0.1" form="saveAssessmentMethodChanges" class="form-control @error('weight') is-invalid @enderror" value="{{$a_method->weight}}" name="current_weights[{{$a_method->a_method_id}}]" min="0" max="100" oninput="validateMaxlength()" onpaste="validateMaxlength()" maxlength="3" required>
                                                         <label for="a_method_weight{{$a_method->a_method_id}}" style="font-size: medium; margin-top:5px;margin-left:5px"><strong>%</strong></label>
                                                     </td>
                                                     <td class="text-center">
                                                         <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteAssessmentMethod(this)"></i>
                                                     </td>
-                                                    
+
                                                 </tr>
-                                                @endforeach                                        
+                                                @endforeach
                                             </tbody>
-                                        </table>                                    
+                                        </table>
                                     </div>
                                 </div>
                                 <form method="POST" id="saveAssessmentMethodChanges" action="{{ action([\App\Http\Controllers\AssessmentMethodController::class, 'store']) }}">
                                     @csrf
                                     <div class="modal-footer">
                                         <input type="hidden" name="course_id" value="{{$course->course_id}}" form="saveAssessmentMethodChanges">
+                                        <button id="deleteAllAssessmentMethods" type="button" class="btn btn-danger col-3">Delete All</button>
                                         <button id="cancel" type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-success btn col-3" >Save Changes</button>
+                                        <button type="submit" class="btn btn-success btn col-3" >Save</button>
                                     </div>
-                                </form>    
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -247,7 +249,7 @@
                             <button class="btn btn-sm btn-primary col-3 float-right">Teaching and Learning Activities <i class="bi bi-arrow-right ml-2"></i></button>
                         </a>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
     </div>
@@ -258,6 +260,13 @@
 
     $(document).ready(function () {
         sortDropdown();
+
+        // To Delete All Assessment Methods
+        $('#deleteAllAssessmentMethods').click(function() {
+            if (confirm('Are you sure you want to delete all assessment methods? This cannot be undone.')) {
+                $('#addAssessmentMethodsTbl tbody').empty();
+            }
+        });
         //   $("form").submit(function () {
         //     // prevent duplicate form submissions
         //     $(this).find(":submit").attr('disabled', 'disabled');
@@ -265,7 +274,7 @@
 
         //   });
 
-        
+
         $('#addAssessmentMethodForm').submit(function (event) {
             // prevent default form submission handling
             event.preventDefault();
@@ -273,14 +282,14 @@
             // check if input fields contain data
             if ($('#assessmentMethod').val().length != 0 && $('#weight').val() >= 0) {
                 addAssessmentMethod();
-                // reset form 
+                // reset form
                 $(this).trigger('reset');
                 $(this).removeClass('was-validated');
             } else {
                 // mark form as validated
                 $(this).addClass('was-validated');
             }
-            // readjust modal's position 
+            // readjust modal's position
             document.querySelector('#addAssessmentMethodModal').handleUpdate();
 
         });
@@ -292,7 +301,7 @@
                         <td>
                             <input list="assessmentMethodOptions" id="a_method{{$a_method->a_method_id}}" type="text" class="form-control @error('a_method') is-invalid @enderror" name="current_a_methods[{{$a_method->a_method_id}}]" value = "{{$a_method->a_method}}" placeholder="Choose from the dropdown list or type your own" form="saveAssessmentMethodChanges" required>
                         </td>
-                        <td>                                                 
+                        <td>
                             <input class="p-1" id="a_method_weight{{$a_method->a_method_id}}" type="number" step="0.1" form="saveAssessmentMethodChanges" class="form-control @error('weight') is-invalid @enderror" value="{{$a_method->weight}}" name="current_weights[{{$a_method->a_method_id}}]" min="0" max="100" required>
                             <label for="a_method_weight{{$a_method->a_method_id}}" style="font-size: medium; margin-top:5px;margin-left:5px"><strong>%</strong></label>
                         </td>
@@ -300,7 +309,7 @@
                             <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteAssessmentMethod(this)"></i>
                         </td>
                     </tr>
-                @endforeach 
+                @endforeach
             `);
         });
     });
@@ -317,14 +326,14 @@
                 <td>
                     <input list="assessmentMethodOptions" type="text" class="form-control @error('a_method') is-invalid @enderror" name="new_a_methods[]" value="${$('#assessmentMethod').val()}" placeholder="Choose from the dropdown list or type your own" form="saveAssessmentMethodChanges" required >
                 </td>
-                <td>                                                 
+                <td>
                     <input class="p-1" type="number" step="0.1" form="saveAssessmentMethodChanges" class="form-control @error('weight') is-invalid @enderror" value="${$('#weight').val()}" name="new_weights[]" min="0" max="100" required >
                     <label style="font-size: medium; margin-top:5px;margin-left:5px"><strong>%</strong></label>
                 </td>
                 <td class="text-center">
                     <i class="bi bi-x-circle-fill text-danger fs-4 btn" onclick="deleteAssessmentMethod(this)"></i>
                 </td>
-            </tr>        
+            </tr>
         `);
     }
 

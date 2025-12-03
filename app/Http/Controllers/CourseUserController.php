@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CourseAccessRequestMail;
 use App\Mail\NotifyInstructorMail;
 use App\Mail\NotifyInstructorOwnerMail;
 use App\Mail\NotifyNewInstructorMail;
@@ -292,5 +293,31 @@ class CourseUserController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function requestAccess(Request $request, int $courseId): RedirectResponse
+    {
+        $data = $request->validate([
+            'access' => 'required|in:view,edit',
+            'message' => 'nullable|string|max:500',
+        ]);
+
+        $course = Course::findOrFail($courseId);
+        $owners = $course->owners;
+        if ($owners->isEmpty()) {
+            return redirect()->back()->with('error', 'No course owner found to notify.');
+        }
+
+        $requester = User::find(Auth::id());
+        foreach ($owners as $owner) {
+            Mail::to($owner->email)->send(new CourseAccessRequestMail(
+                $course,
+                $requester,
+                $data['access'],
+                $data['message'] ?? null
+            ));
+        }
+
+        return redirect()->back()->with('success', 'Access request sent to course owner(s).');
     }
 }

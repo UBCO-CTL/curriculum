@@ -4,6 +4,24 @@
         <div class="col">
             <h3>Course: {{$course->year}} {{$course->semester}} {{$course->course_code}} {{$course->course_num}} {{$course->section}}</h3>
             <h5 class="text-muted">{{$course->course_title}}</h5>
+            <h5>Programs:
+            @php
+                $programs = $course->programs;
+            @endphp
+            @if($programs->count() > 0)
+                @if($programs->count() <= 2)
+                    @foreach($programs as $program)
+                        <a href="{{ route('programWizard.step1', $program->program_id) }}" class="text-primary">{{ $program->program }}</a>{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
+                @else
+                    <a href="{{ route('programWizard.step1', $programs->first()->program_id) }}" class="text-primary">{{ $programs->first()->program }}</a>
+                    and <a href="{{ route('courseWizard.step5', $course->course_id) }}" class="text-primary">
+                        {{ $programs->count() - 1 }} more (See Step 5 for details)</a>
+                @endif
+            @else
+                <span class="text-muted">No associated programs</span>
+            @endif
+            </h5>
             <h5>Mode of Delivery:
             @switch($course->delivery_modality)
                 @case('O')
@@ -38,7 +56,7 @@
                                 <form action="{{ route('courses.duplicate', $course->course_id) }}" method="POST">
                                     @csrf
                                     {{method_field('POST')}}
-                                    
+
                                     <div class="modal-body">
 
                                         <div class="form-group row">
@@ -92,7 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="modal-footer">
                                         <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
                                         <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
@@ -104,7 +122,7 @@
                 </div>
             </div>
         @endif
-        @if (!$isEditor && !$isViewer) 
+        @if (!$isEditor && !$isViewer)
                 <div class="row">
                     <div class="col">
                         <!-- Edit button -->
@@ -371,7 +389,7 @@
                         <td>Teaching and Learning Activities</td>
                         <td>Course Alignment</td>
                         <td>Program Outcome Mapping</td>
-                        <td>BC Degree Standards and Strategic Priorities</td>
+                        <td>BC Degree Standards and UBC Strategic Priorities</td>
                         <td>Course Summary</td>
                     </tr>
                 </tbody>
@@ -381,6 +399,16 @@
 </div>
 <script type="application/javascript">
     $(document).ready(function () {
+
+    // Initialize Bootstrap 5 tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
 	//This method is used to make sure that the proper amount of characters are entered so it doesn't exceed the max character limits
     function validateMaxlength(e){
         //Whitespaces are counted as 1 but character wise are 2 (\n).
@@ -388,9 +416,10 @@
         var currentLength = event.target.value.length;
         var whiteSpace = event.target.value.split(/\n/).length;
         if((currentLength+(whiteSpace))>MAX_LENGTH)
-        { 
+        {
             //Goes to MAX_LENGTH-(whiteSpace)+1 because it starts at 1
-            event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);	        
+            event.target.value = event.target.value.substr(0,MAX_LENGTH-(whiteSpace)+1);
         }
-    } 
+    }
+});
 </script>

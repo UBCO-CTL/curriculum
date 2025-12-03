@@ -43,8 +43,6 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
-//Currently need to force HTTPS for Unit Testing to function properly, looking into a fix now.
-//URL::forceScheme('https');
 
 Route::get('/', function () {
     return view('pages.landing');
@@ -109,6 +107,7 @@ Route::post('/courses/{course}/assign', [CourseUserController::class, 'store'])-
 Route::delete('/courses/{course}/unassign', [CourseUserController::class, 'destroy'])->name('courses.unassign');
 Route::get('/courseUser', [CourseUserController::class, 'leave'])->name('courseUser.leave');
 Route::post('/courseUserTransfer', [CourseUserController::class, 'transferOwnership'])->name('courseUser.transferOwnership');
+Route::post('/courses/{course}/request-access', [CourseUserController::class, 'requestAccess'])->name('courses.requestAccess');
 
 Route::get('/courses/{course}/submit', [CourseController::class, 'submit'])->name('courses.submit');
 Route::post('/courses/{course}/outcomeDetails', [CourseController::class, 'outcomeDetails'])->name('courses.outcomeDetails');
@@ -130,12 +129,15 @@ Route::delete('/courses/{course}/destroy', [CourseController::class, 'destroy'])
 Route::resource('/lo', LearningOutcomeController::class);
 Route::post('/import/clos', [LearningOutcomeController::class, 'import'])->name('courses.outcomes.import');
 Route::post('/store/clos', [LearningOutcomeController::class, 'store'])->name('courses.outcomes.store');
+Route::get('/courses/{course}/outcomes/export-canvas', [LearningOutcomeController::class, 'exportCanvas'])->name('courses.outcomes.export');
 
 Route::resource('/plo', ProgramLearningOutcomeController::class);
 Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->name('program.outcomes.store');
 Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])->name('program.outcomes.import');
 Route::delete('/plo/{program}/delete', [ProgramLearningOutcomeController::class, 'destroy'])->name('plo.destroy');
 Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('plo.update');
+Route::delete('/program/{program}/plos/deleteAll', [ProgramLearningOutcomeController::class, 'destroyAll'])->name('program.plo.destroyAll');
+Route::post('/programs/{program}/plo/reorder', [App\Http\Controllers\ProgramLearningOutcomeController::class, 'reorder'])->name('program.plo.reorder');
 
 Route::resource('/la', LearningActivityController::class);
 Route::post('/la/store', [LearningActivityController::class, 'store'])->name('la.store');
@@ -162,6 +164,7 @@ Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'u
 Route::resource('/ploCategory', PLOCategoryController::class);
 Route::post('/ploCategory/store', [PLOCategoryController::class, 'store'])->name('program.category.store');
 Route::delete('/ploCategory/{program}/delete', [PLOCategoryController::class, 'destroy'])->name('program.category.destroy');
+Route::delete('/program/{program}/categories/deleteAll', [PLOCategoryController::class, 'destroyAll'])->name('program.category.destroyAll');
 Route::post('/ploCategory/{program}/update', [PLOCategoryController::class, 'update'])->name('program.category.update');
 
 Route::resource('/programUser', ProgramUserController::class);

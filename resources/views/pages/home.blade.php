@@ -27,7 +27,7 @@
 @endif
 
 
-    
+
 <div class="container mt-4">
     <div class="row">
         <div style="width: 100%;border-bottom: 1px solid #DCDCDC">
@@ -41,7 +41,7 @@
                     <div class="card-title bg-primary p-3">
                         <h3 style="color: white;">
                         Programs
-                        
+
                         <div style="float:right;">
                             <button id="programHelp" style="border: none; background: none; outline: none;" data-bs-toggle="modal" href="#guideModal">
                                 <i class="bi bi-question-circle text-white"></i>
@@ -64,6 +64,7 @@
                             <th scope="col">Program</th>
                             <th scope="col">Faculty and Department/School</th>
                             <th scope="col">Level</th>
+                            <th scope="col" class="text-center">Courses</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -71,18 +72,40 @@
 
                     @if (count($myPrograms->where('userPermission', 1)) > 0)
                     <tr>
-                        <th colspan="5" class="table-secondary">My Programs</th>
+                        <th colspan="6" class="table-secondary">My Programs</th>
                     </tr>
                     @endif
-                            
+
                     <!-- Displays 'My Programs' -->
-                    @foreach ($myPrograms->where('userPermission', 1)->values() as $index => $program) 
+                    @foreach ($myPrograms->where('userPermission', 1)->values() as $index => $program)
                     <tbody>
                         <tr>
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
-                            @if ($program->last_modified_user != NULL) 
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
                                 <td>{{$program->timeSince}}</td>
@@ -96,11 +119,11 @@
                                         <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
                                         <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($programUsers[$program->program_id] as $counter => $programUser){{$counter + 1}}. {{$programUser->name}}<br>@endforeach" data-modal="addProgramCollaboratorsModal{{$program->program_id}}">
                                             <div>
-                                                Collaborators 
+                                                Collaborators
                                                 <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                 <span class="badge rounded-pill badge badge-dark">
                                                     {{ count($programUsers[$program->program_id]) }}
-                                                </span> 
+                                                </span>
                                             </div>
                                         </div>
                                         <a class="dropdown-item" data-toggle="modal" data-target="#duplicateProgramConfirmation{{$program->program_id}}">Duplicate</a>
@@ -169,7 +192,7 @@
                                             <form action="{{route('programs.destroy', $program->program_id)}}" method="POST" class="float-right">
                                                 @csrf
                                                 {{method_field('DELETE')}}
-                                                
+
                                                 <div class="modal-footer">
                                                     <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
                                                     <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -182,23 +205,45 @@
                             </td>
                         </tr>
                     </tbody>
-                    
+
                     @endforeach
-                            
+
                     <!-- Displays 'Programs I can edit' -->
                     @if (count($myPrograms->where('userPermission', 2)) > 0)
                     <tr>
                         <th colspan="6" class="table-secondary">Programs I Can Edit</th>
                     </tr>
                     @endif
-                            
-                    @foreach ($myPrograms->where('userPermission', 2)->values() as $index => $program) 
+
+                    @foreach ($myPrograms->where('userPermission', 2)->values() as $index => $program)
                     <tbody>
                         <tr>
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
-                            @if ($program->last_modified_user != NULL) 
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
                                 <td>{{$program->timeSince}}</td>
@@ -212,11 +257,11 @@
                                         <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
                                         <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($programUsers[$program->program_id] as $counter => $programUser){{$counter + 1}}. {{$programUser->name}}<br>@endforeach" data-modal="addProgramCollaboratorsModal{{$program->program_id}}">
                                             <div>
-                                                Collaborators 
+                                                Collaborators
                                                 <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                 <span class="badge rounded-pill badge badge-dark">
                                                     {{ count($programUsers[$program->program_id]) }}
-                                                </span> 
+                                                </span>
                                             </div>
                                         </div>
                                         <a class="dropdown-item" data-toggle="modal" data-target="#duplicateProgramConfirmation{{$program->program_id}}">Duplicate</a>
@@ -270,21 +315,43 @@
                         </tr>
                     </tbody>
                     @endforeach
-                            
+
                     <!-- Displays Programs I can view -->
                     @if (count($myPrograms->where('userPermission', 3)) > 0)
                     <tr>
                         <th colspan="6" class="table-secondary">Programs I Can View</th>
                     </tr>
                     @endif
-                            
-                    @foreach ($myPrograms->where('userPermission', 3)->values() as $index => $program) 
+
+                    @foreach ($myPrograms->where('userPermission', 3)->values() as $index => $program)
                     <tbody>
                         <tr>
                             <td><a href="{{route('programWizard.step1', $program->program_id)}}">{{$program->program}}</a></td>
                             <td>{{$program->faculty}} </td>
                             <td>{{$program->level}}</td>
-                            @if ($program->last_modified_user != NULL) 
+                            <td>
+                                <div class="row">
+                                    <div class="d-flex justify-content-center">
+                                        @php
+                                            $programCourses = $myCourses->filter(function($course) use ($program, $coursesPrograms) {
+                                                return collect($coursesPrograms[$course->course_id] ?? [])->contains('program_id', $program->program_id);
+                                            });
+                                            $programCourseCount = $programCourses->count();
+                                        @endphp
+                                        @if($programCourseCount > 0)
+                                            <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($programCourses as $i => $programCourse){{$i + 1}}. {{$programCourse->course_title}}<br>@endforeach" data-bs-placement="right">
+                                                <i class="bi bi-journal-text" style="font-size:x-large; text-align:center;"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
+                                                    {{ $programCourseCount }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='No courses assigned to this program yet'> None</i></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            @if ($program->last_modified_user != NULL)
                                 <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$program->last_modified_user}}">{{$program->timeSince}}</p></td>
                             @else
                                 <td>{{$program->timeSince}}</td>
@@ -297,11 +364,11 @@
                                         <a class="dropdown-item" href="{{route('programWizard.step4', $program->program_id)}}">View</a>
                                         <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($programUsers[$program->program_id] as $counter => $programUser){{$counter + 1}}. {{$programUser->name}}<br>@endforeach" data-modal="addProgramCollaboratorsModal{{$program->program_id}}">
                                             <div>
-                                                Collaborators 
+                                                Collaborators
                                                 <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                 <span class="badge rounded-pill badge badge-dark">
                                                     {{ count($programUsers[$program->program_id]) }}
-                                                </span> 
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -318,13 +385,13 @@
                 @endif
             </div>
             <!-- End of Programs -->
-            
+
             <!-- Start of Courses -->
             <div class="card shadow rounded m-4" style="border-style: solid;border-color: #1E90FF;">
                 <div class="card-title bg-primary p-3">
                     <h3 style="color: white;">
                         Courses
-                    
+
                     <div style="float:right;">
                         <button id="coursesHelp" style="border: none; background: none; outline: none;" data-bs-toggle="modal" href="#guideModal">
                             <i class="bi bi-question-circle text-white"></i>
@@ -337,11 +404,17 @@
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
                         </div>
+
+                        <div class="btn-group btn-group-sm me-2" role="group" aria-label="Courses view toggle" style="float:right;">
+                            <button id="btnListView" type="button" class="btn btn-light">List all Courses</button>
+                            <button id="btnGroupView" type="button" class="btn btn-outline-light">Group by Program</button>
+                        </div>
                     </h3>
                 </div>
 
                 <div class="card-body" style="padding:0%;">
                     @if(count($myCourses)>0)
+                        <div id="courses-list-view">
                         <table class="table table-hover dashBoard">
                             <thead>
                                 <tr>
@@ -354,7 +427,7 @@
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                                
+
                             <!-- Displays 'My Courses' -->
                             @if (count($myCourses->where('userPermission', 1)) > 0)
                                 <tr>
@@ -365,437 +438,22 @@
                             @foreach ($myCourses->where('userPermission', 1)->values() as $index => $course)
                             <tbody>
                                 <tr>
-                                    <!-- Courses That have Not been Completed TODO: THIS IS PROBABLY NOT NEEDED ANYMORE-->
-                                    @if($course->status !== 1)
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div>   
-                                            
-                                        </td>
-                                    @else
-                                        <!-- Courses That have been Completed -->
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div> 
-                                        </td>
-                                    @endif
-                                    @if ($course->last_modified_user != NULL) 
-                                        <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$course->last_modified_user}}">{{$course->timeSince}}</p></td>
-                                    @else
-                                        <td>{{$course->timeSince}}</td>
-                                    @endif
-                                    <td>
-                                        <!-- actions drop down -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear-fill"></i> </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{route('courseWizard.step1', $course->course_id)}}">Edit</a>
-                                                <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
-                                                <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($courseUsers[$course->course_id] as $counter => $courseUser){{$counter + 1}}. {{$courseUser->name}}<br>@endforeach" data-modal="addCourseCollaboratorsModal{{$course->course_id}}">
-                                                    <div>
-                                                        Collaborators 
-                                                        <!-- <i class="bi bi-person-plus-fill"></i> -->
-                                                        <span class="badge rounded-pill badge badge-dark">
-                                                            {{ count($courseUsers[$course->course_id]) }}
-                                                        </span> 
-                                                    </div>
-                                                </div>
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#duplicateCourseConfirmation{{$course->course_id}}">Duplicate</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteCourseConfirmation{{$course->course_id}}" href=#>Delete</a>
-                                            </div>
-                                        </div>
-
-                                        @include('courses.courseCollabs')
-                                        
-                                        <!-- Delete Confirmation Modal -->
-                                        <div class="modal fade show" id="deleteCourseConfirmation{{$course->course_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteCourseConfirmation{{$course->course_id}}" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Delete Course Confirmation</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                    Are you sure you want to delete course {{$course->course_code}} {{$course->course_num}} ?
-                                                    </div>
-
-                                                    <form action="{{route('courses.destroy', $course->course_id)}}" method="POST">
-                                                        @csrf
-                                                        {{method_field('DELETE')}}
-
-                                                        <div class="modal-footer">
-                                                            <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                                            <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End of Delete Course Confirmation Modal -->
-
-                                        <!-- Duplicate Course Confirmation Modal -->
-                                        <div class="modal fade" id="duplicateCourseConfirmation{{$course->course_id}}" tabindex="-1" role="dialog" aria-labelledby="duplicateCourseConfirmation{{$course->course_id}}" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="duplicateCourseConfirmation{{$course->course_id}}">Duplicate Course</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form action="{{ route('courses.duplicate', $course->course_id) }}" method="GET">
-                                                        @csrf
-                                                        {{method_field('GET')}}
-
-                                                        <div class="modal-body">
-
-                                                            <div class="form-group row">
-                                                                <label for="course_code" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Code</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_code" type="text" pattern="[A-Za-z]+" minlength="1" maxlength="4" class="form-control @error('course_code') is-invalid @enderror" value="{{$course->course_code}}" name="course_code" required autofocus>
-                                                                    @error('course_code')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                    @enderror
-                                                                    <small id="helpBlock" class="form-text text-muted">
-                                                                        Maximum of Four letter course code e.g. SUST, ASL, COSC etc.
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_num" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Number</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_num" type="text" class="form-control @error('course_num') is-invalid @enderror" name="course_num" value="{{$course->course_num}}" required autofocus>
-                                                                    @error('course_num')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_title" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Title</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_title" type="text" class="form-control @error('course_title') is-invalid @enderror" name="course_title" value="{{$course->course_title}} - Copy" required autofocus>
-                                                                    @error('course_title')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_section" class="col-md-3 col-form-label text-md-right">Course Section</label>
-                                                                <div class="col-md-4">
-                                                                    <input id="course_section" type="text" class="form-control @error('course_section') is-invalid @enderror" name="course_section" autofocus value= {{$course->section}}>
-                                                                    @error('course_section')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                                            <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    @include('pages.partials.course_row', ['course' => $course])
                                 </tr>
-
                             </tbody>
                             @endforeach
-                            
+
                             <!-- Displays Courses I can edit -->
                             @if (count($myCourses->where('userPermission', 2)) > 0)
                                 <tr>
                                     <th colspan="7" class="table-secondary">Courses I Can Edit</th>
                                 </tr>
                             @endif
-                                
+
                             @foreach ($myCourses->where('userPermission', 2)->values() as $index => $course)
                             <tbody>
                                 <tr>
-                                    <!-- Courses That have Not been Completed TODO: THIS IS PROBABLY NOT NEEDED ANYMORE-->
-                                    @if($course->status !== 1)
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div>                                           
-                                        </td>
-                                    @else
-                                        <!-- Courses That have been Completed -->
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div>                                           
-                                        </td>
-                                    @endif
-                                    @if ($course->last_modified_user != NULL) 
-                                        <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$course->last_modified_user}}">{{$course->timeSince}}</p></td>
-                                    @else
-                                        <td>{{$course->timeSince}}</td>
-                                    @endif
-                                    <td>
-                                        <!-- actions drop down -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear-fill"></i> </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{route('courseWizard.step1', $course->course_id)}}">Edit</a>
-                                                <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
-                                                <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($courseUsers[$course->course_id] as $counter => $courseUser){{$counter + 1}}. {{$courseUser->name}}<br>@endforeach" data-modal="addCourseCollaboratorsModal{{$course->course_id}}">
-                                                    <div>
-                                                        Collaborators 
-                                                        <!-- <i class="bi bi-person-plus-fill"></i> -->
-                                                        <span class="badge rounded-pill badge badge-dark">
-                                                            {{ count($courseUsers[$course->course_id]) }}
-                                                        </span> 
-                                                    </div>
-                                                </div>
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#duplicateCourseConfirmation{{$course->course_id}}">Duplicate</a>
-                                            </div>
-                                        </div>
-
-                                        @include('courses.courseCollabs')
-                                        
-                                        <!-- Duplicate Course Confirmation Modal -->
-                                        <div class="modal fade" id="duplicateCourseConfirmation{{$course->course_id}}" tabindex="-1" role="dialog" aria-labelledby="duplicateCourseConfirmation{{$course->course_id}}" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="duplicateCourseConfirmation{{$course->course_id}}">Duplicate Course</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form action="{{ route('courses.duplicate', $course->course_id) }}" method="GET">
-                                                        @csrf
-                                                        {{method_field('GET')}}
-
-                                                        <div class="modal-body">
-                                                            
-                                                            <div class="form-group row">
-                                                                <label for="course_code" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Code</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_code" type="text" pattern="[A-Za-z]+" minlength="1" maxlength="4" class="form-control @error('course_code') is-invalid @enderror" value="{{$course->course_code}}" name="course_code" required autofocus>
-                                                                    @error('course_code')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                    @enderror
-                                                                    <small id="helpBlock" class="form-text text-muted">
-                                                                        Maximum of Four letter course code e.g. SUST, ASL, COSC etc.
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_num" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Number</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_num" type="text" class="form-control @error('course_num') is-invalid @enderror" name="course_num" value="{{$course->course_num}}" required autofocus>
-                                                                    @error('course_num')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_title" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Title</label>
-                                                                <div class="col-md-8">
-                                                                    <input id="course_title" type="text" class="form-control @error('course_title') is-invalid @enderror" name="course_title" value="{{$course->course_title}} - Copy" required autofocus>
-                                                                    @error('course_title')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group row">
-                                                                <label for="course_section" class="col-md-3 col-form-label text-md-right">Course Section</label>
-                                                                <div class="col-md-4">
-                                                                    <input id="course_section" type="text" class="form-control @error('course_section') is-invalid @enderror" name="course_section" autofocus value= {{$course->section}}>
-                                                                    @error('course_section')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong>{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                                            <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    @include('pages.partials.course_row', ['course' => $course])
                                 </tr>
                             </tbody>
                             @endforeach
@@ -806,133 +464,134 @@
                                     <th colspan="7" class="table-secondary">Courses I Can View</th>
                                 </tr>
                             @endif
-                                
+
                             @foreach ($myCourses->where('userPermission', 3)->values() as $index => $course)
                             <tbody>
                                 <tr>
-                                    <!-- Courses That have Not been Completed TODO: THIS IS PROBABLY NOT NEEDED ANYMORE-->
-                                    @if($course->status !== 1)
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div>                                           
-                                        </td>
-                                    @else
-                                        <!-- Courses That have been Completed -->
-                                        <td style="max-width: 450px;"><a href="{{route('courseWizard.step1', $course->course_id)}}">{{$course->course_title}}</a></td>
-                                        <td>{{$course->course_code}} {{$course->course_num}}</td>
-                                        <td>{{$course->year}} {{$course->semester}}</td>
-                                        <td class="align-middle">
-                                            @if ($progressBar[$course->course_id] == 0)
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @elseif ($progressBar[$course->course_id] == 100)
-                                                <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            @else
-                                                <div class="bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="{{$progressBarMsg[$course->course_id]['statusMsg']}}">
-                                                    <p class="text-center mb-0">{{$progressBar[$course->course_id]}}%</p>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width:{{$progressBar[$course->course_id]}}%;" aria-valuenow="{{$progressBar[$course->course_id]}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <td> 
-                                            <div class="row">
-                                                <div class="d-flex justify-content-center">
-                                                    @if(count($coursesPrograms[$course->course_id]) > 0)
-                                                        <div class="bg-transparent position-relative pr-2 pl-2" data-toggle="tooltip" data-html="true" title="@foreach($coursesPrograms[$course->course_id] as $i => $courseProgram){{$i + 1}}. {{$courseProgram->program}}<br>@endforeach" data-bs-placement="right">
-                                                            <i class="bi bi-map" style="font-size:x-large; text-align:center;"></i>
-                                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge badge-dark">
-                                                                {{ count($coursesPrograms[$course->course_id]) }}
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                    <p style="text-align: center; display:inline-block; margin-left:-15px;"><i class="bi bi-info-circle-fill" data-toggle="tooltip" data-bs-placement="right" title='To map a course to a program, you must first create a program from the "My Programs" section'> None</i></p>
-                                                    @endif
-                                                </div>
-                                            </div>                                           
-                                        </td>
-                                    @endif
-                                    @if ($course->last_modified_user != NULL) 
-                                        <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$course->last_modified_user}}">{{$course->timeSince}}</p></td>
-                                    @else
-                                        <td>{{$course->timeSince}}</td>
-                                    @endif
-                                    <td>
-                                        <!-- actions drop down -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear-fill"></i> </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{route('courseWizard.step7', $course->course_id)}}">View</a>
-                                                <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
-                                                <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($courseUsers[$course->course_id] as $counter => $courseUser){{$counter + 1}}. {{$courseUser->name}}<br>@endforeach" data-modal="addCourseCollaboratorsModal{{$course->course_id}}">
-                                                    <div>
-                                                        Collaborators 
-                                                        <!-- <i class="bi bi-person-plus-fill"></i> -->
-                                                        <span class="badge rounded-pill badge badge-dark">
-                                                            {{ count($courseUsers[$course->course_id]) }}
-                                                        </span> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @include('courses.courseCollabs')
-                                    </td>
+                                    @include('pages.partials.course_row', ['course' => $course])
                                 </tr>
                             </tbody>
-                            @endforeach    
-                        </table>    
-                    @endif
-                </div>
-            </div>
+                            @endforeach
+                        </table>
+                                                    </div>
+
+                        <div id="courses-group-view" class="d-none">
+                            @php
+                                $allProgramsMap = [];
+                                $programsWithCourses = [];
+                                $unassignedCourses = [];
+
+                                foreach ($myCourses as $course) {
+                                    $coursePrograms = $coursesPrograms[$course->course_id];
+                                    if (count($coursePrograms) == 0) {
+                                        $unassignedCourses[] = $course;
+                                    } else {
+                                        foreach ($coursePrograms as $cp) {
+                                            if (!isset($allProgramsMap[$cp->program_id])) {
+                                                $allProgramsMap[$cp->program_id] = [
+                                                    'program' => $cp,
+                                                    'courses' => []
+                                                ];
+                                            }
+                                            $allProgramsMap[$cp->program_id]['courses'][] = $course;
+                                        }
+                                    }
+                                }
+
+                                $programsWithCourses = collect($allProgramsMap)->sortByDesc(function($data) {
+                                    return $data['program']->updated_at ?? $data['program']->created_at ?? '';
+                                })->toArray();
+                            @endphp
+
+                            <div class="accordion" id="coursesAccordion">
+                                @foreach($programsWithCourses as $programId => $data)
+                                    @if(count($data['courses']) > 0)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-program-{{$programId}}">
+                                                <button class="accordion-button @if(!$loop->first) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-program-{{$programId}}" aria-expanded="@if($loop->first) true @else false @endif" aria-controls="collapse-program-{{$programId}}">
+                                                    {{$data['program']->program}} <span class="badge bg-primary ms-2">{{count($data['courses'])}}</span>
+                                                </button>
+                                            </h2>
+                                            <div id="collapse-program-{{$programId}}" class="accordion-collapse collapse @if($loop->first) show @endif" aria-labelledby="heading-program-{{$programId}}" data-bs-parent="#coursesAccordion">
+                                                <div class="accordion-body p-0">
+                                                    <table class="table table-hover dashBoard mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Course Title</th>
+                                                                <th scope="col">Course Code</th>
+                                                                <th scope="col">Term</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col" class="text-center">Programs</th>
+                                                                <th scope="col">Last Updated</th>
+                                                                <th scope="col">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($data['courses'] as $course)
+                                                                <tr>
+                                                                    @include('pages.partials.course_row', [
+                                                                        'course' => $course,
+                                                                        'showPermissionBadge' => true,
+                                                                        'modalPrefix' => 'prog'.$programId.'_'
+                                                                    ])
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                @endforeach
+
+                                @if(count($unassignedCourses) > 0)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading-unassigned">
+                                            <button class="accordion-button @if(count($programsWithCourses) > 0 || count($myPrograms->where('courses', '>', 0)) > 0) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-unassigned" aria-expanded="@if(count($programsWithCourses) == 0 && count($myPrograms->where('courses', '>', 0)) == 0) true @else false @endif" aria-controls="collapse-unassigned">
+                                                Unassigned <span class="badge bg-primary ms-2">{{count($unassignedCourses)}}</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse-unassigned" class="accordion-collapse collapse @if(count($programsWithCourses) == 0 && count($myPrograms->where('courses', '>', 0)) == 0) show @endif" aria-labelledby="heading-unassigned" data-bs-parent="#coursesAccordion">
+                                            <div class="accordion-body p-0">
+                                                <table class="table table-hover dashBoard mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Course Title</th>
+                                                            <th scope="col">Course Code</th>
+                                                            <th scope="col">Term</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col" class="text-center">Programs</th>
+                                                            <th scope="col">Last Updated</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($unassignedCourses as $course)
+                                                            <tr>
+                                                                @include('pages.partials.course_row', [
+                                                                    'course' => $course,
+                                                                    'showPermissionBadge' => true,
+                                                                    'modalPrefix' => 'unassigned_'
+                                                                ])
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                                        </div>
+                                                </div>
+                                    @endif
+                                                    </div>
+                                                </div>
             <!-- End of Courses -->
+
+            <!-- Course Modals (rendered here so they're accessible from both list and group views) -->
+            @foreach($myCourses as $course)
+                                        @include('courses.courseCollabs')
+                            @endforeach
 
                 <!-- My Syllabi Section -->
                 <div class="card shadow rounded m-4" style="border-style: solid;
@@ -940,7 +599,7 @@
                     <div class="card-title bg-primary p-3">
                         <h3 style="color: white;">
                         Syllabi
-                        
+
                         <div style="float:right;">
                             <button id="syllabiHelp" style="border: none; background: none; outline: none;" data-bs-toggle="modal" href="#guideModal">
                                 <i class="bi bi-question-circle text-white"></i>
@@ -970,14 +629,14 @@
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                                
+
                             <!--Displays MySyllabus-->
                             @if (count($mySyllabi->where('userPermission', 1)) > 0)
                                 <tr>
                                     <th colspan="5" class="table-secondary">My Syllabi</th>
                                 </tr>
                             @endif
-                                
+
                             @foreach ($mySyllabi->where('userPermission', 1)->values() as $index => $syllabus)
                             <!-- Displays 'My Syllabi' -->
                             <tbody>
@@ -997,11 +656,11 @@
                                     <td>
                                         @if (strlen($syllabus->course_term) > 20 && $syllabus->course_term != 'W1' && $syllabus->course_term != 'W2' && $syllabus->course_term != 'S1' && $syllabus->course_term != 'S2')
                                             {{$syllabus->course_year}} Other
-                                        @else 
+                                        @else
                                             {{$syllabus->course_year}}  {{$syllabus->course_term}}
                                         @endif
                                     </td>
-                                    @if ($syllabus->last_modified_user != NULL) 
+                                    @if ($syllabus->last_modified_user != NULL)
                                         <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$syllabus->last_modified_user}}">{{$syllabus->timeSince}}</p></td>
                                     @else
                                         <td>{{$syllabus->timeSince}}</td>
@@ -1015,11 +674,11 @@
                                                 <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
                                                 <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($syllabiUsers[$syllabus->id] as $userIndex => $syllabusUser){{$userIndex + 1}}. {{$syllabusUser->name}}<br>@endforeach" data-modal="addSyllabusCollaboratorsModal{{$syllabus->id}}">
                                                     <div>
-                                                        Collaborators 
+                                                        Collaborators
                                                         <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                         <span class="badge rounded-pill badge badge-dark">
                                                             {{ count($syllabiUsers[$syllabus->id]) }}
-                                                        </span> 
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <a class="dropdown-item" data-toggle="modal" data-target="#duplicateSyllabusConfirmation{{$syllabus->id}}">Duplicate</a>
@@ -1125,16 +784,16 @@
                                     </td>
                                 </tr>
                             </tbody>
-                                
+
                             @endforeach
-                            
+
                             <!--Displays Syllabi I can Edit-->
                             @if (count($mySyllabi->where('userPermission', 2)) > 0)
                                 <tr>
                                     <th colspan="6" class="table-secondary">Syllabi I Can Edit</th>
                                 </tr>
                             @endif
-                                
+
                             @foreach ($mySyllabi->where('userPermission', 2)->values() as $index => $syllabus)
                             <tbody>
                                 <tr>
@@ -1150,7 +809,7 @@
                                     <td>
                                         {{$syllabus->course_year}} {{$syllabus->course_term}}
                                     </td>
-                                    @if ($syllabus->last_modified_user != NULL) 
+                                    @if ($syllabus->last_modified_user != NULL)
                                         <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$syllabus->last_modified_user}}">{{$syllabus->timeSince}}</p></td>
                                     @else
                                         <td>{{$syllabus->timeSince}}</td>
@@ -1164,11 +823,11 @@
                                                 <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
                                                 <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($syllabiUsers[$syllabus->id] as $userIndex => $syllabusUser){{$userIndex + 1}}. {{$syllabusUser->name}}<br>@endforeach" data-modal="addSyllabusCollaboratorsModal{{$syllabus->id}}">
                                                     <div>
-                                                        Collaborators 
+                                                        Collaborators
                                                         <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                         <span class="badge rounded-pill badge badge-dark">
                                                             {{ count($syllabiUsers[$syllabus->id]) }}
-                                                        </span> 
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <a class="dropdown-item" data-toggle="modal" data-target="#duplicateSyllabusConfirmation{{$syllabus->id}}">Duplicate</a>
@@ -1244,14 +903,14 @@
                                 </tr>
                             </tbody>
                             @endforeach
-                                
+
                             <!--Displays Syllabi I can View -->
                             @if (count($mySyllabi->where('userPermission', 3)) > 0)
                                 <tr>
                                     <th colspan="6" class="table-secondary">Syllabi I Can View</th>
                                 </tr>
                             @endif
-                            
+
                             @foreach ($mySyllabi->where('userPermission', 3)->values() as $index => $syllabus)
                             <tbody>
                                 <tr>
@@ -1267,7 +926,7 @@
                                     <td>
                                         {{$syllabus->course_year}} {{$syllabus->course_term}}
                                     </td>
-                                    @if ($syllabus->last_modified_user != NULL) 
+                                    @if ($syllabus->last_modified_user != NULL)
                                         <td><p data-toggle="tooltip" data-html="true" data-bs-placement="top" title="Last updated by: {{$syllabus->last_modified_user}}">{{$syllabus->timeSince}}</p></td>
                                     @else
                                         <td>{{$syllabus->timeSince}}</td>
@@ -1281,11 +940,11 @@
                                                 <!-- <a class="dropdown-item" href="#">Collaborators</a> -->
                                                 <div class="dropdown-item collabIcon btn bg-transparent position-relative" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="@foreach($syllabiUsers[$syllabus->id] as $userIndex => $syllabusUser){{$userIndex + 1}}. {{$syllabusUser->name}}<br>@endforeach" data-modal="addSyllabusCollaboratorsModal{{$syllabus->id}}">
                                                     <div>
-                                                        Collaborators 
+                                                        Collaborators
                                                         <!-- <i class="bi bi-person-plus-fill"></i> -->
                                                         <span class="badge rounded-pill badge badge-dark">
                                                             {{ count($syllabiUsers[$syllabus->id]) }}
-                                                        </span> 
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1317,7 +976,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            
+
             <form method="POST" action="{{ action([\App\Http\Controllers\ProgramController::class, 'store']) }}">
                 @csrf
                 <div class="modal-body">
@@ -1332,7 +991,7 @@
                             @enderror
                         </div>
                     </div>
-                                            
+
                     <!-- Campus -->
                     <div class="form-group row">
                         <label for="campus" class="col-md-3 col-form-label text-md-right">Campus</label>
@@ -1414,7 +1073,7 @@
                             </div>
                         </div>
                     </div>
-                        
+
                     <input type="hidden" class="form-check-input" name="user_id" value={{$user->id}}>
                 </div>
 
@@ -1503,7 +1162,7 @@
                                 <select id="course_semester" class="form-control @error('course_semester') is-invalid @enderror"
                                         name="course_semester" required autofocus>
                                     <option value="W1">Winter Term 1</option>
-                                    <option value="W2">Winter Term 2</option>
+                                    <option value="W2" selected >Winter Term 2</option>
                                     <option value="S1">Summer Term 1</option>
                                     <option value="S2">Summer Term 2</option>
 
@@ -1524,9 +1183,9 @@
                                     <option value="2027">2027</option>
                                     <option value="2026">2026</option>
                                     <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
+                                    <option value="2024" selected >2024</option>
                                     <option value="2023">2023</option>
-                                    <option value="2022" selected>2022</option>
+                                    <option value="2022">2022</option>
                                     <option value="2021">2021</option>
                                     <option value="2020">2020</option>
                                     <option value="2019">2019</option>
@@ -1591,8 +1250,8 @@
                                 </div>
                             </div>
                         </div>
-                    
-                
+
+
                 <input type="hidden" class="form-check-input" name="user_id" value={{Auth::id()}}>
                 <input type="hidden" class="form-check-input" name="type" value="unassigned">
                 <div class="modal-footer">
@@ -1668,13 +1327,13 @@
         // var oFaculties = faculties.filter(item => {
         //     return item.campus_id === 2;
         // });
-        
+
         $('#campus').change( function() {
             // filter faculty based on campus
             if ($('#campus').find(':selected').text() == 'Vancouver') {
                 // Hide text / show select
                 campusDefaultOption();
-                
+
                 //Displays Vancouver Faculties
                 // delete drop down items
                 $('#faculty').empty();
@@ -1757,7 +1416,7 @@
 
         });
 
-        $('#department').change( function() { 
+        $('#department').change( function() {
             if ($('#department').find(':selected').val() !== 'Other') {
                 departmentDefaultOption();
             } else {
@@ -1847,10 +1506,49 @@
         $('#department-text').prop( "disabled", true );
         $('#department-text').val('');
     });
-    
+
+    $(document).ready(function() {
+        const listView = $('#courses-list-view');
+        const groupView = $('#courses-group-view');
+        const btnListView = $('#btnListView');
+        const btnGroupView = $('#btnGroupView');
+
+        const savedView = localStorage.getItem('dashboardCoursesView') || 'list';
+
+        function switchToList() {
+            listView.removeClass('d-none');
+            groupView.addClass('d-none');
+            btnListView.removeClass('btn-outline-light').addClass('btn-light');
+            btnGroupView.removeClass('btn-light').addClass('btn-outline-light');
+            localStorage.setItem('dashboardCoursesView', 'list');
+        }
+
+        function switchToGroup() {
+            listView.addClass('d-none');
+            groupView.removeClass('d-none');
+            btnListView.removeClass('btn-light').addClass('btn-outline-light');
+            btnGroupView.removeClass('btn-outline-light').addClass('btn-light');
+            localStorage.setItem('dashboardCoursesView', 'group');
+        }
+
+        if (savedView === 'group') {
+            switchToGroup();
+        } else {
+            switchToList();
+        }
+
+        btnListView.on('click', function() {
+            switchToList();
+        });
+
+        btnGroupView.on('click', function() {
+            switchToGroup();
+        });
+    });
+
 </script>
 
-<style> 
+<style>
 .tooltip-inner {
     text-align: left;
     max-width: 600px;
