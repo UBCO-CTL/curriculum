@@ -152,12 +152,12 @@
                                 <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
                                     <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
                                     <div>
-                                        Select, from the below Ministry and UBC priorities and strategies, the items that align strongly with your course. This is <b>optional</b>.
+                                        Select, from the below UBC priorities and strategies, the items that align strongly with your course. This is <b>optional</b>.
                                     </div>
                                 </div>
 
                                 <div class="jumbotron pt-4">
-                                    <h4 class="mb-4">Alignment with Ministry and UBC Priorities</h4>
+                                    <h4 class="mb-4">Alignment with UBC Priorities</h4>
                                     <h6 class="card-subtitle wizard mb-4 text-primary fw-bold">Note: Remember to click save once you are done.</h6>
 
                                     <!--Accordions-->
