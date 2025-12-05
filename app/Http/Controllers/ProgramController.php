@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PDF;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
@@ -45,22 +44,6 @@ class ProgramController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
-    }
-
-    /**
-     * Generate an array of Excel column names (A, B, ..., Z, AA, AB, ..., etc.)
-     * Supports up to 1000 columns by default (Excel max is 16,384)
-     *
-     * @param int $maxColumns Maximum number of columns to generate (default: 1000)
-     * @return array Array of column names indexed from 0
-     */
-    private function generateColumnNames(int $maxColumns = 1000): array
-    {
-        $columns = [];
-        for ($i = 0; $i < $maxColumns; $i++) {
-            $columns[$i] = Coordinate::stringFromColumnIndex($i + 1);
-        }
-        return $columns;
     }
 
     /**
@@ -1358,8 +1341,8 @@ class ProgramController extends Controller
             $program = Program::find($programId);
             // create the spreadsheet
             $spreadsheet = new Spreadsheet;
-            // create array of column names (supports up to 1000 columns)
-            $columns = $this->generateColumnNames();
+            // create array of column names (A-Z, then AA-AZ for up to 52 columns)
+            $columns = array_merge(range('A', 'Z'), array_map(fn($c) => 'A' . $c, range('A', 'Z')));
             // create array of styles for spreadsheet
             $styles = [
                 'primaryHeading' => [
@@ -1431,8 +1414,8 @@ class ProgramController extends Controller
             $program = Program::find($programId);
             // create the spreadsheet
             $spreadsheet = new Spreadsheet;
-            // create array of column names (supports up to 1000 columns)
-            $columns = $this->generateColumnNames();
+            // create array of column names (A-Z, then AA-AZ for up to 52 columns)
+            $columns = array_merge(range('A', 'Z'), array_map(fn($c) => 'A' . $c, range('A', 'Z')));
             // create array of styles for spreadsheet
             $styles = [
                 'primaryHeading' => [
@@ -1522,22 +1505,9 @@ class ProgramController extends Controller
             foreach ($charts as $chartName => $chartUrl) {
                 $sheet = $spreadsheet->createSheet();
                 $sheet->setTitle($chartName);
-
-                // Add note about chart comprehensibility if program has more than 20 PLOs (only for Program MAP Chart)
-                $hasWarning = $program->programLearningOutcomes->count() > 20 && $chartName == 'Program MAP Chart';
-                if ($hasWarning) {
-                    $sheet->setCellValue('A1', 'Note: Programs with more than 20 PLOs may cause charts to be less comprehensible due to space constraints.');
-                    $sheet->getStyle('A1')->getFont()->setBold(true);
-                    $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID);
-                    $sheet->getStyle('A1')->getFill()->getStartColor()->setRGB('FFF3CD');
-                    $sheet->getRowDimension(1)->setRowHeight(30);
-                    $sheet->getStyle('A1')->getAlignment()->setWrapText(true);
-                    $sheet->mergeCells('A1:J1');
-                }
-
                 $imageDrawing = new Drawing;
                 $imageDrawing->setPath($chartUrl);
-                $imageDrawing->setCoordinates($hasWarning ? 'A3' : 'A1');
+                $imageDrawing->setCoordinates('A1');
                 $imageDrawing->setWorksheet($sheet);
                 // Add ministry standards table to Ministry standards sheet
                 if ($chartName == 'Ministry Standards Chart') {
