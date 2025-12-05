@@ -212,7 +212,7 @@
                             Categories can be used to group PLOs.
                             You may use an excel spreadsheet to import multiple PLOs/Categories (use row 1 for headers and begin list of PLOs on row 2). Follow the template below to save them on your computer first, and then upload them to this page.
 
-                            <strong>Please note that programs with more than 20 PLOs may cause charts in PDF and Excel exports to be less comprehensible due to space constraints.</strong>
+                            <strong> Please note this website can only support a total of 52 PLOs per program</strong>.
                         </div>
                     </div>
 

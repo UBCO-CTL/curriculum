@@ -306,13 +306,6 @@
         @if($programContent[3]==1 || $programContent[4]==1 || $programContent[5]==1 || $programContent[6]==1 )
         <div class="panel panel-default">
             <div class="panel-heading"><h4>Curriculum MAP: Bar Charts</h4></div>
-            @if($program->programLearningOutcomes->count() > 20)
-                    <div class="panel-body">
-                        <div class="alert alert-warning" role="alert" style="margin:0px">
-                            <p><strong>Note:</strong> Programs with more than 20 PLOs may cause charts to be less comprehensible due to space constraints.</p>
-                        </div>
-                    </div>
-                @endif
                 @if($program->courses->count() < 1 )
                     <div class="panel-body">
                         <div class="alert alert-warning" role="alert">
