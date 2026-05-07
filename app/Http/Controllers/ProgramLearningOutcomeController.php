@@ -80,7 +80,8 @@ class ProgramLearningOutcomeController extends Controller implements HasMiddlewa
                     // save and update plo
                     $plo->pl_outcome = $currentPLOs[$plo->pl_outcome_id];
                     $plo->plo_shortphrase = $currentPLOShortphrases[$plo->pl_outcome_id];
-                    $plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id];
+                    //$plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id];
+                    $plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id] ?: null;
                     $plo->save();
                 } else {
                     // remove plo from program
@@ -102,7 +103,8 @@ class ProgramLearningOutcomeController extends Controller implements HasMiddlewa
                     $newPLO = new ProgramLearningOutcome;
                     $newPLO->pl_outcome = $plo;
                     $newPLO->plo_shortphrase = $newPLOShortphrases[$index];
-                    $newPLO->plo_category_id = $categoryId;
+                    //$newPLO->plo_category_id = $categoryId;
+                    $newPLO->plo_category_id = $categoryId ?: null;
                     $newPLO->position = $maxPositions[$categoryId];
                     $newPLO->program_id = $programId;
                     $newPLO->save();
