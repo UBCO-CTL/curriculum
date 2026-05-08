@@ -734,7 +734,7 @@
                     <h5 class="modal-title" id="editPLOModalLabel">Edit Program Learning Outcome (PLO)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{route('plo.update', $plo->pl_outcome_id)}}" method="POST">
+                <form action="{{route('program.outcomes.update', $plo->pl_outcome_id)}}" method="POST">
                     @csrf
                     {{method_field('POST')}}
                     <div class="modal-body">

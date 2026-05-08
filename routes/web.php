@@ -133,7 +133,7 @@ Route::resource('/plo', ProgramLearningOutcomeController::class);
 Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->name('program.outcomes.store');
 Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])->name('program.outcomes.import');
 Route::delete('/plo/{program}/delete', [ProgramLearningOutcomeController::class, 'destroy'])->name('plo.destroy');
-Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('plo.update');
+Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('program.outcomes.update');
 Route::delete('/program/{program}/plos/deleteAll', [ProgramLearningOutcomeController::class, 'destroyAll'])->name('program.plo.destroyAll');
 Route::post('/programs/{program}/plo/reorder', [App\Http\Controllers\ProgramLearningOutcomeController::class, 'reorder'])->name('program.plo.reorder');
 
@@ -157,7 +157,7 @@ Route::resource('/mappingScale', MappingScaleController::class);
 Route::post('/mappingScale/store', [MappingScaleController::class, 'store'])->name('program.mappingScale.store');
 Route::post('/mappingScale/addDefaultMappingScale', [MappingScaleController::class, 'addDefaultMappingScale'])->name('mappingScale.addDefaultMappingScale');
 Route::delete('/mappingScale/{program}/delete', [MappingScaleController::class, 'destroy'])->name('mappingScale.destroy');
-Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'update'])->name('mappingScale.update');
+Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'update'])->name('program.mappingScale.update');
 
 Route::resource('/ploCategory', PLOCategoryController::class);
 Route::post('/ploCategory/store', [PLOCategoryController::class, 'store'])->name('program.category.store');
