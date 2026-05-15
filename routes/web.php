@@ -164,6 +164,7 @@ Route::post('/ploCategory/store', [PLOCategoryController::class, 'store'])->name
 Route::delete('/ploCategory/{program}/delete', [PLOCategoryController::class, 'destroy'])->name('program.category.destroy');
 Route::delete('/program/{program}/categories/deleteAll', [PLOCategoryController::class, 'destroyAll'])->name('program.category.destroyAll');
 Route::post('/ploCategory/{program}/update', [PLOCategoryController::class, 'update'])->name('program.category.update');
+Route::post('/programs/{program}/ploCategory/reorder', [PLOCategoryController::class, 'reorder'])->name('program.category.reorder');
 
 Route::resource('/programUser', ProgramUserController::class);
 Route::post('/program/{programId}/collaborator/add', [ProgramUserController::class, 'store'])->name('programUser.add');

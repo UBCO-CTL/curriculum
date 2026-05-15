@@ -160,6 +160,39 @@ class CourseTest extends TestCase
         ]);
     }
 
+    public function test_create_la_with_percentage(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'test-course-la-percentage@ubc.ca',
+        ]);
+        $course = Course::factory()->create([
+            'course_title' => 'Learning Activity Percentage Test',
+            'last_modified_user' => $user->name,
+        ]);
+
+        $response = $this->actingAs($user)->post(route('la.store'), [
+            'new_l_activities' => [
+                0 => 'Case study',
+            ],
+            'new_l_activities_percentage' => [
+                0 => '25',
+            ],
+            'course_id' => $course->course_id,
+        ]);
+
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('learning_activities', [
+            'l_activity' => 'Case study',
+            'course_id' => $course->course_id,
+            'percentage' => 25,
+            'l_activities_pos' => 1,
+        ]);
+
+        $course->delete();
+        $user->delete();
+    }
+
     public function test_create_am(): void
     {
         $user = User::where('email', 'test-course@ubc.ca')->first();
@@ -274,17 +307,17 @@ class CourseTest extends TestCase
         $course = Course::where('course_title', 'Intro to Unit Testing')->orderBy('course_id', 'DESC')->first();
         $learningActivities = LearningActivity::where('course_id', $course->course_id)->get();
 
-        $response = $this->actingAs($user)->post(route('courses.loReorder', $course->course_id), [
-            'l_outcome_pos' => [
-                0 => $learningActivities[1]->l_outcome_id,
-                1 => $learningActivities[0]->l_outcome_id,
-                2 => $learningActivities[2]->l_outcome_id,
+        $response = $this->actingAs($user)->post(route('courses.tlaReorder', $course->course_id), [
+            'l_activities_pos' => [
+                0 => $learningActivities[1]->l_activity_id,
+                1 => $learningActivities[0]->l_activity_id,
+                2 => $learningActivities[2]->l_activity_id,
             ],
         ]);
 
         $this->assertDatabaseHas('learning_activities', [
             'l_activity' => $learningActivities[1]->l_activity,
-            'l_activities_pos' => 0,
+            'l_activities_pos' => 1,
             'course_id' => $course->course_id,
         ]);
     }

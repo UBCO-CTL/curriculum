@@ -254,13 +254,16 @@ class ProgramLearningOutcomeController extends Controller implements HasMiddlewa
         /**  Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = $reader->load($absolutePath);
         $worksheets = $spreadsheet->getAllSheets();
+        $maxCategoryPosition = PLOCategory::where('program_id', $programId)->max('position') ?? 0;
         foreach ($worksheets as $worksheet) {
             // create a program learning outcome category
             $worksheetTitle = $worksheet->getTitle();
             Log::debug('Add PLO category: '.$worksheetTitle);
+            $maxCategoryPosition++;
             $ploCategory = PLOCategory::create([
                 'plo_category' => $worksheetTitle,
                 'program_id' => $programId,
+                'position' => $maxCategoryPosition,
             ]);
 
             // Get max position for this category

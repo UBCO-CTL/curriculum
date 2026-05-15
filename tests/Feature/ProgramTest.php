@@ -84,6 +84,70 @@ class ProgramTest extends TestCase
 
     }
 
+    public function test_reorder_plo_categories(): void
+    {
+        User::where('email', 'test-program-reorder@ubc.ca')->delete();
+        Program::where('program', 'Bachelor of Reorder Testing')->delete();
+
+        DB::table('users')->insert([
+            'name' => 'Test Program Reorder',
+            'email' => 'test-program-reorder@ubc.ca',
+            'email_verified_at' => Carbon::now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+        ]);
+
+        $user = User::where('email', 'test-program-reorder@ubc.ca')->first();
+
+        DB::table('programs')->insert([
+            'program' => 'Bachelor of Reorder Testing',
+            'campus' => 'Okanagan',
+            'faculty' => 'Irving K. Barber Faculty of Science',
+            'level' => 'Bachelors',
+            'status' => -1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+            'last_modified_user' => $user->name,
+        ]);
+
+        $program = Program::where('program', 'Bachelor of Reorder Testing')->orderBy('program_id', 'DESC')->first();
+
+        $firstCategoryId = DB::table('p_l_o_categories')->insertGetId([
+            'program_id' => $program->program_id,
+            'plo_category' => 'First category',
+            'position' => 1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $secondCategoryId = DB::table('p_l_o_categories')->insertGetId([
+            'program_id' => $program->program_id,
+            'plo_category' => 'Second category',
+            'position' => 2,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $this->actingAs($user)->post(route('program.category.reorder', $program->program_id), [
+            'categories_pos' => [
+                $secondCategoryId,
+                $firstCategoryId,
+            ],
+        ]);
+
+        $this->assertDatabaseHas('p_l_o_categories', [
+            'plo_category_id' => $secondCategoryId,
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseHas('p_l_o_categories', [
+            'plo_category_id' => $firstCategoryId,
+            'position' => 2,
+        ]);
+
+        Program::where('program_id', $program->program_id)->delete();
+        User::where('email', 'test-program-reorder@ubc.ca')->delete();
+    }
+
     /*
         public function test_program_outcome_import()
         {

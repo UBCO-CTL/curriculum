@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Throwable;
 
 class PLOCategoryController extends Controller implements HasMiddleware
@@ -52,9 +53,9 @@ class PLOCategoryController extends Controller implements HasMiddleware
             // get this program
             $program = Program::find($programId);
             // get the current plo categories
-            $currentPLOCategories = $request->input('current_plo_categories');
+            $currentPLOCategories = $request->input('current_plo_categories', []);
             // get the new plo categories
-            $newPLOCategories = $request->input('new_plo_categories');
+            $newPLOCategories = $request->input('new_plo_categories', []);
             // case: delete all program learning outcome categories
             if (! $currentPLOCategories && ! $newPLOCategories) {
                 $program->ploCategories()->delete();
@@ -75,10 +76,13 @@ class PLOCategoryController extends Controller implements HasMiddleware
             }
             // add new plo categories
             if ($newPLOCategories) {
+                $maxPosition = PLOCategory::where('program_id', $programId)->max('position') ?? 0;
                 foreach ($newPLOCategories as $index => $newPLOCategory) {
+                    $maxPosition++;
                     $newPLOCat = new PLOCategory;
                     $newPLOCat->plo_category = $newPLOCategory;
                     $newPLOCat->program_id = $programId;
+                    $newPLOCat->position = $maxPosition;
                     $newPLOCat->save();
                 }
             }
@@ -201,5 +205,34 @@ class PLOCategoryController extends Controller implements HasMiddleware
         }
 
         return redirect()->route('programWizard.step1', $programId);
+    }
+
+    public function reorder(Request $request, $programId)
+    {
+        try {
+            $categoryOrder = $request->input('categories_pos', []);
+
+            foreach ($categoryOrder as $position => $categoryId) {
+                PLOCategory::where('program_id', $programId)
+                    ->where('plo_category_id', $categoryId)
+                    ->update(['position' => $position + 1]);
+            }
+
+            $program = Program::find($programId);
+            if ($program) {
+                $user = User::find(Auth::id());
+                $program->last_modified_user = $user->name;
+                $program->touch();
+                $program->save();
+            }
+
+            Session::flash('success', 'PLO category order updated successfully');
+
+            return redirect()->back();
+        } catch (Throwable $exception) {
+            Session::flash('error', 'Error updating PLO category order');
+
+            return redirect()->back();
+        }
     }
 }

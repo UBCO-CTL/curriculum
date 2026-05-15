@@ -544,10 +544,22 @@ class ProgramWizardController extends Controller implements HasMiddleware
             $freqOfMSIds[$programMappingScalesIds[$i]] = [];
             $programMappingScalesColours[$i] = (strtolower(MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first()) == '#ffffff' || strtolower(MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first()) == '#fff' ? '#6c757d' : MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first());
         }
-        // get categorized plo's for the program (ordered by category then outcome id)
-        $plos_order = ProgramLearningOutcome::where('program_id', $program_id)->whereNotNull('plo_category_id')->orderBy('plo_category_id', 'ASC')->orderBy('pl_outcome_id', 'ASC')->get();
+        // get categorized PLOs in the same category/PLO order shown in the program
+        $plos_order = ProgramLearningOutcome::query()
+            ->select('program_learning_outcomes.*')
+            ->join('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')
+            ->where('program_learning_outcomes.program_id', $program_id)
+            ->whereNotNull('program_learning_outcomes.plo_category_id')
+            ->orderBy('p_l_o_categories.position', 'asc')
+            ->orderBy('program_learning_outcomes.position', 'asc')
+            ->orderBy('program_learning_outcomes.pl_outcome_id', 'asc')
+            ->get();
         // get UnCategorized PLO's
-        $uncatPLOS = ProgramLearningOutcome::where('program_id', $program_id)->whereNull('plo_category_id')->get();
+        $uncatPLOS = ProgramLearningOutcome::where('program_id', $program_id)
+            ->whereNull('plo_category_id')
+            ->orderBy('position', 'asc')
+            ->orderBy('pl_outcome_id', 'asc')
+            ->get();
         // Merge Categorized PLOs and Uncategorized PLOs
         $all_plos = $plos_order->toBase()->merge($uncatPLOS);
         $plosInOrder = $all_plos->pluck('plo_shortphrase')->toArray();

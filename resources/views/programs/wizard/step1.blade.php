@@ -243,19 +243,26 @@
                                 </div>
 
                             @else
+                                <form id="savePLOCategoryOrder" action="{{route('program.category.reorder', $program->program_id)}}" method="POST" class="category-reorder-form">
+                                    @csrf
+                                </form>
                                 <table class="table table-light table-bordered" >
-                                    <tr class="table-primary">
-                                        <th>PLO Category</th>
-                                        <th class="text-center w-25">Actions</th>
-                                    </tr>
+                                        <thead>
+                                            <tr class="table-primary">
+                                                <th class="text-center" style="width: 5%">#</th>
+                                                <th>PLO Category</th>
+                                                <th class="text-center w-25">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="plo-category-list">
+                                            @foreach($ploCategories as $category)
+                                            <tr data-category-id="{{$category->plo_category_id}}">
+                                                <td class="text-center fw-bold drag-handle">↕</td>
+                                                <td>
+                                                    {{$category->plo_category}}
+                                                </td>
 
-                                    @foreach($ploCategories as $category)
-                                    <tr>
-                                        <td data-category-id="{{$category->plo_category_id}}">
-                                            {{$category->plo_category}}
-                                        </td>
-
-                                        <td class="text-center align-middle">
+                                                <td class="text-center align-middle">
                                             <button type="button" style="width:60px;" class="btn btn-secondary btn-sm m-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{$category->plo_category_id}}">
                                                 Edit
                                             </button>
@@ -326,10 +333,15 @@
                                                     </div>
                                             </div>
                                             <!-- End of Category Delete Confirmation Modal -->
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </table>
+                                                    <input type="hidden" name="categories_pos[]" value="{{$category->plo_category_id}}" form="savePLOCategoryOrder">
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-4">
+                                        <button type="submit" form="savePLOCategoryOrder" class="btn btn-success float-right col-2 category-save-order">Save Order</button>
+                                    </div>
                             @endif
                         </div>
                         <div class="card-footer text-end">
@@ -446,7 +458,7 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4">
-                                        <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
+                                        <button type="submit" class="btn btn-success float-right col-2 plo-save-order">Save Order</button>
                                     </div>
                                 </form>
                             @endif

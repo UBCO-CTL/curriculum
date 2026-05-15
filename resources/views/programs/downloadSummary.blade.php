@@ -236,23 +236,25 @@
                                         <th class="text-left" colspan="{{ $ploChunk->count() }}">Program Learning Outcomes</th>
                                     </tr>
                                     @php
-                                        $currentCategory = null;
+                                        $categoryGroups = [];
+                                        foreach ($ploChunk as $ploData) {
+                                            $lastGroupIndex = count($categoryGroups) - 1;
+                                            if ($lastGroupIndex >= 0 && $categoryGroups[$lastGroupIndex]['category'] === $ploData['category']) {
+                                                $categoryGroups[$lastGroupIndex]['count']++;
+                                            } else {
+                                                $categoryGroups[] = [
+                                                    'category' => $ploData['category'],
+                                                    'count' => 1,
+                                                ];
+                                            }
+                                        }
                                     @endphp
-                                    @foreach ($ploChunk as $ploIndex => $ploData)
-                                        @if ($currentCategory !== $ploData['category'])
-                                            @php $currentCategory = $ploData['category']; @endphp
-                                            @php
-                                                $categoryPlosInChunk = $ploChunk->filter(fn($p) => $p['category'] === $currentCategory);
-                                                $categoryStartIndex = $ploChunk->search(fn($p) => $p['category'] === $currentCategory);
-                                            @endphp
-                                            @if ($categoryStartIndex === $ploIndex)
-                                                <tr style="font-size:12px">
-                                                    <th class="active"></th>
-                                                    <th class="active" colspan="{{ $ploChunk->count() }}">{{ $currentCategory }}</th>
-                                                </tr>
-                                            @endif
-                                        @endif
-                                    @endforeach
+                                    <tr style="font-size:12px">
+                                        <th class="active"></th>
+                                        @foreach ($categoryGroups as $categoryGroup)
+                                            <th class="active" colspan="{{ $categoryGroup['count'] }}">{{ $categoryGroup['category'] }}</th>
+                                        @endforeach
+                                    </tr>
                                     <tr style="font-size:10px">
                                         <td class="active"></td>
                                         @foreach ($ploChunk as $ploData)
@@ -338,16 +340,18 @@
                             <p>This chart shows how many course learning outcomes (CLOs) are aligned to each program learning outcome (PLO).</p>
                         </div>
                     </div>
-                    <img src={{$charts["Program MAP Chart"]}} width="600">
+                    @if (! empty($charts["Program MAP Chart"]))
+                        <img src="{{$charts["Program MAP Chart"]}}" width="600">
+                    @endif
                     @endif
                     @if($programContent[4]==1) <!-- programContent[0] = Assessment Methods Chart flag -->
-                        @if ($charts["Assessment Methods Chart"])
+                        @if (! empty($charts["Assessment Methods Chart"]))
                             <div class="panel-body">
                                 <div class="alert alert-info" role="alert" style="margin:0px">
                                     <p>This chart shows the frequencies of the assessment methods for courses belonging to this program.</p>
                                 </div>
                             </div>
-                            <img src={{$charts["Assessment Methods Chart"]}} width="600">
+                            <img src="{{$charts["Assessment Methods Chart"]}}" width="600">
                         @else
                             <div class="panel-body">
                                 <div class="alert alert-warning" role="alert">
@@ -357,13 +361,13 @@
                         @endif
                     @endif
                     @if($programContent[5]==1) <!-- programContent[5] = Learning Activities Chart flag -->
-                        @if ($charts["Learning Activities Chart"])
+                        @if (! empty($charts["Learning Activities Chart"]))
                             <div class="panel-body">
                                 <div class="alert alert-info" role="alert" style="margin:0px">
                                     <p>This chart shows the frequencies of the learning activities for courses belonging to this program.</p>
                                 </div>
                             </div>
-                            <img src={{$charts["Learning Activities Chart"]}} width="600">
+                            <img src="{{$charts["Learning Activities Chart"]}}" width="600">
                         @else
                             <div class="panel-body">
                                 <div class="alert alert-warning" role="alert">
@@ -373,13 +377,13 @@
                         @endif
                     @endif
                     @if($programContent[6]==1) <!-- programContent[6] = Ministry Standards Chart flag -->
-                        @if ($charts["Ministry Standards Chart"])
+                        @if (! empty($charts["Ministry Standards Chart"]))
                             <div class="panel-body">
                                 <div class="alert alert-info" role="alert" style="margin:0px">
                                     <p>This chart shows how the ministry standards are aligned with each course belonging to this program.</p>
                                 </div>
                             </div>
-                            <img src={{$charts["Ministry Standards Chart"]}} width="600">
+                            <img src="{{$charts["Ministry Standards Chart"]}}" width="600">
                             <div class="panel-body mt-2">
                                 {!! $tableMS !!}
                             </div>

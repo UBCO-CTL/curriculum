@@ -396,10 +396,22 @@ class ProgramController extends Controller implements HasMiddleware
                 $freqOfMSIds[$mappingScaleIdsArr[$index]] = [];
                 $programMappingScalesColors[$index] = (strtolower(MappingScale::where('map_scale_id', $mappingScaleIdsArr[$index])->pluck('colour')->first()) == '#ffffff' || strtolower(MappingScale::where('map_scale_id', $mappingScaleIdsArr[$index])->pluck('colour')->first()) == '#fff' ? '#6c757d' : MappingScale::where('map_scale_id', $mappingScaleIdsArr[$index])->pluck('colour')->first());
             }
-            // get categorized plo's for the program (ordered by category then outcome id)
-            $plosInCatOrdered = ProgramLearningOutcome::where('program_id', $programId)->whereNotNull('plo_category_id')->orderBy('plo_category_id', 'ASC')->orderBy('pl_outcome_id', 'ASC')->get();
+            // get categorized PLOs in the same category/PLO order shown in the program
+            $plosInCatOrdered = ProgramLearningOutcome::query()
+                ->select('program_learning_outcomes.*')
+                ->join('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')
+                ->where('program_learning_outcomes.program_id', $programId)
+                ->whereNotNull('program_learning_outcomes.plo_category_id')
+                ->orderBy('p_l_o_categories.position', 'asc')
+                ->orderBy('program_learning_outcomes.position', 'asc')
+                ->orderBy('program_learning_outcomes.pl_outcome_id', 'asc')
+                ->get();
             // get UnCategorized PLO's
-            $unCatPLOS = ProgramLearningOutcome::where('program_id', $programId)->whereNull('plo_category_id')->get();
+            $unCatPLOS = ProgramLearningOutcome::where('program_id', $programId)
+                ->whereNull('plo_category_id')
+                ->orderBy('position', 'asc')
+                ->orderBy('pl_outcome_id', 'asc')
+                ->get();
             // Merge Categorized PLOs and Uncategorized PLOs to get allPlos in the correct order
             $allPlos = $plosInCatOrdered->toBase()->merge($unCatPLOS);
             // get shortphrase of all plos
@@ -1404,6 +1416,7 @@ class ProgramController extends Controller implements HasMiddleware
             $spreadsheetName = 'summary-'.$program->program_id.'.xlsx';
             // create absolute filename
             $storagePath = storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'spreadsheets'.DIRECTORY_SEPARATOR.$spreadsheetName);
+            File::ensureDirectoryExists(dirname($storagePath));
             // save the spreadsheet document
             $writer->save($storagePath);
             // delete charts
@@ -1494,6 +1507,7 @@ class ProgramController extends Controller implements HasMiddleware
             $spreadsheetName = 'data-summary-'.$program->program.'.xlsx';
             // create absolute filename
             $storagePath = storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'spreadsheets'.DIRECTORY_SEPARATOR.$spreadsheetName);
+            File::ensureDirectoryExists(dirname($storagePath));
             // save the spreadsheet document
             $writer->save($storagePath);
             // get the url of the document
@@ -3259,6 +3273,7 @@ class ProgramController extends Controller implements HasMiddleware
             $newCategory = new PLOCategory;
             $newCategory->plo_category = $ploCategory->plo_category;
             $newCategory->program_id = $program->program_id;
+            $newCategory->position = $ploCategory->position;
             $newCategory->save();
             $historyCategories[$ploCategory->plo_category_id] = $newCategory->plo_category_id;
         }

@@ -12,7 +12,17 @@ class PLOCategory extends Model
 
     protected $primaryKey = 'plo_category_id';
 
-    protected $fillable = ['program_id', 'plo_category'];
+    protected $fillable = ['program_id', 'plo_category', 'position'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('p_l_o_categories.position', 'asc')
+                ->orderBy('p_l_o_categories.plo_category_id', 'asc');
+        });
+    }
 
     public function plos(): HasMany
     {
