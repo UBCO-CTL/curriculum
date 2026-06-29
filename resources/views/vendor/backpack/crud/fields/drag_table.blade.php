@@ -43,7 +43,7 @@
             data-maxErrorTitle="{{trans('backpack::crud.table_cant_add', ['entity' => $item_name])}}"
             data-maxErrorMessage="{{trans('backpack::crud.table_max_reached', ['max' => $max])}}">
 
-    <div ondrop="drop(event)" ondragover="allowDrop(event)" class="array-container form-group">
+    <div ondrop="drop(event)" ondragover="allowDrop(event)" class="array-container mb-3">
 
         <table  class="table table-sm table-striped m-b-0 dragtable">
 
@@ -72,10 +72,10 @@
                     </td>
                     @endforeach
                     <td>
-                        <span><span draggable="true" ondragstart="notDragged(event)" class="btn btn-sm btn-light sort-handle pull-right"><span class="sr-only">sort item</span><i class="la la-sort" role="presentation" aria-hidden="true"></i></span></span>
+                        <span><span draggable="true" ondragstart="notDragged(event)" class="btn btn-sm btn-light sort-handle pull-right"><span class="visually-hidden">sort item</span><i class="la la-sort" role="presentation" aria-hidden="true"></i></span></span>
                     </td>
                     <td>
-                        <span><button draggable="true" ondragstart="notDragged(event)" class="btn btn-sm btn-light removeItem" type="button"><span class="sr-only">delete item</span><i class="la la-trash" role="presentation" aria-hidden="true"></i></button></span>
+                        <span><button draggable="true" ondragstart="notDragged(event)" class="btn btn-sm btn-light removeItem" type="button"><span class="visually-hidden">delete item</span><i class="la la-trash" role="presentation" aria-hidden="true"></i></button></span>
                     </td>
                 </tr>
 
@@ -245,7 +245,7 @@
               var data = ev.dataTransfer.getData("Text");
               let trg = 0;
               if(ev.target.classList.contains('form_group'))trg = ev.target;
-              else trg = $(ev.target).closest('div.form-group')[0];
+              else trg = $(ev.target).closest('div.mb-3')[0];
               trg.children[0].children[1].appendChild(document.getElementById(data));
               ev.preventDefault();
               let field_name = "ProgramOC";

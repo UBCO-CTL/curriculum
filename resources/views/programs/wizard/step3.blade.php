@@ -16,15 +16,15 @@
                             <i class="bi bi-question-circle" style="color:#002145;"></i>
                         </button>
                     </div>
-                    <div class="text-left">
+                    <div class="text-start">
                         @include('layouts.guide')
                     </div>
                 </h3>
 
                 <div class="card-body">
-                    <div class="alert alert-primary d-flex align-items-center ml-3 mr-3" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
-                        <div class="ml-2">
+                    <div class="alert alert-primary d-flex align-items-center ms-3 me-3" role="alert" style="text-align:justify">
+                        <i class="bi bi-info-circle-fill pe-2 fs-3"></i>
+                        <div class="ms-2">
                             <div class="mt-2 mb-2">
                                 <li class="m-0 p-0">Add required and non-required courses to the program.</li>
                                 <li class="m-0 p-0">After adding courses to the program, map or request to map each course to the program learning outcomes (PLOs) of this program.</li>
@@ -32,17 +32,17 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="card-subtitle wizard text-primary fw-bold float-right mr-3">
+                    <h6 class="card-subtitle wizard text-primary fw-bold float-end me-3">
                         Note: Only course owners or editors can map the course to this program.
                     </h6>
-                    <ul class="mr-2">
+                    <ul class="me-2">
                         <li class="my-2"><b>Button - Map Course:</b> You will see this button if you are the owner or editor of the course to complete the course to program mapping.</li>
                     </ul>
 
                     <div class="row mb-2">
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-md col-2 mt-2 float-right" data-toggle="modal" data-target="#createCourseModal" style="background-color:#002145;color:white;"><i class="bi bi-plus pr-2"></i>New Course</button>
-                            <button type="button" class="btn btn-primary btn-md col-3 mt-2 float-right" data-toggle="modal" data-target="#addCourseModal" style="margin-right: 10px; background-color:#002145;color:white;"><i class="bi bi-plus pr-2"></i> Course From My Dashboard</button>
+                            <button type="button" class="btn btn-primary btn-md col-2 mt-2 float-end" data-bs-toggle="modal" data-bs-target="#createCourseModal" style="background-color:#002145;color:white;"><i class="bi bi-plus pe-2"></i>New Course</button>
+                            <button type="button" class="btn btn-primary btn-md col-3 mt-2 float-end" data-bs-toggle="modal" data-bs-target="#addCourseModal" style="margin-right: 10px; background-color:#002145;color:white;"><i class="bi bi-plus pe-2"></i> Course From My Dashboard</button>
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@
                             <div class="col">
                                 @if ($programCourses->count() < 1)
                                     <div class="alert alert-warning wizard">
-                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses set for this program yet.</div>
+                                        <div class="notes"><i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>There are no courses set for this program yet.</div>
                                     </div>
                                 @else
                                     <table class="table table-light table-bordered" >
@@ -59,7 +59,7 @@
                                             <th class="w-25">Course Title</th>
                                             <th>Course Code</th>
                                             <th>Term</th>
-                                            <th><i class="bi bi-exclamation-circle-fill" style="font-style:normal;" data-toggle="tooltip" data-html="true" data-bs-placement="right" title="<ol><li><b>Not Mapped:</b> The course instructor has <b>not</b> mapped their course learning outcomes to the program learning outcomes.</li><li><b>Partially Mapped:</b> The course instructor has mapped <b>some</b> of their course learning outcomes to the program learning outcomes.</li><li><b>Mapped:</b> The course instructor has mapped <b>all</b> of their course learning outcomes to the program learning outcomes.</li></ol>"> Mapped to Program</i></th>
+                                            <th><i class="bi bi-exclamation-circle-fill" style="font-style:normal;" data-bs-toggle="tooltip" data-html="true" data-bs-placement="right" title="<ol><li><b>Not Mapped:</b> The course instructor has <b>not</b> mapped their course learning outcomes to the program learning outcomes.</li><li><b>Partially Mapped:</b> The course instructor has mapped <b>some</b> of their course learning outcomes to the program learning outcomes.</li><li><b>Mapped:</b> The course instructor has mapped <b>all</b> of their course learning outcomes to the program learning outcomes.</li></ol>"> Mapped to Program</i></th>
                                             <th class="text-center">Actions</th>
                                         </tr>
 
@@ -70,7 +70,7 @@
                                                     {{$programCourse->course_title}}
                                                     <br>
                                                     <div class="d-flex align-items-center mt-2">
-                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="mr-2">
+                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="me-2">
                                                             @csrf
                                                             <input type="hidden" name="course_id" value="{{$programCourse->course_id}}">
                                                             <input type="hidden" name="program_id" value="{{$program->program_id}}">
@@ -79,7 +79,7 @@
                                                             <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
                                                             <div class="form-check form-switch d-flex align-items-center course-switch">
                                                                 <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
-                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                <label class="form-check-label ms-2" for="flexSwitchCheck{{$programCourse->course_id}}">
                                                                     <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
                                                                 </label>
                                                             </div>
@@ -94,7 +94,7 @@
                                                     {{$programCourse->course_title}}
                                                     <br>
                                                     <div class="d-flex align-items-center mt-2">
-                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="mr-2">
+                                                        <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}" class="me-2">
                                                             @csrf
                                                             <input type="hidden" name="course_id" value="{{$programCourse->course_id}}">
                                                             <input type="hidden" name="program_id" value="{{$program->program_id}}">
@@ -103,7 +103,7 @@
                                                             <input type="hidden" name="required" value="{{$programCourse->pivot->course_required ? '0' : '1'}}">
                                                             <div class="form-check form-switch d-flex align-items-center course-switch">
                                                                 <input class="form-check-input switch-input" type="checkbox" id="flexSwitchCheck{{$programCourse->course_id}}" onchange="this.form.submit()" {{$programCourse->pivot->course_required ? 'checked' : ''}}>
-                                                                <label class="form-check-label ml-2" for="flexSwitchCheck{{$programCourse->course_id}}">
+                                                                <label class="form-check-label ms-2" for="flexSwitchCheck{{$programCourse->course_id}}">
                                                                     <span class="text-muted">{{$programCourse->pivot->course_required ? 'Required' : 'Not Required'}}</span>
                                                                 </label>
                                                             </div>
@@ -119,21 +119,21 @@
                                             </td>
                                             <td>
                                                 @if($actualTotalOutcomes[$programCourse->course_id] == 0)
-                                                    <i class="bi bi-exclamation-circle-fill text-danger pr-2"></i>Not Mapped
+                                                    <i class="bi bi-exclamation-circle-fill text-danger pe-2"></i>Not Mapped
                                                 @elseif ($actualTotalOutcomes[$programCourse->course_id] < $expectedTotalOutcomes[$programCourse->course_id])
-                                                    <i class="bi bi-exclamation-circle-fill text-warning pr-2"></i>Partially Mapped
+                                                    <i class="bi bi-exclamation-circle-fill text-warning pe-2"></i>Partially Mapped
                                                 @else
-                                                    <i class="bi bi-check-circle-fill text-success pr-2"></i>Completed
+                                                    <i class="bi bi-check-circle-fill text-success pe-2"></i>Completed
                                                 @endif
                                             </td>
                                             <td>
                                                 <!-- Delete button -->
-                                                <button style="width:70px" type="submit" class="btn btn-danger btn-sm float-right ml-2" data-toggle="modal" data-target="#deleteConfirmationCourse{{$programCourse->course_id}}">
+                                                <button style="width:70px" type="submit" class="btn btn-danger btn-sm float-end ms-2" data-bs-toggle="modal" data-bs-target="#deleteConfirmationCourse{{$programCourse->course_id}}">
                                                     Remove
                                                 </button>
 
                                                 <!-- Add Note button -->
-                                                <button type="button" style="width:80px" class="btn btn-secondary btn-sm float-right ml-2" data-toggle="modal" data-target="#editCourseModal{{$programCourse->course_id}}">
+                                                <button type="button" style="width:80px" class="btn btn-secondary btn-sm float-end ms-2" data-bs-toggle="modal" data-bs-target="#editCourseModal{{$programCourse->course_id}}">
                                                     Add Note
                                                 </button>
 
@@ -144,9 +144,9 @@
                                                 @if($programCourse->owners[0]->id == $user->id)
                                                     <!-- Allow owner to be redirected to the course to map it -->
                                                     @if ($programCourse->learningOutcomes->count() > 0)
-                                                        <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                        <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ms-2 float-end">Go to Course</a>
                                                     @else
-                                                        <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                        <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ms-2 float-end">Go to Course</a>
                                                     @endif
                                                 @endif
 
@@ -154,28 +154,28 @@
                                                     @if($editor->id == $user->id)
                                                         <!-- Show for editors -->
                                                         @if ($programCourse->learningOutcomes->count() > 0)
-                                                            <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                            <a href="{{ route('courseWizard.step5', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ms-2 float-end">Go to Course</a>
                                                         @else
-                                                            <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ml-2 float-right">Go to Course</a>
+                                                            <a href="{{ route('courseWizard.step1', $programCourse->course_id) }}" class="btn btn-outline-primary btn-sm ms-2 float-end">Go to Course</a>
                                                         @endif
                                                     @endif
                                                 @endforeach
 
                                                 @foreach($programCourse->viewers as $viewer)
                                                     @if($viewer->id == $user->id)
-                                                        <a href="{{ route('courseWizard.step7', $programCourse->course_id) }}" class="btn btn-outline-secondary btn-sm ml-2 float-right">View Course</a>
+                                                        <a href="{{ route('courseWizard.step7', $programCourse->course_id) }}" class="btn btn-outline-secondary btn-sm ms-2 float-end">View Course</a>
                                                     @endif
                                                 @endforeach
 
                                                 @if(!$userHasCourseAccess)
-                                                    <button type="button" class="btn btn-outline-primary btn-sm ml-2 float-right" data-toggle="modal" data-target="#requestAccess{{$programCourse->course_id}}">Request access</button>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm ms-2 float-end" data-bs-toggle="modal" data-bs-target="#requestAccess{{$programCourse->course_id}}">Request access</button>
 
                                                     <div class="modal fade" id="requestAccess{{$programCourse->course_id}}" tabindex="-1" role="dialog" aria-labelledby="requestAccessLabel{{$programCourse->course_id}}" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title" id="requestAccessLabel{{$programCourse->course_id}}">Request access</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <form method="POST" action="{{ route('courses.requestAccess', $programCourse->course_id) }}">
                                                                     @csrf
@@ -197,7 +197,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                                         <button type="submit" class="btn btn-primary btn-sm">Send request</button>
                                                                     </div>
                                                                 </form>
@@ -212,21 +212,19 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="exampleModalLabel">Remove Confirmation</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
 
                                                             <div class="modal-body">
                                                             Are you sure you want to remove {{$programCourse->course_code . ' ' . $programCourse->course_num}} ?
                                                             </div>
 
-                                                            <form action="{{route('courses.remove', $programCourse->course_id)}}" method="POST" class="float-right ml-2">
+                                                            <form action="{{route('courses.remove', $programCourse->course_id)}}" method="POST" class="float-end ms-2">
                                                                 @csrf
                                                                 {{method_field('GET')}}
                                                                 <input type="hidden" class="form-check-input " name="program_id" value={{$program->program_id}}>
                                                                 <div class="modal-footer">
-                                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                                 <button style="width:70px" type="submit" class="btn btn-danger btn-sm">Remove</button>
                                                                 </div>
                                                             </form>
@@ -241,13 +239,13 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="editCourseModalLabel">Add/Edit Note</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <form method="POST" action="{{ route('courseProgram.editCourseRequired', $program->program_id) }}">
                                                                 @csrf
 
                                                                 <div class="modal-body">
-                                                                    <div class="form-group row">
+                                                                    <div class="row mb-3">
                                                                         <label for="required" class="col-md-3 col-form-label text-md-right">Note</label>
                                                                         <div class="col-md-8">
                                                                             <div class="form">
@@ -269,7 +267,7 @@
                                                                     <input type="hidden" name="required" value="{{$programCourse->pivot->course_required}}">
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
                                                                     <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
                                                                 </div>
                                                             </form>
@@ -291,15 +289,13 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="createCourseModalLabel">Create Course</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form method="POST" action="{{ action([\App\Http\Controllers\CourseController::class, 'store']) }}">
                                     @csrf
                                     <div class="modal-body">
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_code"
                                                 class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Code</label>
 
@@ -322,7 +318,7 @@
                                                 </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_num" class="col-md-3 col-form-label text-md-right">Course Number</label>
 
                                             <div class="col-md-8">
@@ -336,7 +332,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_title"
                                                 class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Title</label>
 
@@ -353,7 +349,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_title" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Year and Semester</label>
 
                                             <div class="col-md-3">
@@ -372,7 +368,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-2 float-right">
+                                            <div class="col-md-2 float-end">
                                                 <select id="course_year" class="form-control @error('course_year') is-invalid @enderror"
                                                 name="course_year" required autofocus>
                                                     <option value="2030">2030</option>
@@ -401,7 +397,7 @@
 
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_section" class="col-md-3 col-form-label text-md-right">Course
                                                 Section</label>
 
@@ -418,10 +414,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="delivery_modality" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Mode of Delivery</label>
 
-                                            <div class="col-md-3 float-right">
+                                            <div class="col-md-3 float-end">
                                                 <select id="delivery_modality" class="form-control @error('delivery_modality') is-invalid @enderror"
                                                 name="delivery_modality" required autofocus>
                                                     <option value="O">Online</option>
@@ -439,7 +435,7 @@
                                         </div>
 
                                         <!-- Passes Information for Ministry Standards -->
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="standard_category_id" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Map This Course Against</label>
                                             <div class="col-md-8">
                                                 <select class="form-control" name="standard_category_id" id="standard_category_id" required>
@@ -454,7 +450,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="required" class="col-md-3 col-form-label text-md-right">Required</label>
                                             <div class="col-md-6">
 
@@ -476,7 +472,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="email" class="col-md-3 col-form-label text-md-right">Assign Owner For Course</label>
                                             <div class="col-md-8">
                                                 <input id="email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter email of the owner..." autocomplete="email">
@@ -501,7 +497,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary col-2 btn-sm"
-                                            data-dismiss="modal">Close</button>
+                                            data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary col-2 btn-sm">Add</button>
                                     </div>
                                 </form>
@@ -516,13 +512,11 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="createCourseModalLabel">Add Existing Courses to {{$program->program}}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 @if (count($userCoursesNotInProgram) < 1)
                                     <div class="alert alert-warning wizard">
-                                        <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no courses to assign.
+                                        <i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>There are no courses to assign.
                                     </div>
                                 @else
                                     <div class="modal-body">
@@ -541,7 +535,7 @@
                                                 @foreach($userCoursesNotInProgram as $index => $course)
                                                 <tr>
                                                     <td>
-                                                        <input class="form-check-input ml-0" type="checkbox" name="selectedCourses[]" value={{$course->course_id}} id="flexCheck{{$course->course_id}}">
+                                                        <input class="form-check-input ms-0" type="checkbox" name="selectedCourses[]" value={{$course->course_id}} id="flexCheck{{$course->course_id}}">
                                                     </td>
                                                     <td>
                                                         {{$course->course_title}}
@@ -554,7 +548,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input ml-0" name="require{{$course->course_id}}" type="checkbox" id="flexSwitchCheck{{$course->course_id}}">
+                                                            <input class="form-check-input ms-0" name="require{{$course->course_id}}" type="checkbox" id="flexSwitchCheck{{$course->course_id}}">
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -564,7 +558,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary col-2 btn-sm" form="addExistCourse">Add Selected</button>
                                     </div>
                                 @endif
@@ -575,8 +569,8 @@
 
                 <div class="card-footer">
                     <div class="card-body mb-4">
-                        <a href="{{route('programWizard.step2', $program->program_id)}}"><button class="btn btn-sm btn-primary col-3  float-left"><i class="bi bi-arrow-left ml-2"></i> Mapping Scale</button></a>
-                        <a href="{{route('programWizard.step4', $program->program_id)}}"><button class="btn btn-sm btn-primary col-3 float-right">Program Overview <i class="bi bi-arrow-right ml-2"></i></button></a>
+                        <a href="{{route('programWizard.step2', $program->program_id)}}"><button class="btn btn-sm btn-primary col-3  float-start"><i class="bi bi-arrow-left ms-2"></i> Mapping Scale</button></a>
+                        <a href="{{route('programWizard.step4', $program->program_id)}}"><button class="btn btn-sm btn-primary col-3 float-end">Program Overview <i class="bi bi-arrow-right ms-2"></i></button></a>
                     </div>
                 </div>
 
@@ -590,7 +584,7 @@
     $(document).ready(function () {
 
         // Enables functionality of tool tips
-        $('[data-toggle="tooltip"]').tooltip({html:true});
+        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
 
 
         $("form").submit(function () {

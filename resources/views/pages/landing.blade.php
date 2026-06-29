@@ -78,7 +78,7 @@
     
     <div class="row p-md-2 justify-content-center text-light bg-primary">
         <div class="container">
-                <div class="col-md font-weight-bold">
+                <div class="col-md fw-bold">
 
                 &nbsp;&nbsp;
                 

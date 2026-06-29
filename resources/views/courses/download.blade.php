@@ -1491,7 +1491,7 @@
             border-top: 1px solid #eee;
         }
 
-        .sr-only {
+        .visually-hidden {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -1502,8 +1502,8 @@
             border: 0;
         }
 
-        .sr-only-focusable:active,
-        .sr-only-focusable:focus {
+        .visually-hidden-focusable:active,
+        .visually-hidden-focusable:focus {
             position: static;
             width: auto;
             height: auto;
@@ -1671,11 +1671,11 @@
             background-color: #fcf8e3;
         }
 
-        .text-left {
+        .text-start {
             text-align: left;
         }
 
-        .text-right {
+        .text-end {
             text-align: right;
         }
 
@@ -1883,7 +1883,7 @@
             padding: 10px 20px;
             margin: 0 0 20px;
             font-size: 17.5px;
-            border-left: 5px solid #eee;
+            border-start: 5px solid #eee;
         }
 
         blockquote p:last-child,
@@ -1912,8 +1912,8 @@
             padding-right: 15px;
             padding-left: 0;
             text-align: right;
-            border-right: 5px solid #eee;
-            border-left: 0;
+            border-end: 5px solid #eee;
+            border-start: 0;
         }
 
         .blockquote-reverse footer:before,
@@ -3232,7 +3232,7 @@
             .table-responsive>.table-bordered>thead>tr>td:first-child,
             .table-responsive>.table-bordered>tbody>tr>td:first-child,
             .table-responsive>.table-bordered>tfoot>tr>td:first-child {
-                border-left: 0;
+                border-start: 0;
             }
 
             .table-responsive>.table-bordered>thead>tr>th:last-child,
@@ -3241,7 +3241,7 @@
             .table-responsive>.table-bordered>thead>tr>td:last-child,
             .table-responsive>.table-bordered>tbody>tr>td:last-child,
             .table-responsive>.table-bordered>tfoot>tr>td:last-child {
-                border-right: 0;
+                border-end: 0;
             }
 
             .table-responsive>.table-bordered>tbody>tr:last-child>th,
@@ -3738,7 +3738,7 @@
             top: 25px;
         }
 
-        .has-feedback label.sr-only~.form-control-feedback {
+        .has-feedback label.visually-hidden~.form-control-feedback {
             top: 0;
         }
 
@@ -4434,8 +4434,8 @@
             vertical-align: middle;
             border-top: 4px dashed;
             border-top: 4px solid \9;
-            border-right: 4px solid transparent;
-            border-left: 4px solid transparent;
+            border-end: 4px solid transparent;
+            border-start: 4px solid transparent;
         }
 
         .dropup,
@@ -4790,10 +4790,10 @@
             left: auto;
         }
 
-        [data-toggle="buttons"]>.btn input[type="radio"],
-        [data-toggle="buttons"]>.btn-group>.btn input[type="radio"],
-        [data-toggle="buttons"]>.btn input[type="checkbox"],
-        [data-toggle="buttons"]>.btn-group>.btn input[type="checkbox"] {
+        [data-bs-toggle="buttons"]>.btn input[type="radio"],
+        [data-bs-toggle="buttons"]>.btn-group>.btn input[type="radio"],
+        [data-bs-toggle="buttons"]>.btn input[type="checkbox"],
+        [data-bs-toggle="buttons"]>.btn-group>.btn input[type="checkbox"] {
             position: absolute;
             clip: rect(0, 0, 0, 0);
             pointer-events: none;
@@ -4935,7 +4935,7 @@
         }
 
         .input-group-addon:first-child {
-            border-right: 0;
+            border-end: 0;
         }
 
         .input-group .form-control:last-child,
@@ -4950,7 +4950,7 @@
         }
 
         .input-group-addon:last-child {
-            border-left: 0;
+            border-start: 0;
         }
 
         .input-group-btn {
@@ -6964,7 +6964,7 @@
         .panel>.table-responsive>.table-bordered>tbody>tr>td:first-child,
         .panel>.table-bordered>tfoot>tr>td:first-child,
         .panel>.table-responsive>.table-bordered>tfoot>tr>td:first-child {
-            border-left: 0;
+            border-start: 0;
         }
 
         .panel>.table-bordered>thead>tr>th:last-child,
@@ -6979,7 +6979,7 @@
         .panel>.table-responsive>.table-bordered>tbody>tr>td:last-child,
         .panel>.table-bordered>tfoot>tr>td:last-child,
         .panel>.table-responsive>.table-bordered>tfoot>tr>td:last-child {
-            border-right: 0;
+            border-end: 0;
         }
 
         .panel>.table-bordered>thead>tr:first-child>td,
@@ -7503,7 +7503,7 @@
             left: 0;
             margin-top: -5px;
             border-width: 5px 5px 5px 0;
-            border-right-color: #000;
+            border-end-color: #000;
         }
 
         .tooltip.left .tooltip-arrow {
@@ -7511,7 +7511,7 @@
             right: 0;
             margin-top: -5px;
             border-width: 5px 0 5px 5px;
-            border-left-color: #000;
+            border-start-color: #000;
         }
 
         .tooltip.bottom .tooltip-arrow {
@@ -7642,17 +7642,17 @@
             top: 50%;
             left: -11px;
             margin-top: -11px;
-            border-right-color: #999;
-            border-right-color: rgba(0, 0, 0, .25);
-            border-left-width: 0;
+            border-end-color: #999;
+            border-end-color: rgba(0, 0, 0, .25);
+            border-start-width: 0;
         }
 
         .popover.right>.arrow:after {
             bottom: -10px;
             left: 1px;
             content: " ";
-            border-right-color: #fff;
-            border-left-width: 0;
+            border-end-color: #fff;
+            border-start-width: 0;
         }
 
         .popover.bottom>.arrow {
@@ -7676,17 +7676,17 @@
             top: 50%;
             right: -11px;
             margin-top: -11px;
-            border-right-width: 0;
-            border-left-color: #999;
-            border-left-color: rgba(0, 0, 0, .25);
+            border-end-width: 0;
+            border-start-color: #999;
+            border-start-color: rgba(0, 0, 0, .25);
         }
 
         .popover.left>.arrow:after {
             right: 1px;
             bottom: -10px;
             content: " ";
-            border-right-width: 0;
-            border-left-color: #fff;
+            border-end-width: 0;
+            border-start-color: #fff;
         }
 
         .carousel {
@@ -8250,7 +8250,7 @@
 
             .card-group>.card+.card {
                 margin-left: 0;
-                border-left: 0;
+                border-start: 0;
             }
 
             .card-group>.card:first-child {
@@ -8599,7 +8599,7 @@
         -->
 
         <div class="mt-2 mb-3">
-            <p class="float-right">{{date("Y-m-d")}}</p>
+            <p class="float-end">{{date("Y-m-d")}}</p>
             <h3>{{$course->course_code}}{{$course->course_num}}: Course Summary</h3>
             <p><b>Course:</b> {{$course->year}} {{$course->semester}} {{$course->course_code}}{{$course->course_num}} {{$course->section}}
             - {{$course->course_title}}</p>

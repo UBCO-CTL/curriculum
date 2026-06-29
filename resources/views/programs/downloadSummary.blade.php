@@ -58,7 +58,7 @@
     </head>
     <body>
         <div style="margin-bottom:16px">
-            <p class="text-right">{{date("Y-m-d")}}</p>
+            <p class="text-end">{{date("Y-m-d")}}</p>
             <h2>Program Overview: {{$program->program}}</h2>
             <p><b>Faculty:</b> {{$program->faculty}}</p>
             <p><b>Department:</b> {{$program->department}}</p>
@@ -233,7 +233,7 @@
                                 <table class="table table-bordered table-sm table-condensed" style="width:100%; margin-bottom:15px;">
                                     <tr class="info" style="font-size:14px">
                                         <th>Courses</th>
-                                        <th class="text-left" colspan="{{ $ploChunk->count() }}">Program Learning Outcomes</th>
+                                        <th class="text-start" colspan="{{ $ploChunk->count() }}">Program Learning Outcomes</th>
                                     </tr>
                                     @php
                                         $currentCategory = null;

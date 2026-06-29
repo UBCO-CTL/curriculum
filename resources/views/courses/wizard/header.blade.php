@@ -42,16 +42,14 @@
         @if (!$isViewer)
             <div class="row my-2">
                 <div class="col">
-                <button type="button" style="width:200px" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#duplicateCourse" >Duplicate Course</button>
+                <button type="button" style="width:200px" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#duplicateCourse" >Duplicate Course</button>
                     <!-- Duplicate Course Confirmation Modal -->
                     <div class="modal fade" id="duplicateCourse" tabindex="-1" role="dialog" aria-labelledby="duplicateCourse" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="duplicateCourse">Duplicate Course</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form action="{{ route('courses.duplicate', $course->course_id) }}" method="POST">
                                     @csrf
@@ -59,7 +57,7 @@
 
                                     <div class="modal-body">
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_code" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Code</label>
                                             <div class="col-md-8">
                                                 <input id="course_code" type="text" pattern="[A-Za-z]+" minlength="1" maxlength="4" class="form-control @error('course_code') is-invalid @enderror" value="{{$course->course_code}}" name="course_code" required autofocus>
@@ -74,7 +72,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_num" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Number</label>
                                             <div class="col-md-8">
                                                 <input id="course_num" type="number" max="699" min="100" pattern="[0-9]*" class="form-control @error('course_num') is-invalid @enderror" name="course_num" value="{{$course->course_num}}" required autofocus>
@@ -86,7 +84,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_title" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Title</label>
                                             <div class="col-md-8">
                                                 <input id="course_title" type="text" class="form-control @error('course_title') is-invalid @enderror" name="course_title" value="{{$course->course_title}} - Copy" required autofocus>
@@ -98,7 +96,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="course_section" class="col-md-3 col-form-label text-md-right">Course Section</label>
                                             <div class="col-md-4">
                                                 <input id="course_section" type="text" class="form-control @error('course_section') is-invalid @enderror" name="course_section" autofocus value= {{$course->section}}>
@@ -112,7 +110,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                         <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
                                     </div>
                                 </form>
@@ -126,7 +124,7 @@
                 <div class="row">
                     <div class="col">
                         <!-- Edit button -->
-                        <button type="button" class="btn btn-secondary btn-sm float-right" style="width:200px" data-toggle="modal" data-target="#editCourseModal{{$course->course_id}}">
+                        <button type="button" class="btn btn-secondary btn-sm float-end" style="width:200px" data-bs-toggle="modal" data-bs-target="#editCourseModal{{$course->course_id}}">
                             Edit Course Information
                         </button>
                         <!-- Edit Course Modal -->
@@ -135,7 +133,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="editCourseModalLabel">Edit Course information</h5>
-                                        <button type="button" class="close"data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close"data-bs-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -145,7 +143,7 @@
                                         {{method_field('PUT')}}
 
                                         <div class="modal-body">
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="course_code" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Code</label>
 
                                                 <div class="col-md-8">
@@ -163,7 +161,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="course_num" class="col-md-3 col-form-label text-md-right">Course Number</label>
 
                                                 <div class="col-md-8">
@@ -177,7 +175,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="course_title" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Course Title</label>
 
                                                 <div class="col-md-8">
@@ -191,7 +189,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="course_semester" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Term and Year</label>
 
                                                 <div class="col-md-3">
@@ -210,7 +208,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="col-md-2 float-right">
+                                                <div class="col-md-2 float-end">
                                                     <select id="course_year" class="form-control @error('course_year') is-invalid @enderror"
                                                     name="course_year" required autofocus>
                                                         <option @if($course->year === 2030) selected @endif value="2030">2030</option>
@@ -238,7 +236,7 @@
 
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="course_section" class="col-md-3 col-form-label text-md-right">Course
                                                     Section</label>
 
@@ -255,10 +253,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="delivery_modality" class="col-md-3 col-form-label text-md-right"><span class="requiredField">*</span>Mode of Delivery</label>
 
-                                                <div class="col-md-3 float-right">
+                                                <div class="col-md-3 float-end">
                                                     <select id="delivery_modality" class="form-control @error('delivery_modality') is-invalid @enderror"
                                                     name="delivery_modality" required autofocus>
                                                         <option @if($course->delivery_modality === 'O') selected @endif value="O">Online</option>
@@ -275,7 +273,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="row mb-3">
                                                 <label for="standard_category_id" class="col-md-3 col-form-label text-md-right"><span class="requiredField">* </span>Map my course against</label>
                                                 <div class="col-md-8">
                                                     <select class="form-control" name="standard_category_id" id="standard_category_id" required>
@@ -295,7 +293,7 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
                                         </div>
                                     </form>
@@ -308,7 +306,7 @@
                 <div class="row my-2">
                     <div class="col">
                         <!-- Assign instructor button  -->
-                        <button type="button" class="btn btn-outline-primary btn-sm float-right" style="width:200px"
+                        <button type="button" class="btn btn-outline-primary btn-sm float-end" style="width:200px"
                             data-bs-toggle="modal" data-bs-target="#addCourseCollaboratorsModal{{$course->course_id}}">Add Collaborators</button>
                     </div>
                     @include('courses.courseCollabs')
@@ -316,8 +314,8 @@
 
                 <div class="row">
                     <div class="col">
-                            <button type="button" style="width:200px" class="btn btn-danger btn-sm float-right"
-                            data-toggle="modal" data-target="#deleteConfirmation" >Delete Course</button>
+                            <button type="button" style="width:200px" class="btn btn-danger btn-sm float-end"
+                            data-bs-toggle="modal" data-bs-target="#deleteConfirmation" >Delete Course</button>
 
                         <!-- Delete Confirmation Modal -->
                         <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
@@ -325,9 +323,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="deleteConfirmation">Delete Confirmation</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
                                     <div class="modal-body">
@@ -341,7 +337,7 @@
                                             value={{$course->program_id}}>
 
                                         <div class="modal-footer">
-                                            <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                            <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                             <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
                                         </div>
 
@@ -407,7 +403,7 @@
     });
 
     // Initialize tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip();
 
 	//This method is used to make sure that the proper amount of characters are entered so it doesn't exceed the max character limits
     function validateMaxlength(e){

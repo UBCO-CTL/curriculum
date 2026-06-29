@@ -11,16 +11,14 @@
         @if (!$isViewer)
             <div class="row my-2">
                 <div class="col">
-                    <button type="button" style="width:200px" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#duplicateConfirmation">Duplicate Program</button>
+                    <button type="button" style="width:200px" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#duplicateConfirmation">Duplicate Program</button>
                     <!-- Duplicate Confirmation Modal -->
                     <div class="modal fade" id="duplicateConfirmation" tabindex="-1" role="dialog" aria-labelledby="duplicateConfirmation" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Duplicate Program</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
                                 <form action="{{ route('programs.duplicate', $program->program_id) }}" method="GET">
@@ -29,7 +27,7 @@
 
                                     <div class="modal-body">
 
-                                        <div class="form-group row">
+                                        <div class="row mb-3">
                                             <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>
                                             <div class="col-md-8">
                                                 <input id="program" type="text" class="form-control @error('program') is-invalid @enderror" name="program" value="{{$program->program}} - Copy" required autofocus>
@@ -44,7 +42,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                         <button style="width:80px" type="submit" class="btn btn-success btn-sm">Duplicate</button>
                                     </div>
                                 </form>
@@ -58,7 +56,7 @@
             <div class="row">
                 <div class="col">
                         <!-- Edit button -->
-                        <button type="button" style="width:200px" class="btn btn-secondary btn-sm float-right" data-toggle="modal" data-target="#editInfoModal" onclick="fillInformation()">
+                        <button type="button" style="width:200px" class="btn btn-secondary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#editInfoModal" onclick="fillInformation()">
                             Edit Program Information
                         </button>
                         <!-- Modal -->
@@ -67,16 +65,14 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="editInfoModalLabel">Edit Program Information</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         
                                         <form method="POST" action="{{route('programs.update', $program->program_id)}}">
                                             @csrf
                                             {{method_field('POST')}}
                                             <div class="modal-body">
-                                                <div class="form-group row">
+                                                <div class="row mb-3">
                                                     <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>
 
                                                     <div class="col-md-8">
@@ -90,11 +86,11 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row">
+                                                <div class="row mb-3">
                                                     <label for="campus" class="col-md-2 col-form-label text-md-right">Campus</label>
 
                                                     <div class="col-md-8">
-                                                        <select id='campus' class="custom-select" name="campus">
+                                                        <select id='campus' class="form-select" name="campus">
                                                             
                                                         </select>
                                                         <input id='campus-text' class="form-control" name="campus" type="text" placeholder="(Optional) Enter the Campus" disabled hidden></input>
@@ -106,10 +102,10 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row">
+                                                <div class="row mb-3">
                                                     <label for="faculty" class="col-md-2 col-form-label text-md-right">Faculty/School</label>
                                                     <div class="col-md-8">
-                                                        <select id='faculty' class="custom-select" name="faculty">
+                                                        <select id='faculty' class="form-select" name="faculty">
                                                             <!-- @for($i =0; $i<count($faculties) ; $i++)
                                                                 @if($faculties[$i]==$program->faculty)
                                                                     <option value="{{$program->faculty}}" selected>{{$program->faculty}}</option>
@@ -127,10 +123,10 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row">
+                                                <div class="row mb-3">
                                                     <label for="department" class="col-md-2 col-form-label text-md-right">Department</label>
                                                     <div class="col-md-8">
-                                                        <select id='department' class="custom-select" name="department">
+                                                        <select id='department' class="form-select" name="department">
                                                         </select>
                                                         <input id='department-text' class="form-control" name="department" type="text" placeholder="(Optional) Enter the department" disabled hidden></input>
                                                         @error('department')
@@ -141,7 +137,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row">
+                                                <div class="row mb-3">
                                                     <label for="level" class="col-md-2 col-form-label text-md-right"><span class="requiredField">* </span>Level</label>
                                                     <div class="col-md-8">
                                                         <div class="form-check ">
@@ -196,7 +192,7 @@
                                             </div>
 
                                             <div class="modal-footer">
-                                                <button type="button" id="cancel" class="btn btn-secondary col-2 btn-sm" data-dismiss="modal">Cancel</button>
+                                                <button type="button" id="cancel" class="btn btn-secondary col-2 btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                 <button type="submit" class="btn btn-primary col-2 btn-sm">Save</button>
                                             </div>
                                         </form>
@@ -209,33 +205,31 @@
                 <div class="row my-2">
                     <div class="col">
                         <!-- Assign Collaborator button  -->
-                        <button type="button" class="btn btn-outline-primary btn-sm float-right" style="width:200px" data-bs-toggle="modal" data-bs-target="#addProgramCollaboratorsModal{{$program->program_id}}">Add Collaborators</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm float-end" style="width:200px" data-bs-toggle="modal" data-bs-target="#addProgramCollaboratorsModal{{$program->program_id}}">Add Collaborators</button>
                         <!-- Program Collaborators Modal -->  
                         @include('programs.programCollabs')
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" style="width:200px" class="btn btn-danger btn-sm float-right"
-                        data-toggle="modal" data-target="#deleteConfirmation">Delete Entire Program</button>
+                        <button type="button" style="width:200px" class="btn btn-danger btn-sm float-end"
+                        data-bs-toggle="modal" data-bs-target="#deleteConfirmation">Delete Entire Program</button>
                         <!-- Delete Confirmation Modal -->
                         <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                     Are you sure you want to delete {{$program->program}} program ?
                                     </div>
-                                    <form action="{{route('programs.destroy', $program->program_id)}}" method="POST" class="float-right">
+                                    <form action="{{route('programs.destroy', $program->program_id)}}" method="POST" class="float-end">
                                         @csrf
                                         {{method_field('DELETE')}}
                                         <div class="modal-footer">
-                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                        <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                         <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Delete</button>
                                         </div>
                                     </form>

@@ -10,8 +10,8 @@
 
                 <div class="card-body">
                     <div id="prompt" style="display: none;">
-                        <div class="alert alert-primary d-flex align-items-center ml-3 mr-3" role="alert" style="text-align:justify">
-                            <i class="bi bi-info-circle-fill pr-2 fs-3"></i>                        
+                        <div class="alert alert-primary d-flex align-items-center ms-3 me-3" role="alert" style="text-align:justify">
+                            <i class="bi bi-info-circle-fill pe-2 fs-3"></i>                        
                             <div>
                                 While this tool was created to serve the UBC community, anyone can register and use the site. However, since information such as Ministry-related standards and UBC strategic plans are presented, not all users may benefit from every feature.
                             </div>
@@ -20,7 +20,7 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -60,13 +60,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_CAPTCHA_PUBLIC_KEY') }}"></div>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
+                        <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}

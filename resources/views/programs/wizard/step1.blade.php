@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
         <div class="modal-content "  >
             <div class="modal-header">
-                <h5 class="modal-title" id="addPLOCategoryModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> PLO Categories</h5>
+                <h5 class="modal-title" id="addPLOCategoryModalLabel"><i class="bi bi-pencil-fill btn-icon me-2"></i> PLO Categories</h5>
             </div>
 
             <div class="modal-body">
@@ -73,13 +73,13 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered" role="document" style="width:80%">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addPLOModalLabel"><i class="bi bi-pencil-fill btn-icon mr-2"></i> Program Learning Outcomes (PLOs)
+                <h5 class="modal-title" id="addPLOModalLabel"><i class="bi bi-pencil-fill btn-icon me-2"></i> Program Learning Outcomes (PLOs)
                 </h5>
             </div>
 
-            <div class="modal-body text-left">
+            <div class="modal-body text-start">
                 <form id="addPLOForm" class="needs-validation" novalidate>
-                    <div class="form-group row align-items-end">
+                    <div class="row align-items-end">
                         <div class="col-6">
                             <label for="pl_outcome" class="form-label fs-6">
                                 <span class="requiredField">* </span>
@@ -99,7 +99,7 @@
                             </label>
                             <input type="text" id="ploShortphrase" class="form-control mb-1" name="title" autofocus placeholder="E.g. Experimental Design..." maxlength="50" style="resize:none">
                             <div class="form-floating">
-                                <select class="form-select custom-select" style="font-size:12px;" name="category" id="ploCategory">
+                                <select class="form-select" style="font-size:12px;" name="category" id="ploCategory">
                                     <option value="" selected>None</option>
                                     @foreach($ploCategories as $c)
                                         <option value="{{$c->plo_category_id}}">{{$c->plo_category}}</option>
@@ -123,9 +123,9 @@
                     <table id="addPLOTbl" class="table table-light table-borderless">
                         <thead>
                             <tr class="table-primary">
-                                <th class="text-left" width="40%">Program Learning Outcomes or Competencies</th>
-                                <th class="text-left" width="20%">Short Phrase</th>
-                                <th class="text-left" width="30%">Category</th>
+                                <th class="text-start" width="40%">Program Learning Outcomes or Competencies</th>
+                                <th class="text-start" width="20%">Short Phrase</th>
+                                <th class="text-start" width="30%">Category</th>
                                 <th class="text-center" width="10%">Actions</th>
                             </tr>
                         </thead>
@@ -199,14 +199,14 @@
                             <i class="bi bi-question-circle" style="color:#002145;"></i>
                         </button>
                     </div>
-                    <div class="text-left">
+                    <div class="text-start">
                         @include('layouts.guide')
                     </div>
                 </h3>
 
                 <div class="card-body">
-                    <div class="alert alert-primary d-flex align-items-center ml-3 mr-3" role="alert" style="text-align:justify">
-                        <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
+                    <div class="alert alert-primary d-flex align-items-center ms-3 me-3" role="alert" style="text-align:justify">
+                        <i class="bi bi-info-circle-fill pe-2 fs-3"></i>
                         <div>
                             Program learning outcomes (PLOs) are the knowledge, skills and attributes that students are expected to attain by the end of a program of study. Add, edit and delete PLOs below.
                             Categories can be used to group PLOs.
@@ -216,22 +216,22 @@
                         </div>
                     </div>
 
-                    <form method="POST" class="col-6 ml-1" action="{{ action([\App\Http\Controllers\ProgramLearningOutcomeController::class, 'import']) }}" enctype="multipart/form-data">
+                    <form method="POST" class="col-6 ms-1" action="{{ action([\App\Http\Controllers\ProgramLearningOutcomeController::class, 'import']) }}" enctype="multipart/form-data">
                         @csrf
                         <a href="{{asset('import_samples/import-plos-template.xlsx')}}" download><i class="bi bi-download mb-1"></i> import-plos-template.xlsx</a>
                         <div class="input-group">
                             <input type="hidden" name="program_id" value="{{$program->program_id}}">
                             <input type="file" name="upload" class="form-control" aria-label="Upload" required accept=".xlsx,.xls,.csv">
-                            <button class="btn bg-primary text-white" type="submit" >Import PLOs<i class="bi bi-box-arrow-in-down-left pl-2"></i></button>
+                            <button class="btn bg-primary text-white" type="submit" >Import PLOs<i class="bi bi-box-arrow-in-down-left ps-2"></i></button>
                         </div>
                     </form>
 
                     <div class="card m-3">
                         <h5 class="card-header wizard text-start">
                             Categories (Can be used to group PLOs)
-                            <div class="float-right">
+                            <div class="float-end">
                                 <button type="button" class="btn bg-primary text-white btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#addPLOCategoryModal">
-                                    <i class="bi bi-plus pr-2"></i>PLO Category
+                                    <i class="bi bi-plus pe-2"></i>PLO Category
                                 </button>
                             </div>
                         </h5>
@@ -239,7 +239,7 @@
                         <div class="card-body">
                             @if($ploCategories->count() < 1)
                                 <div class="alert alert-warning wizard">
-                                    <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no PLO categories set for this program yet.
+                                    <i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>There are no PLO categories set for this program yet.
                                 </div>
 
                             @else
@@ -347,9 +347,9 @@
                     <div class="card m-3 mt-5">
                         <h5 class="card-header wizard text-start">
                             Program Learning Outcomes (PLOs)
-                            <div class="float-right">
+                            <div class="float-end">
                                 <button type="button" class="btn bg-primary text-white btn-sm" style="width:180px" data-bs-toggle="modal" data-bs-target="#addPLOModal">
-                                    <i class="bi bi-plus pr-2"></i>PLO
+                                    <i class="bi bi-plus pe-2"></i>PLO
                                 </button>
                             </div>
                         </h5>
@@ -370,11 +370,11 @@
                                                 @if ($plo->plo_category != NULL)
                                                     @if ($plo->plos->count() > 0)
                                                         <tr class="mt-5">
-                                                            <th class="text-left" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
+                                                            <th class="text-start" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
                                                         </tr>
                                                         <tr class="table-primary">
                                                             <th class="text-center" style="width: 5%">#</th>
-                                                            <th class="text-left" colspan="2">Program Learning Outcome</th>
+                                                            <th class="text-start" colspan="2">Program Learning Outcome</th>
                                                             <th class="text-center w-25" colspan="1">Actions</th>
                                                         </tr>
                                                         <tbody class="plo-category-section" data-category-id="{{$plo->plo_category_id}}">
@@ -402,10 +402,10 @@
                                                         </tbody>
                                                     @else
                                                         <tr class="mt-5">
-                                                            <th class="text-left" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
+                                                            <th class="text-start" colspan="4" style="background-color: #ebebeb;">{{$plo->plo_category}}</th>
                                                         </tr>
                                                         <tr class="alert alert-warning wizard">
-                                                            <th colspan="4" style="background-color: #fff3cd;"><i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>There are no program learning outcomes set for this PLO category. </th>
+                                                            <th colspan="4" style="background-color: #fff3cd;"><i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>There are no program learning outcomes set for this PLO category. </th>
                                                         </tr>
                                                     @endif
                                                 @endif
@@ -414,11 +414,11 @@
                                             <!-- UnCategorized PLOs -->
                                             @if($hasUncategorized)
                                                 <tr>
-                                                    <th class="text-left" colspan="4" style="background-color: #ebebeb;">Uncategorized PLOs</th>
+                                                    <th class="text-start" colspan="4" style="background-color: #ebebeb;">Uncategorized PLOs</th>
                                                 </tr>
                                                 <tr class="table-primary">
                                                     <th class="text-center" style="width: 5%">#</th>
-                                                    <th class="text-left" colspan="2">Program Learning Outcome</th>
+                                                    <th class="text-start" colspan="2">Program Learning Outcome</th>
                                                     <th class="text-center" colspan="1">Actions</th>
                                                 </tr>
                                                 <tbody class="plo-category-section" data-category-id="uncategorized">
@@ -446,7 +446,7 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4">
-                                        <button type="submit" class="btn btn-success float-right col-2">Save Order</button>
+                                        <button type="submit" class="btn btn-success float-end col-2">Save Order</button>
                                     </div>
                                 </form>
                             @endif
@@ -463,7 +463,7 @@
                 <div class="card-footer">
                     <div class="card-body mb-4">
                         <a href="{{route('programWizard.step2', $program->program_id)}}">
-                            <button class="btn btn-sm btn-primary col-3 float-right">Mapping Scales <i class="bi bi-arrow-right mr-2"></i></button>
+                            <button class="btn btn-sm btn-primary col-3 float-end">Mapping Scales <i class="bi bi-arrow-right me-2"></i></button>
                         </a>
                     </div>
                 </div>
@@ -746,7 +746,7 @@
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="editPLOShortphraseInput{{$plo->pl_outcome_id}}" placeholder="E.g. Experimental Design" value="{{$plo->plo_shortphrase}}" name="title" maxlength="50">
                             <label for="editPLOShortphraseInput{{$plo->pl_outcome_id}}">Short Phrase</label>
-                            <small class="ml-2 form-text text-muted" style="font-size:12px"><i class="bi bi-exclamation-circle-fill text-warning mr-1" title=""></i> Having a short phrase helps with visualizing your program overview at the end of the mapping process (50 character limit)</small>
+                            <small class="ms-2 form-text text-muted" style="font-size:12px"><i class="bi bi-exclamation-circle-fill text-warning me-1" title=""></i> Having a short phrase helps with visualizing your program overview at the end of the mapping process (50 character limit)</small>
                         </div>
 
                         <div class="form-floating mb-3">

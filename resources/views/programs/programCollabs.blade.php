@@ -11,8 +11,8 @@
             <div class="modal-body">
                 <div class="form-text text-muted mb-4">
                     <p>Give others access to this program and assign them roles.</p>
-                    <li class="mb-1 mr-4 ml-4"><b>Editors</b> have access to edit and view your program but cannot delete your program or add/remove collaborators.</li>
-                    <li class="mb-3 mr-4 ml-4"><b>Viewers</b> can view an overview of your program but cannot edit or delete your program or add/remove collaborators.</li>
+                    <li class="mb-1 me-4 ms-4"><b>Editors</b> have access to edit and view your program but cannot delete your program or add/remove collaborators.</li>
+                    <li class="mb-3 me-4 ms-4"><b>Viewers</b> can view an overview of your program but cannot edit or delete your program or add/remove collaborators.</li>
                 </div>
 
                 @if ($programPermission->pivot->permission == 1)
@@ -88,7 +88,7 @@
                                         @endif
                                         @if ($programCollaborator->email == $user->email)
                                             <td class="text-center align-middle" colspan="2">
-                                                <button type="button" class="btn btn-danger btn" data-toggle="modal" data-target="#leaveProgramConfirmation{{$program->program_id}}">Leave</button>
+                                                <button type="button" class="btn btn-danger btn" data-bs-toggle="modal" data-bs-target="#leaveProgramConfirmation{{$program->program_id}}">Leave</button>
                                             </td>
 
                                             <!-- Leave Confirmation Modal -->
@@ -97,18 +97,16 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="exampleModalLabel">Leave Program Confirmation</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">Are you sure you want to leave {{$program->program}} program?</div>
-                                                        <form action="{{ action([\App\Http\Controllers\ProgramUserController::class, 'leave']) }}" class="float-right">
+                                                        <form action="{{ action([\App\Http\Controllers\ProgramUserController::class, 'leave']) }}" class="float-end">
                                                             @csrf
 
                                                             <input type="hidden" class="form-check-input " name="program_id" value={{$program->program_id}}>
                                                             <input type="hidden" class="form-check-input " name="programCollaboratorId" value={{$programCollaborator->id}}>
                                                             <div class="modal-footer">
-                                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                                 <button style="width:60px" type="submit" class="btn btn-danger btn-sm">Leave</button>
                                                             </div>
                                                         </form>
@@ -122,7 +120,7 @@
                                                 </td>
 
                                                 <td class="text-center align-middle">
-                                                    <button type="input" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#transferProgramConfirmation{{$program->program_id}}">Transfer Ownership</button>
+                                                    <button type="input" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#transferProgramConfirmation{{$program->program_id}}">Transfer Ownership</button>
                                                 </td>
 
                                                 <!-- Transfer Confirmation Modal -->
@@ -131,9 +129,7 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="exampleModalLabel">Transfer Program Confirmation</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">Are you sure you want to give ownership of the program: {{$program->program}} to the user: {{$programCollaborator->name}}?</div>
                                                             <form action="{{ action([\App\Http\Controllers\ProgramUserController::class, 'transferOwnership']) }}">
@@ -143,7 +139,7 @@
                                                                 <input type="hidden" class="form-check-input " name="oldOwnerId" value={{$user->id}}>
 
                                                                 <div class="modal-footer">
-                                                                    <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                                                    <button style="width:60px" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                                                     <button type="input" class="btn btn-primary btn-sm">Transfer Ownership</button>
                                                                 </div>
                                                             </form>

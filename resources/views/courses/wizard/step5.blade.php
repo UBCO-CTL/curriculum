@@ -20,7 +20,7 @@
                                 <i class="bi bi-question-circle" style="color:#002145;"></i>
                             </button>
                         </div>
-                        <div class="text-left">
+                        <div class="text-start">
                             @include('layouts.guide')
                     </div>
                 </h3>
@@ -33,21 +33,21 @@
 
                     @else
                         <div class="alert alert-primary d-flex align-items-center" role="alert" style="text-align:justify">
-                            <i class="bi bi-info-circle-fill pr-2 fs-3"></i>
+                            <i class="bi bi-info-circle-fill pe-2 fs-3"></i>
                             <div>
                                 Now that you have inputted your course information, you are ready to map it to program learning outcomes (PLOs). Using the mapping scale provided by each program, identify the alignment between each of your course learning outcomes (CLOs) and PLOs.
                             </div>
                         </div>
 
                         <!-- list of programs this course belongs to -->
-                        <div class="jumbotron">
+                        <div class="p-5 mb-4 bg-light rounded-3">
                             <form action="{{action([\App\Http\Controllers\OutcomeMapController::class, 'store'])}}" method="POST">
                             @csrf
                             <input type="hidden" name="course_id" value="{{$course->course_id}}">
 
                             @if (count($course->programs) < 1)
                                 <div class="alert alert-warning text-center">
-                                    <i class="bi bi-exclamation-circle-fill pr-2 fs-3"></i>
+                                    <i class="bi bi-exclamation-circle-fill pe-2 fs-3"></i>
                                     <br>
                                     <p>This course does not belong to any programs yet. Please move ahead to the next step.</p>
                                     <p>If you would like to define program learning outcomes to map this course, please create a program first. <a class="alert-link" href="{{route('home')}}">Create a Program.</a></p>
@@ -79,7 +79,7 @@
 
                                                             <!-- Mapping scale for this program -->
                                                             <p>Using the mapping scale provided, identify the alignment between each of your course learning outcomes (CLOs) and the program learning outcomes (PLOs).</p>
-                                                            <p class="form-text text-primary container font-weight-bold ">Note: Remember to click save once you are done.</p>
+                                                            <p class="form-text text-primary container fw-bold ">Note: Remember to click save once you are done.</p>
                                                             <div class="container row mb-2">
                                                                 <div class="col">
                                                                     <table class="table table-bordered table-sm">
@@ -140,11 +140,11 @@
                                                                                                                         <th>Program Learning Outcomes or Competencies</th>
                                                                                                                         <!-- Mapping Table Levels -->
                                                                                                                         @foreach($courseProgram->mappingScaleLevels as $programMappingScaleLevel)
-                                                                                                                            <th data-toggle="tooltip" title="{{$programMappingScaleLevel->title}}: {{$programMappingScaleLevel->description}}">
+                                                                                                                            <th data-bs-toggle="tooltip" title="{{$programMappingScaleLevel->title}}: {{$programMappingScaleLevel->description}}">
                                                                                                                                 {{$programMappingScaleLevel->abbreviation}}
                                                                                                                             </th>
                                                                                                                         @endforeach
-                                                                                                                        <th data-toggle="tooltip" title="Not Aligned">N/A</th>
+                                                                                                                        <th data-bs-toggle="tooltip" title="Not Aligned">N/A</th>
                                                                                                                     </tr>
                                                                                                                 </thead>
 
@@ -242,7 +242,7 @@
                                                                                                                 </tbody>
                                                                                                             </table>
 
-                                                                                                            <!-- <button type="submit" class="btn btn-success my-3 btn-sm float-right col-2" >Save</button> -->
+                                                                                                            <!-- <button type="submit" class="btn btn-success my-3 btn-sm float-end col-2" >Save</button> -->
 
                                                                                                 </div>
                                                                                             </div>
@@ -255,12 +255,12 @@
                                                                 </div>
                                                             @else
                                                                 <div class="alert alert-warning text-center">
-                                                                    <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>Program learning outcomes have not been set for this program
+                                                                    <i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>Program learning outcomes have not been set for this program
                                                                 </div>
                                                             @endif
                                                         @else
                                                             <div class="alert alert-warning text-center">
-                                                                <i class="bi bi-exclamation-circle-fill pr-2 fs-5"></i>A mapping scale has not been set for this program.
+                                                                <i class="bi bi-exclamation-circle-fill pe-2 fs-5"></i>A mapping scale has not been set for this program.
                                                             </div>
                                                         @endif
                                                     </div>
@@ -270,7 +270,7 @@
                                         <!-- End of Program Accordion -->
                                     @endforeach
                                 </div>
-                                <button type="submit" class="btn btn-success my-3 btn-sm float-right col-2" >Save</button>
+                                <button type="submit" class="btn btn-success my-3 btn-sm float-end col-2" >Save</button>
                             @endif
                             </form>
                         </div>
@@ -281,10 +281,10 @@
                 <div class="card-footer">
                     <div class="card-body mb-4">
                         <a href="{{route('courseWizard.step4', $course->course_id)}}">
-                            <button class="btn btn-sm btn-primary col-3 float-left"><i class="bi bi-arrow-left mr-2"></i> Course Alignment</button>
+                            <button class="btn btn-sm btn-primary col-3 float-start"><i class="bi bi-arrow-left me-2"></i> Course Alignment</button>
                         </a>
                         <a href="{{route('courseWizard.step6', $course->course_id)}}">
-                            <button class="btn btn-sm btn-primary col-3 float-right">Standards and Strategic Priorities<i class="bi bi-arrow-right ml-2"></i></button>
+                            <button class="btn btn-sm btn-primary col-3 float-end">Standards and Strategic Priorities<i class="bi bi-arrow-right ms-2"></i></button>
                         </a>
                     </div>
                 </div>
@@ -296,7 +296,7 @@
 
 <script>
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         $("form").submit(function () {
         // prevent duplicate form submissions

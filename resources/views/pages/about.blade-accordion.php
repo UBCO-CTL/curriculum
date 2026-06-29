@@ -18,7 +18,7 @@
             <div class="accordion" id="accordionGroup">
                 <div class="card">
                     <div class="card-header" id="headingOne">
-                        <input class="accordion-input" type="checkbox" id="title1" data-toggle="collapse" data-target="#collapseOne"/>
+                        <input class="accordion-input" type="checkbox" id="title1" data-bs-toggle="collapse" data-bs-target="#collapseOne"/>
                             <label for="title1">
                             <h3 class="accordion-title">What is Curriculum Mapping?</h3>
                             </label>									
@@ -40,7 +40,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header" id="headingTwo">
-                    <input class="accordion-input" type="checkbox" id="title2" data-toggle="collapse" data-target="#collapseTwo"/>
+                    <input class="accordion-input" type="checkbox" id="title2" data-bs-toggle="collapse" data-bs-target="#collapseTwo"/>
                         <label for="title2">
                             <h3 class="accordion-title">Benefits of Curriculum Mapping</h3>
                         </label>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header" id="headingThree">
-                        <input class="accordion-input" type="checkbox" id="title3" data-toggle="collapse" data-target="#collapseThree"/>
+                        <input class="accordion-input" type="checkbox" id="title3" data-bs-toggle="collapse" data-bs-target="#collapseThree"/>
                             <label for="title3">
                                 <h3 class="accordion-title">How to get the best out of this tool?</h3>
                             </label>                
@@ -127,7 +127,7 @@
             
                 <div class="card">
                     <div class="card-header" id="headingSix">
-                    <input class="accordion-input" type="checkbox" id="title4" data-toggle="collapse" data-target="#collapseFour"/>
+                    <input class="accordion-input" type="checkbox" id="title4" data-bs-toggle="collapse" data-bs-target="#collapseFour"/>
                         <label for="title4">
                             <h3 class="accordion-title">References and Literature</h3>                   
                         </label>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header" id="headingFive">
-                        <input class="accordion-input" type="checkbox" id="title5" data-toggle="collapse" data-target="#collapseFive"/>
+                        <input class="accordion-input" type="checkbox" id="title5" data-bs-toggle="collapse" data-bs-target="#collapseFive"/>
                                 <label for="title5">
                                     <h3 class="accordion-title">Contributors</h3>                  
                                 </label>

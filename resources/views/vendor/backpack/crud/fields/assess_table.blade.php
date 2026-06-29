@@ -43,7 +43,7 @@
             data-maxErrorTitle="{{trans('backpack::crud.table_cant_add', ['entity' => $item_name])}}"
             data-maxErrorMessage="{{trans('backpack::crud.table_max_reached', ['max' => $max])}}">
 
-    <div class="array-container form-group">
+    <div class="array-container mb-3">
 
         <table class="table table-sm table-striped m-b-0">
 
@@ -74,10 +74,10 @@
                     </td>
                     @endforeach
                     <td>
-                        <span class="btn btn-sm btn-light sort-handle pull-right"><span class="sr-only">sort item</span><i class="la la-sort" role="presentation" aria-hidden="true"></i></span>
+                        <span class="btn btn-sm btn-light sort-handle pull-right"><span class="visually-hidden">sort item</span><i class="la la-sort" role="presentation" aria-hidden="true"></i></span>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-light removeItem" type="button"><span class="sr-only">delete item</span><i class="la la-trash" role="presentation" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-light removeItem" type="button"><span class="visually-hidden">delete item</span><i class="la la-trash" role="presentation" aria-hidden="true"></i></button>
                     </td>
                 </tr>            
             </tbody>
