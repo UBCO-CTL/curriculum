@@ -1250,7 +1250,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#notification").toast("show");
+        const toastEl = document.getElementById('notification');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
 
         // Show notification if user is using a browser that's not either firefox chrome
         // Chrome 1 - 79
@@ -1274,7 +1276,7 @@
         // }
 
         // Enables functionality of tool tips
-        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
 
         $("form").submit(function () {
             // prevent duplicate form submissions
@@ -1296,7 +1298,7 @@
 
     $(document).ready(function () {
         // Enables functionality of tool tips
-        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
 
         $('.collabIcon').click(function(event) {
             var modalId = event.currentTarget.dataset['modal'];

@@ -690,7 +690,9 @@
 <script type="application/javascript">
     $(document).ready(function () {
 
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
     });
 
 </script>

@@ -240,7 +240,7 @@
 
     $(document).ready(function () {
         // Enables functionality of tool tips
-        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
 
         // To Delete All CLOs
         $('#deleteAllCLOs').click(function() {

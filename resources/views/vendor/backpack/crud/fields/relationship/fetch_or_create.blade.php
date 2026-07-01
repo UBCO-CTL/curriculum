@@ -368,12 +368,13 @@ function triggerModal(element) {
     var $force_select = (element.attr('data-force-select') == 'true') ? true : false;
 
 
-    $modal.modal();
+    const modal = new bootstrap.Modal($modal[0]);
+    modal.show();
 
     initializeFieldsWithJavascript($form);
 
     $modalCancelButton.on('click', function () {
-        $($modal).modal('hide');
+        bootstrap.Modal.getInstance($modal[0]).hide();
     });
 
     //when you hit save on modal save button.
@@ -415,7 +416,7 @@ function triggerModal(element) {
                     selectOption(element, result.data);
                 }
 
-                $modal.modal('hide');
+                bootstrap.Modal.getInstance($modal[0]).hide();
 
 
 

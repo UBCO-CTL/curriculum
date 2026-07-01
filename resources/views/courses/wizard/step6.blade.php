@@ -626,7 +626,9 @@
         changeMandate($('#ubc-mandate').val(), mandateCollapseList)
         changeMarket($('#ubc-market').val(), marketCollapseList)
 
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
 
         $("form").submit(function () {
         // prevent duplicate form submissions

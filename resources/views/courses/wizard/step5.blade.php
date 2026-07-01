@@ -296,7 +296,9 @@
 
 <script>
     $(document).ready(function () {
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
 
         $("form").submit(function () {
         // prevent duplicate form submissions

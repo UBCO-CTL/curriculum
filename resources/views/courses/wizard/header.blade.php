@@ -403,7 +403,9 @@
     });
 
     // Initialize tooltips
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+        new bootstrap.Tooltip(el);
+    });
 
 	//This method is used to make sure that the proper amount of characters are entered so it doesn't exceed the max character limits
     function validateMaxlength(e){

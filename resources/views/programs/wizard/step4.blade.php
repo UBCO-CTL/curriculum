@@ -689,7 +689,7 @@
                     $("#loading-div").fadeOut("fast");
                     $("#allCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -702,7 +702,7 @@
                     $("#loading-div-required").fadeOut("fast");
                     $("#requiredCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -715,7 +715,7 @@
                     $("#loading-div-non-required").fadeOut("fast");
                     $("#nonRequiredCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -728,7 +728,7 @@
                     $("#loading-div-first").fadeOut("fast");
                     $("#firstCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -741,7 +741,7 @@
                     $("#loading-div-second").fadeOut("fast");
                     $("#secondCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -754,7 +754,7 @@
                     $("#loading-div-third").fadeOut("fast");
                     $("#thirdCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -767,7 +767,7 @@
                     $("#loading-div-fourth").fadeOut("fast");
                     $("#fourthCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -780,7 +780,7 @@
                     $("#loading-div-graduate").fadeOut("fast");
                     $("#graduateCoursesInput").html(data);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -869,7 +869,7 @@
                     }
                     $("#high-chart-am").show();
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -959,7 +959,7 @@
                     // display chart
                     $("#high-chart-la").show();
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -1044,12 +1044,12 @@
                         // Append to table for all optional priority frequencies
                         $('#ms-table').append(tableHTML);
                         // Enables functionality of tool tips
-                        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                     }
                     // display chart
                     $("#high-chart-ms").show();
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -1137,7 +1137,7 @@
                     // display chart
                     $("#high-chart-ms").show();
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -1220,7 +1220,7 @@
                     // display chart
                     $("#high-chart-ms").show();
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -1241,7 +1241,7 @@
                     // Append to table for all optional priority frequencies
                     $('#op-table').append(opFreq);
                     // Enables functionality of tool tips
-                    $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
                 }
             });
         });
@@ -1341,7 +1341,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1359,7 +1359,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1377,7 +1377,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1395,7 +1395,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1413,7 +1413,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1431,7 +1431,7 @@
                 // Append to table for all optional priority frequencies
                 $('#op-table').append(opFreq);
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1515,7 +1515,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1598,7 +1598,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1682,7 +1682,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1766,7 +1766,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1850,7 +1850,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -1934,7 +1934,7 @@
                 }
                 $("#high-chart-am").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2018,7 +2018,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2102,7 +2102,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2186,7 +2186,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2270,7 +2270,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2354,7 +2354,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2438,7 +2438,7 @@
                 // display chart
                 $("#high-chart-la").show();
                 // Enables functionality of tool tips
-                $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
             }
         });
     }
@@ -2503,10 +2503,12 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#notification").toast("show");
+        const toastEl = document.getElementById('notification');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
 
         // Enables functionality of tool tips
-        $('[data-bs-toggle="tooltip"]').tooltip({html:true});
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) { new bootstrap.Tooltip(el, {html: true}); });
 
         $("form").submit(function () {
             // prevent duplicate form submissions

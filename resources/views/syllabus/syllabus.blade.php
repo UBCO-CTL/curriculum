@@ -1390,11 +1390,13 @@
 
     $(document).ready(function() {
 
-        $(function() {
-            $('[data-bs-toggle="popover"]').popover()
-        })
+        document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function(el) {
+            new bootstrap.Popover(el);
+        });
 
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
 
 
         // event listener on select term dropdown
@@ -2538,8 +2540,8 @@
     // Function changes optional verison of syllabus
     function onChangeCampus() {
 
-        $('.courseInfo').tooltip({
-            selector: '.has-tooltip'
+        document.querySelectorAll('.courseInfo .has-tooltip').forEach(function(el) {
+            new bootstrap.Tooltip(el);
         });
 
 
