@@ -78,7 +78,7 @@
     
     <div class="row p-md-2 justify-content-center text-light bg-primary">
         <div class="container">
-                <div class="col-md fw-bold">
+                <div class="col-md font-weight-bold">
 
                 &nbsp;&nbsp;
                 
@@ -90,10 +90,9 @@
         <div class="container">
             <h1>Benefits</h1>
             <div class="row pb-sm-5">
-                <div class="col-sm">
-                    <!-- replace this with img! -->
-                    <div class="box-img">
-                        <img src=" {{ asset('img/Checkmark.png') }}" />
+                <div class="col-sm d-flex align-items-start">
+                    <div class="box-img me-3">
+                        <img src=" {{ asset('img/Checkmark.png') }}" style="border: 5px solid #002145; width: 100px;"/>
                     </div>
                     <div class="box-text">
                         <h2>
@@ -104,10 +103,9 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-sm">
-                    <!-- replace this with img! -->
-                    <div class="box-img">
-                        <img src=" {{ asset('img/Checkmark.png') }}" />
+                <div class="col-sm d-flex align-items-start">
+                    <div class="box-img me-3">
+                        <img src=" {{ asset('img/Checkmark.png') }}" style="border: 5px solid #002145; width: 100px;"/>
                     </div>
                     <div class="box-text">
                         <h2>
@@ -120,10 +118,9 @@
                 </div>
             </div>
             <div class="row pb-sm-5">
-                <div class="col-sm">
-                    <!-- replace this with img! -->
-                    <div class="box-img">
-                        <img src=" {{ asset('img/Checkmark.png') }}" />
+                <div class="col-sm d-flex align-items-start">
+                    <div class="box-img me-3">
+                        <img src=" {{ asset('img/Checkmark.png') }}" style="border: 5px solid #002145; width: 100px;"/>
                     </div>
                     <div class="box-text">
                         <h2>
@@ -134,10 +131,9 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-sm">
-                    <!-- replace this with img! -->
-                    <div class="box-img">
-                        <img src=" {{ asset('img/Checkmark.png') }}" />
+                <div class="col-sm d-flex align-items-start">
+                    <div class="box-img me-3">
+                        <img src=" {{ asset('img/Checkmark.png') }}" style="border: 5px solid #002145; width: 100px;"/>
                     </div>
                     <div class="box-text">
                         <h2>

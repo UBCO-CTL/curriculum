@@ -6,3 +6,92 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap'; 
+
+// Landing page 
+.container {
+    max-width: 1150px !important;
+}
+
+// Curriculum Map & Syllabus Generator section
+
+.bg-primary h1 {
+    font-size: 52px !important;
+    font-weight: 500 !important;
+    margin-bottom: 16px !important;
+}
+
+.bg-primary * {
+    color: #ffffff !important;
+}
+
+.bg-primary .img {
+    margin-bottom: 16px;
+}
+
+.bg-secondary {
+    background-color: #fff !important;
+    color: #212529 !important;
+}
+
+.bg-primary a {
+    color: #90c3e8;
+    text-decoration: none;
+    &:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+}
+
+.bg-secondary a {
+    color: #002145;
+    text-decoration: none;
+    &:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+}
+
+
+// Benefits section 
+
+.bg-secondary h1 {
+    font-size: 52px !important;
+    margin-bottom: 10px;
+}
+
+.bg-secondary h2 {
+    font-size: 28.8px !important;
+}
+
+.bg-secondary p {
+    color: #212529 !important;
+}
+
+.box-img img {
+    width: 140px !important;
+    height: 140px !important;
+    border: 8px solid #002145 !important;
+}
+
+// How to Use Curriculum MAP and Syllabus Generator section
+
+.bg-primary a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47,93,124) !important;
+        text-decoration: underline;
+    }
+}
+
+
+// Questions section
+
+.bg-secondary a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47,93,124) !important;
+        text-decoration: underline;
+    }
+}
