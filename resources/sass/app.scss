@@ -33,14 +33,6 @@
     color: #212529 !important;
 }
 
-.bg-primary a {
-    color: #90c3e8;
-    text-decoration: none;
-    &:hover {
-        color: #fff;
-        text-decoration: underline;
-    }
-}
 
 .bg-secondary a {
     color: #002145;
@@ -75,11 +67,11 @@
 
 // How to Use Curriculum MAP and Syllabus Generator section
 
-.bg-primary a {
+.bg-primary .col-md a {
     color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47,93,124) !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
@@ -87,11 +79,11 @@
 
 // Questions section
 
-.bg-secondary a {
+.bg-secondary .col-md a {
     color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47,93,124) !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
