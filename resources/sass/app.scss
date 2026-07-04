@@ -13,7 +13,7 @@
 }
 
 .bg-secondary {
-    background-color: #fff !important;
+    background-color: white !important;
     color: rgb(0, 33, 69) !important;
 }
 
@@ -127,4 +127,43 @@
         color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
+}
+
+// ─── FAQ Page ───────────────────────────────────────────
+
+
+.faq-page .bg-secondary a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
+    }
+}
+
+.faq-page .btn-primary {
+    background-color: rgb(64, 180, 229) !important;
+    border-color: rgb(64, 180, 229) !important;
+    &:hover {
+        background-color: rgb(0, 167, 225) !important;
+        border-color: rgb(0, 143, 190) !important;
+        
+    }
+}
+
+.faq-page .btn-danger.disabled {
+    background-color: red !important;
+    border-color: red !important;
+    color: white !important;
+    opacity: 1 !important;
+}
+
+.faq-page .requiredField {
+    color: red !important;
+}
+
+
+
+.faq-page .btn-success {
+    color: white !important;
 }

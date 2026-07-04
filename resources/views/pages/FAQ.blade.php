@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+<div class="faq-page">
 <link href=" {{ asset('css/accordions.css') }}" rel="stylesheet" type="text/css" >
 <!--Link for FontAwesome Font for the arrows for the accordions.-->
 <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" rel="stylesheet" type="text/css" >
@@ -31,10 +31,10 @@
                         <!-- FAQ Accordion body -->
                         <div id="collapseFAQAccordion9" class="accordion-collapse collapse" aria-labelledby="FAQAccordionHeader9" data-bs-parent="FAQAccordion9">
                             <div class="accordion-body lh-lg">
-                                <p><a href="https://curriculum.ok.ubc.ca/">Curriculum MAP<a> is a tool to support curriculum mapping, analysis and planning. Curriculum MAP also has a feature to generate syllabi according to the policies, guidelines and templates provided by <a href="https://senate.ubc.ca/okanagan/">UBC Okanagan<a> and <a href="https://senate.ubc.ca/vancouver/">UBC Vancouver<a> senates.</p>
+                                <p><a href="https://curriculum.ok.ubc.ca/">Curriculum MAP</a> is a tool to support curriculum mapping, analysis and planning. Curriculum MAP also has a feature to generate syllabi according to the policies, guidelines and templates provided by <a href="https://senate.ubc.ca/okanagan/">UBC Okanagan</a> and <a href="https://senate.ubc.ca/vancouver/">UBC Vancouver</a> senates.</p>
                                 <p class="fw-bold">How do I register?</p>
                                 <ol>
-                                    <li>Click on "Register" at the top of the <a href="https://curriculum.ok.ubc.ca/">Curriculum MAP Website<a>.</li>
+                                    <li>Click on "Register" at the top of the <a href="https://curriculum.ok.ubc.ca/">Curriculum MAP Website</a>.</li>
                                     <li>Create an account by entering your name, email address, and a password for the account.</li>
                                     <li>Click the <button type="submit" class="btn btn-primary">{{ __('Register') }}</button> button. A verification email will be sent to the email you have entered.</li>
                                     <li>Navigate to your email and open the verification notification.</li>
@@ -363,7 +363,7 @@
                         <div id="collapseFAQAccordion7" class="accordion-collapse collapse" aria-labelledby="FAQAccordionHeader7" data-bs-parent="FAQAccordion7">
                             <div class="accordion-body lh-lg">
                                 <p>Applying a Creative Commons open copyright license to your syllabus is only the first step. The next step is making sure that it is discoverable and usable by other instructors. You can do this by submitting your syllabus to an open educational resource repository (OERR). An OERR is an online storage system that allows educators to share, manage and use education resources. You can find a list of OERR at <a href="https://guides.library.ubc.ca/open-education/sharing">https://guides.library.ubc.ca/open-education/sharing</a>.</p>
-                                <p>You may also want to submit your syllabus to the UBC OER Collection. The goal of the <a href="https://oer.open.ubc.ca/">UBC OER Collection</a> is to showcase UBC OER content in a searchable interface to support both UBC faculty and the general community in incorporating open educational resources and practices into their curriculum. Learn more and submit your syllabus at <a href="https://oer.open.ubc.ca/">https://oer.open.ubc.ca/<a>.</p>
+                                <p>You may also want to submit your syllabus to the UBC OER Collection. The goal of the <a href="https://oer.open.ubc.ca/">UBC OER Collection</a> is to showcase UBC OER content in a searchable interface to support both UBC faculty and the general community in incorporating open educational resources and practices into their curriculum. Learn more and submit your syllabus at <a href="https://oer.open.ubc.ca/">https://oer.open.ubc.ca/</a>.</p>
                                 <p>For any questions related to open education resources (OER) at UBC please contact open@ubc.ca.</p>
                                 </div>
                         </div>
@@ -517,6 +517,7 @@
 
         </div>
     </div>
+</div>
 </div>
 
 <!-- End here -->
