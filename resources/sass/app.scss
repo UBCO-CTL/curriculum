@@ -7,6 +7,11 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap'; 
 
+// Custom variables
+$link-color-custom: #0055B7;
+$link-hover-color-custom: rgb(47, 93, 124);
+$brand-navy: #002145;
+
 // Global 
 .container {
     max-width: 1150px !important;
@@ -35,10 +40,10 @@
 }
 
 .landing-page .bg-secondary a {
-    color: #002145;
+    color: $link-color-custom;
     text-decoration: none;
     &:hover {
-        color: #0056b3;
+        color: $link-hover-color-custom;
         text-decoration: underline;
     }
 }
@@ -60,25 +65,25 @@
 .landing-page .box-img img {
     width: 140px !important;
     height: 140px !important;
-    border: 8px solid #002145 !important;
+    border: 8px solid $brand-navy !important;
 }
 
 // How to Use section
 .landing-page .bg-primary .col-md a {
-    color: #0055B7 !important;
+    color: $link-color-custom !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47, 93, 124) !important;
+        color: $link-hover-color-custom !important;
         text-decoration: underline;
     }
 }
 
 // Questions section
 .landing-page .bg-secondary .col-md a {
-    color: #0055B7 !important;
+    color: $link-color-custom !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47, 93, 124) !important;
+        color: $link-hover-color-custom !important;
         text-decoration: underline;
     }
 }
@@ -121,10 +126,10 @@
 }
 
 .about-page .bg-secondary a {
-    color: #0055B7 !important;
+    color: $link-color-custom !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47, 93, 124) !important;
+        color: $link-hover-color-custom !important;
         text-decoration: underline;
     }
 }
@@ -133,10 +138,10 @@
 
 
 .faq-page .bg-secondary a {
-    color: #0055B7 !important;
+    color: $link-color-custom !important;
     text-decoration: none;
     &:hover {
-        color: rgb(47, 93, 124) !important;
+        color: $link-hover-color-custom !important;
         text-decoration: underline;
     }
 }
@@ -166,4 +171,28 @@
 
 .faq-page .btn-success {
     color: white !important;
+}
+
+
+
+
+
+// ─── Register View ───────────────────────────────────────────
+
+.register-view .btn-primary {
+    background-color: rgb(64, 180, 229) !important;
+    border-color: rgb(64, 180, 229) !important;
+    &:hover {
+        background-color: rgb(0, 167, 225) !important;
+        border-color: rgb(0, 143, 190) !important;
+    }
+}
+
+.register-view a {
+    color: $link-color-custom !important;
+    text-decoration: none;
+    &:hover {
+        color: $link-hover-color-custom !important;
+        text-decoration: underline;
+    }
 }
