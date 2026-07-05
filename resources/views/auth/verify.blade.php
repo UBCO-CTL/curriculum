@@ -2,6 +2,7 @@
 
 @section('content')
 
+<div class="verify-page">
 <div class="container">
     <div class="row justify-content-center" style="padding-bottom:265px;">
         <div class="col-md-8">

@@ -7,11 +7,6 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap'; 
 
-// Custom variables
-$link-color-custom: #0055B7;
-$link-hover-color-custom: rgb(47, 93, 124);
-$brand-navy: #002145;
-
 // Global 
 .container {
     max-width: 1150px !important;
@@ -40,10 +35,10 @@ $brand-navy: #002145;
 }
 
 .landing-page .bg-secondary a {
-    color: $link-color-custom;
+    color: #002145;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom;
+        color: #0056b3;
         text-decoration: underline;
     }
 }
@@ -65,25 +60,25 @@ $brand-navy: #002145;
 .landing-page .box-img img {
     width: 140px !important;
     height: 140px !important;
-    border: 8px solid $brand-navy !important;
+    border: 8px solid #002145 !important;
 }
 
 // How to Use section
 .landing-page .bg-primary .col-md a {
-    color: $link-color-custom !important;
+    color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
 
 // Questions section
 .landing-page .bg-secondary .col-md a {
-    color: $link-color-custom !important;
+    color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
@@ -126,10 +121,10 @@ $brand-navy: #002145;
 }
 
 .about-page .bg-secondary a {
-    color: $link-color-custom !important;
+    color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
@@ -138,10 +133,10 @@ $brand-navy: #002145;
 
 
 .faq-page .bg-secondary a {
-    color: $link-color-custom !important;
+    color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom !important;
+        color: rgb(47, 93, 124) !important;
         text-decoration: underline;
     }
 }
@@ -173,13 +168,9 @@ $brand-navy: #002145;
     color: white !important;
 }
 
+// ─── Register Page ───────────────────────────────────────────
 
-
-
-
-// ─── Register View ───────────────────────────────────────────
-
-.register-view .btn-primary {
+.register-page .btn-primary {
     background-color: rgb(64, 180, 229) !important;
     border-color: rgb(64, 180, 229) !important;
     &:hover {
@@ -188,11 +179,22 @@ $brand-navy: #002145;
     }
 }
 
-.register-view a {
-    color: $link-color-custom !important;
+.register-page a {
+    color: #0055B7 !important;
     text-decoration: none;
     &:hover {
-        color: $link-hover-color-custom !important;
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
+    }
+}
+
+// ─── Verify Page ───────────────────────────────────────────
+
+.verify-page .btn-link {
+    color: #40B4E5 !important;
+    text-decoration: none;
+    &:hover {
+        color: #0055B7 !important;
         text-decoration: underline;
     }
 }
