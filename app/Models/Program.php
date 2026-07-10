@@ -117,10 +117,10 @@ class Program extends Model
             if (property_exists($row, 'plo_category_id') && $row->plo_category_id != '') {
                 $id = $row->plo_category_id;
                 if (in_array($id, $setCats)) {
-                    PLOCategory::where('plo_category_id', $id)->update(['plo_category' => $row->plo_category]);
+                    PLOCategory::where('plo_category_id', $id)->update(['plo_category' => $row->plo_category, 'position' => $key + 1]);
                 }
             } else {
-                $res = DB::table('p_l_o_categories')->insertGetId(['program_id' => $prgID, 'plo_category' => $row->plo_category]);
+                $res = DB::table('p_l_o_categories')->insertGetId(['program_id' => $prgID, 'plo_category' => $row->plo_category, 'position' => $key + 1]);
                 $item['plo_category_id'] = $res;
             }
             $aData[$key] = $item;
