@@ -4531,12 +4531,12 @@
             outline: 0;
         }
 
-        .dropdown-menu-right {
+        .dropdown-menu-end {
             right: 0;
             left: auto;
         }
 
-        .dropdown-menu-left {
+        .dropdown-menu-start {
             right: auto;
             left: 0;
         }
@@ -4585,7 +4585,7 @@
                 left: auto;
             }
 
-            .navbar-right .dropdown-menu-left {
+            .navbar-right .dropdown-menu-start {
                 right: auto;
                 left: 0;
             }

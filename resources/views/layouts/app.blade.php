@@ -93,7 +93,7 @@
                                         {{ Auth::user()->email }}
                                     </a>
 
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         
 
                                         @can('admin-privilege')

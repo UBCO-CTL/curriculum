@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="request-page">
     <div class="container" style="display: flex;justify-content: center;">
         <div class="row" style="width:75%">
             <div class="col-md-12 col-md-offset-1">
@@ -79,4 +80,5 @@
             </div>
         </div>
     </div>
+ </div>
 @endsection

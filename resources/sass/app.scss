@@ -21,6 +21,20 @@
     color: #ffffff !important;
 }
 
+// ─── Navbar ───────────────────────────────────────────
+.dropdown-menu .dropdown-item {
+    color: rgb(0, 33, 69) !important;
+    &:hover {
+        color: rgb(0, 33, 69) !important;
+        background-color: #eff2f68f !important;
+    }
+    &:active {
+        color: rgb(255, 255, 255) !important;
+        background-color: rgb(64, 180, 229) !important;
+    }
+}
+
+
 // ─── Landing Page ───────────────────────────────────────────
 
 // Curriculum MAP & Syllabus Generator section
@@ -197,4 +211,35 @@
         color: #0055B7 !important;
         text-decoration: underline;
     }
+}
+
+// ─── Account Information Page ───────────────────────────────────────────
+
+.accountInformation-page .btn-primary {
+    background-color: rgb(64, 180, 229) !important;
+    border-color: rgb(64, 180, 229) !important;
+    &:hover {
+        background-color: rgb(0, 167, 225) !important;
+        border-color: rgb(0, 143, 190) !important;
+    }
+}
+
+
+
+// ─── Registration Invite Page ───────────────────────────────────────────
+
+.request-page .btn-primary {
+    background-color: rgb(64, 180, 229) !important;
+    border-color: rgb(64, 180, 229) !important;
+    &:hover {
+        background-color: rgb(0, 167, 225) !important;
+        border-color: rgb(0, 143, 190) !important;
+    }
+}
+
+
+.request-page .form-control:focus {
+    border-color: rgb(161, 203, 239) !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
