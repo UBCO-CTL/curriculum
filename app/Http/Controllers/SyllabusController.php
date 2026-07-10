@@ -2286,18 +2286,6 @@ class SyllabusController extends Controller implements HasMiddleware
 
             // get path to word file
             $wordFilePath = config('app.env') == 'local' ? public_path($fileName . $wordFileExt) : base_path('html' . DIRECTORY_SEPARATOR . $fileName . $wordFileExt);
-            
-            //sanitize the XML 
-            // 🔧 Sanitize the XML inside the docx before loading it 
-            $zip = new \ZipArchive; if ($zip->open($wordFilePath) === true) { 
-                // read the main document XML 
-                $xml = $zip->getFromName('word/document.xml'); 
-                // sanitize it 
-                $xml = $this->sanitizeXml($xml); 
-                // write it back into the docx 
-                $zip->addFromString('word/document.xml', $xml); 
-                $zip->close(); }
-            
             // load word file
             $wordFileContent = IOFactory::load($wordFilePath);
             $pdfWriter = IOFactory::createWriter($wordFileContent, 'PDF');
