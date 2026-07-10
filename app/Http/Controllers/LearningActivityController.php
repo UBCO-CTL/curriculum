@@ -7,19 +7,18 @@ use App\Models\LearningActivity;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class LearningActivityController extends Controller
+class LearningActivityController extends Controller implements HasMiddleware
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(['auth', 'verified']);
+        return [
+            ['auth', 'verified'],
+        ];
     }
 
     public function index(): RedirectResponse
@@ -48,16 +47,16 @@ class LearningActivityController extends Controller
         // try update student assessment methods
         try {
             $courseId = $request->input('course_id');
-            $currentActivities = $request->input('current_l_activities');
-            $newActivities = $request->input('new_l_activities');
-            $currentPercentages = $request->input('current_l_activities_percentage');
-            $newPercentages = $request->input('new_l_activities_percentage');
+            $currentActivities = $request->input('current_l_activities', []);
+            $newActivities = $request->input('new_l_activities', []);
+            $currentPercentages = $request->input('current_l_activities_percentage', []);
+            $newPercentages = $request->input('new_l_activities_percentage', []);
 
             // get the course
             $course = Course::find($courseId);
             // case: delete all teaching and learning activities
-            if (! $currentActivities && ! $newActivities) {
-                Course::find($courseId)->learningActivities()->delete();
+            if (empty($currentActivities) && empty($newActivities)) {
+                $course->learningActivities()->delete();
             }
             // get the saved assessment methods for this course
             $learningActivities = $course->learningActivities;
@@ -79,11 +78,13 @@ class LearningActivityController extends Controller
                 }
             }
             // add new learning activities
-            if ($newActivities) {
+            if (! empty($newActivities)) {
+                $nextPosition = $course->learningActivities()->max('l_activities_pos') + 1;
                 foreach ($newActivities as $index => $newActivity) {
                     $newLearningActivity = new LearningActivity;
                     $newLearningActivity->l_activity = $newActivity;
                     $newLearningActivity->course_id = $courseId;
+                    $newLearningActivity->l_activities_pos = $nextPosition++;
 
                     // save percentage if provided
                     if (isset($newPercentages[$index])) {
@@ -106,6 +107,11 @@ class LearningActivityController extends Controller
 
         } catch (Throwable $exception) {
             // flash error message if something goes wrong
+            Log::error('There was an error updating teaching and learning activities', [
+                'course_id' => $request->input('course_id'),
+                'exception' => $exception,
+            ]);
+
             $request->session()->flash('error', 'There was an error updating your teaching and learning activities');
 
         } finally {

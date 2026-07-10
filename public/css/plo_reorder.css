@@ -26,10 +26,12 @@
     box-shadow: 0 0 15px rgba(0,0,0,0.15);
 }
 
-.plo-category-section tr {
+.plo-category-section tr,
+.plo-category-list tr {
     transition: background-color 0.2s ease;
 }
 
-.plo-category-section tr:hover {
+.plo-category-section tr:hover,
+.plo-category-list tr:hover {
     background-color: #f8f9fa;
 }

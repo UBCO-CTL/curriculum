@@ -189,6 +189,8 @@ CREATE TABLE `learning_activities` (
   `l_activity_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `l_activity` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `course_id` bigint(20) unsigned NOT NULL,
+  `l_activities_pos` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `percentage` tinyint(3) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`l_activity_id`),
@@ -400,6 +402,7 @@ CREATE TABLE `p_l_o_categories` (
   `plo_category_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `plo_category` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `program_id` bigint(20) unsigned NOT NULL,
+  `position` int(10) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`plo_category_id`),
@@ -762,3 +765,6 @@ INSERT INTO `migrations` VALUES (114,'2021_06_23_182042_create_optional_priority
 INSERT INTO `migrations` VALUES (115,'2021_06_24_181949_create_optional_priority_subcategories_table',18);
 INSERT INTO `migrations` VALUES (116,'2021_06_25_172715_create_optional_priorities_table',18);
 INSERT INTO `migrations` VALUES (117,'2021_06_26_181737_create_course_optional_priorities_table',18);
+INSERT INTO `migrations` VALUES (118,'2026_05_15_000000_add_position_to_p_l_o_categories_table',19);
+INSERT INTO `migrations` VALUES (119,'2022_06_01_181506_add_l_activities_pos_to_learning_activities_table',20);
+INSERT INTO `migrations` VALUES (120,'2026_05_15_000001_add_percentage_to_learning_activities_table',21);

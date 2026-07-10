@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    const ploSaveButton = $('.plo-save-order');
+    const categorySaveButton = $('.category-save-order');
+
     // Initialize Sortable for each category section
     $('.plo-category-section').each(function() {
         new Sortable(this, {
@@ -16,6 +19,22 @@ $(document).ready(function() {
             onEnd: function(evt) {
                 // Update hidden input fields for new order
                 updatePLOOrder(evt.to);
+                enableSaveButton(ploSaveButton);
+            }
+        });
+    });
+
+    // Initialize Sortable for the PLO category list
+    $('.plo-category-list').each(function() {
+        new Sortable(this, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                updatePLOCategoryOrder(evt.to);
+                enableSaveButton(categorySaveButton);
             }
         });
     });
@@ -43,18 +62,40 @@ $(document).ready(function() {
                 $(this).append(input);
             });
         });
+    }
 
-        // Enable the save button since changes were made
-        $('button[type="submit"]').prop('disabled', false)
+    function updatePLOCategoryOrder(container) {
+        $('input[name="categories_pos[]"]').remove();
+
+        $('.plo-category-list tr[data-category-id]').each(function() {
+            const categoryId = $(this).data('category-id');
+
+            const input = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'categories_pos[]')
+                .attr('form', 'savePLOCategoryOrder')
+                .val(categoryId);
+            $(this).append(input);
+        });
+    }
+
+    function enableSaveButton(button) {
+        button.prop('disabled', false)
             .addClass('btn-success')
             .removeClass('btn-secondary');
     }
 
-    // Initially disable save button until changes are made
-    $('button[type="submit"]').prop('disabled', true)
-        .addClass('btn-secondary')
-        .removeClass('btn-success');
+    function disableSaveButton(button) {
+        button.prop('disabled', true)
+            .addClass('btn-secondary')
+            .removeClass('btn-success');
+    }
 
-    // Update all category sections on page load to ensure proper order
+    // Initially disable order save buttons until changes are made
+    disableSaveButton(ploSaveButton);
+    disableSaveButton(categorySaveButton);
+
+    // Update all sections on page load to ensure proper order
     updatePLOOrder();
+    updatePLOCategoryOrder();
 });

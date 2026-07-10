@@ -197,7 +197,7 @@
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <form action="{{route('mappingScale.update', $ms->map_scale_id)}}" method="POST">
+                                                            <form action="{{route('program.mappingScale.update', $ms->map_scale_id)}}" method="POST">
                                                                 @csrf
                                                                 {{method_field('POST')}}
                                                                 <div class="modal-body">

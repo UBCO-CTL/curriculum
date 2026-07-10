@@ -12,24 +12,22 @@ use App\Models\ProgramLearningOutcome;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Throwable;
 
-class ProgramLearningOutcomeController extends Controller
+class ProgramLearningOutcomeController extends Controller implements HasMiddleware
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(['auth', 'verified']);
+        return [
+            ['auth', 'verified'],
+        ];
     }
 
     public function index(): RedirectResponse
@@ -54,7 +52,7 @@ class ProgramLearningOutcomeController extends Controller
     public function store(Request $request): RedirectResponse
     {
         // validate request data
-        $this->validate($request, [
+        $request->validate([
             'program_id' => 'required',
         ]);
 
@@ -82,7 +80,8 @@ class ProgramLearningOutcomeController extends Controller
                     // save and update plo
                     $plo->pl_outcome = $currentPLOs[$plo->pl_outcome_id];
                     $plo->plo_shortphrase = $currentPLOShortphrases[$plo->pl_outcome_id];
-                    $plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id];
+                    //$plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id];
+                    $plo->plo_category_id = $currentPLOCategories[$plo->pl_outcome_id] ?: null;
                     $plo->save();
                 } else {
                     // remove plo from program
@@ -104,7 +103,8 @@ class ProgramLearningOutcomeController extends Controller
                     $newPLO = new ProgramLearningOutcome;
                     $newPLO->pl_outcome = $plo;
                     $newPLO->plo_shortphrase = $newPLOShortphrases[$index];
-                    $newPLO->plo_category_id = $categoryId;
+                    //$newPLO->plo_category_id = $categoryId;
+                    $newPLO->plo_category_id = $categoryId ?: null;
                     $newPLO->position = $maxPositions[$categoryId];
                     $newPLO->program_id = $programId;
                     $newPLO->save();
@@ -119,10 +119,10 @@ class ProgramLearningOutcomeController extends Controller
             $request->session()->flash('success', 'Your program learning outcomes were updated successfully!');
         } catch (Throwable $exception) {
             $message = 'There was an error updating your program learning outcomes';
-            Log::error($message . ' ...\n');
-            Log::error('Code - ' . $exception->getCode());
-            Log::error('File - ' . $exception->getFile());
-            Log::error('Line - ' . $exception->getLine());
+            Log::error($message.' ...\n');
+            Log::error('Code - '.$exception->getCode());
+            Log::error('File - '.$exception->getFile());
+            Log::error('Line - '.$exception->getLine());
             Log::error($exception->getMessage());
             $request->session()->flash('error', $message);
         } finally {
@@ -158,7 +158,7 @@ class ProgramLearningOutcomeController extends Controller
     public function update(Request $request, $programLearningOutcomeID): RedirectResponse
     {
         // validate request input
-        $this->validate($request, [
+        $request->validate([
             'program_id' => 'required',
             'plo' => 'required',
         ]);
@@ -243,7 +243,7 @@ class ProgramLearningOutcomeController extends Controller
             'temporary',
             $clientFileName
         );
-        $absolutePath = storage_path('app' . DIRECTORY_SEPARATOR . 'temporary' . DIRECTORY_SEPARATOR . $clientFileName);
+        $absolutePath = storage_path('app'.DIRECTORY_SEPARATOR.'temporary'.DIRECTORY_SEPARATOR.$clientFileName);
 
         /**  Create a new reader of the type defined by $clientFileName extension  **/
         $reader = IOFactory::createReaderForFile($absolutePath);
@@ -254,13 +254,16 @@ class ProgramLearningOutcomeController extends Controller
         /**  Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = $reader->load($absolutePath);
         $worksheets = $spreadsheet->getAllSheets();
+        $maxCategoryPosition = PLOCategory::where('program_id', $programId)->max('position') ?? 0;
         foreach ($worksheets as $worksheet) {
             // create a program learning outcome category
             $worksheetTitle = $worksheet->getTitle();
-            Log::debug('Add PLO category: ' . $worksheetTitle);
+            Log::debug('Add PLO category: '.$worksheetTitle);
+            $maxCategoryPosition++;
             $ploCategory = PLOCategory::create([
                 'plo_category' => $worksheetTitle,
                 'program_id' => $programId,
+                'position' => $maxCategoryPosition,
             ]);
 
             // Get max position for this category
@@ -337,9 +340,11 @@ class ProgramLearningOutcomeController extends Controller
             }
 
             Session::flash('success', 'PLO order updated successfully');
+
             return redirect()->back();
         } catch (\Exception $e) {
             Session::flash('error', 'Error updating PLO order');
+
             return redirect()->back();
         }
     }

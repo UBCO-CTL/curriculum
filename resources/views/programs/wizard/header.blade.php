@@ -74,7 +74,7 @@
                                         
                                         <form method="POST" action="{{route('programs.update', $program->program_id)}}">
                                             @csrf
-                                            {{method_field('POST')}}
+                                            @method('PUT')
                                             <div class="modal-body">
                                                 <div class="form-group row">
                                                     <label for="program" class="col-md-2 col-form-label text-md-right">Program Name</label>

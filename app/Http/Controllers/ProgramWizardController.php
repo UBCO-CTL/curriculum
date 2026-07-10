@@ -26,18 +26,150 @@ use App\Models\User;
 use Doctrine\DBAL\Schema\Index;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class ProgramWizardController extends Controller
+class ProgramWizardController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(['auth', 'verified']);
-        $this->middleware('hasAccess');
+        return [
+            ['auth', 'verified'],
+            'hasAccess',
+        ];
+    }
+    public function step1($program_id, Request $request)
+{
+    $isEditor = (bool) $request->isEditor;
+    if ($request->isViewer) {
+        return redirect()->route('programWizard.step4', $program_id);
     }
 
+    // Current user (lean)
+    $user = User::query()->select(['id','name','email'])->findOrFail(Auth::id());
+
+    // Reference lists (trimmed; cache if desired)
+
+    $campuses = Campus::query()
+    ->select(['campus_id', 'campus'])
+    ->orderBy('campus')
+    ->get();
+
+    $faculties = Faculty::query()
+    ->select(['faculty_id', 'faculty', 'campus_id'])
+    ->orderBy('faculty')
+    ->get();
+
+    $departments = Department::query()
+    ->select(['department_id', 'department', 'faculty_id'])
+    ->orderBy('department')
+    ->get();
+
+    $levels = ['Undergraduate', 'Graduate', 'Other'];
+
+    // Program basics
+    $program = Program::query()
+        ->select(['program_id','program','level','faculty','department','campus'])
+        ->findOrFail($program_id);
+
+    PLOCategory::normalizePositionsForProgram($program_id);
+
+    // Collaborators ONLY for this program (NOT all the user's programs)
+    $programCollaborators = $program->users()->select(['users.id','users.name','users.email'])->get();
+
+    // PLO data (trim columns)
+    $plos = ProgramLearningOutcome::query()
+        ->select(['pl_outcome_id','plo_category_id','position','plo_shortphrase','pl_outcome'])
+        ->where('program_id', $program_id)
+        ->orderBy('plo_category_id','asc')
+        ->orderBy('position','asc')
+        ->get();
+
+    $ploCategories = PLOCategory::query()
+        ->select(['plo_category_id','plo_category'])
+        ->where('program_id', $program_id)
+        ->get();
+
+    $ploProgramCategories = ProgramLearningOutcome::query()
+        ->select(['pl_outcome_id','plo_category_id','position','plo_shortphrase','pl_outcome'])
+        ->where('program_id', $program_id)
+        ->whereNotNull('plo_category_id')
+        ->orderBy('plo_category_id','asc')
+        ->orderBy('position','asc')
+        ->get();
+
+    $unCategorizedPLOS = ProgramLearningOutcome::query()
+        ->select(['pl_outcome_id','plo_shortphrase','pl_outcome'])
+        ->where('program_id', $program_id)
+        ->whereNull('plo_category_id')
+        ->orderBy('position','asc')
+        ->get();
+
+    $hasUncategorized = $unCategorizedPLOS->isNotEmpty();
+
+    // Progress counts
+    $ploCount    = $plos->count();
+    $msCount     = MappingScale::join('mapping_scale_programs','mapping_scales.map_scale_id','=','mapping_scale_programs.map_scale_id')
+                      ->where('mapping_scale_programs.program_id', $program_id)
+                      ->count();
+    $courseCount = CourseProgram::where('program_id', $program_id)->count();
+
+    // Derived helpers for the Blade
+    $plosPerCategoryCount = $plos
+        ->whereNotNull('plo_category_id')
+        ->groupBy('plo_category_id')
+        ->map->count()
+        ->toArray();
+
+    // Default short forms (your original logic)
+    $defaultShortForms      = [];
+    $defaultShortFormsIndex = [];
+    $ploDefaultCount        = 0;
+
+    foreach ($ploCategories as $category) {
+        $categoryPLOs = $ploProgramCategories->where('plo_category_id', $category->plo_category_id);
+        foreach ($categoryPLOs as $plo) {
+            $ploDefaultCount++;
+            $defaultShortForms[$plo->pl_outcome_id]      = 'PLO #'.$ploDefaultCount;
+            $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
+        }
+    }
+    foreach ($unCategorizedPLOS as $plo) {
+        $ploDefaultCount++;
+        $defaultShortForms[$plo->pl_outcome_id]      = 'PLO #'.$ploDefaultCount;
+        $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
+    }
+
+    return view('programs.wizard.step1', [
+        'plos'                   => $plos,
+        'program'                => $program,
+        'ploCategories'          => $ploCategories,
+        'faculties'              => $faculties,
+        'departments'            => $departments,
+        'campuses'               => $campuses,
+        'levels'                 => $levels,
+        'user'                   => $user,
+        'programCollaborators'   => $programCollaborators, // << new, lean
+        'ploCount'               => $ploCount,
+        'msCount'                => $msCount,
+        'courseCount'            => $courseCount,
+        'ploProgramCategories'   => $ploProgramCategories,
+        'hasUncategorized'       => $hasUncategorized,
+        'unCategorizedPLOS'      => $unCategorizedPLOS,
+        'plosPerCategoryCount'   => $plosPerCategoryCount, // << new helper
+        'isEditor'               => $isEditor,
+        'isViewer'               => false,
+        'defaultShortForms'      => $defaultShortForms,
+        'defaultShortFormsIndex' => $defaultShortFormsIndex,
+    ]);
+}
+//Old step1 Method, improved by:
+//Removed the “my programs → users for each program” fan‑out ($myPrograms + $programUsers) and replaced it with only this program’s collaborators ($programCollaborators).
+//Trimmed all queries to only the columns used on the page
+//Added $plosPerCategoryCount so the Blade no longer needs to call $plo->plos->count() which would trigger N+1 lazy loads
+/*
     public function step1($program_id, Request $request)
     {
         $isEditor = false;
@@ -49,7 +181,7 @@ class ProgramWizardController extends Controller
             return redirect()->route('programWizard.step4', $program_id);
         }
 
-        //header
+        // header
         $campuses = Campus::all();
         $faculties = Faculty::all();
         $departments = Department::all();
@@ -81,7 +213,7 @@ class ProgramWizardController extends Controller
             ->orderBy('position', 'asc')
             ->get();
 
-        //progress bar
+        // progress bar
         $ploCount = $plos->count();
         $msCount = MappingScale::join('mapping_scale_programs', 'mapping_scales.map_scale_id', '=', 'mapping_scale_programs.map_scale_id')
             ->where('mapping_scale_programs.program_id', $program_id)->count();
@@ -94,7 +226,7 @@ class ProgramWizardController extends Controller
             ->get();
         $hasUncategorized = $unCategorizedPLOS->isNotEmpty();
 
-        //get sequential numbering (1,2,3,4) regardless of position values
+        // get sequential numbering (1,2,3,4) regardless of position values
         $defaultShortForms = [];
         $defaultShortFormsIndex = [];
         $ploDefaultCount = 0;
@@ -104,7 +236,7 @@ class ProgramWizardController extends Controller
             $categoryPLOs = $ploProgramCategories->where('plo_category_id', $category->plo_category_id);
             foreach ($categoryPLOs as $plo) {
                 $ploDefaultCount++;
-                $defaultShortForms[$plo->pl_outcome_id] = 'PLO #' . $ploDefaultCount;
+                $defaultShortForms[$plo->pl_outcome_id] = 'PLO #'.$ploDefaultCount;
                 $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
             }
         }
@@ -112,7 +244,7 @@ class ProgramWizardController extends Controller
         // Then process uncategorized PLOs
         foreach ($unCategorizedPLOS as $plo) {
             $ploDefaultCount++;
-            $defaultShortForms[$plo->pl_outcome_id] = 'PLO #' . $ploDefaultCount;
+            $defaultShortForms[$plo->pl_outcome_id] = 'PLO #'.$ploDefaultCount;
             $defaultShortFormsIndex[$plo->pl_outcome_id] = $ploDefaultCount;
         }
 
@@ -136,7 +268,7 @@ class ProgramWizardController extends Controller
             ->with('isViewer', $isViewer)
             ->with('defaultShortForms', $defaultShortForms)
             ->with('defaultShortFormsIndex', $defaultShortFormsIndex);
-    }
+    } */
 
     public function step2($program_id, Request $request)
     {
@@ -148,7 +280,7 @@ class ProgramWizardController extends Controller
         if ($request->isViewer) {
             return redirect()->route('programWizard.step4', $program_id);
         }
-        //header
+        // header
         $campuses = Campus::all();
         $faculties = Faculty::all();
         $departments = Department::all();
@@ -189,7 +321,7 @@ class ProgramWizardController extends Controller
 
         $program = Program::where('program_id', $program_id)->first();
 
-        //progress bar
+        // progress bar
         $ploCount = ProgramLearningOutcome::where('program_id', $program_id)->count();
         $msCount = count($mappingScales);
         $courseCount = CourseProgram::where('program_id', $program_id)->count();
@@ -210,7 +342,7 @@ class ProgramWizardController extends Controller
         if ($request->isViewer) {
             return redirect()->route('programWizard.step4', $program_id);
         }
-        //header
+        // header
         $campuses = Campus::all();
         $faculties = Faculty::all();
         $departments = Department::all();
@@ -301,7 +433,7 @@ class ProgramWizardController extends Controller
         } elseif ($request->isViewer) {
             $isViewer = true;
         }
-        //header
+        // header
         $campuses = Campus::all();
         $faculties = Faculty::all();
         $departments = Department::all();
@@ -319,7 +451,7 @@ class ProgramWizardController extends Controller
         //
         $program = Program::where('program_id', $program_id)->first();
 
-        //progress bar
+        // progress bar
         $ploCount = ProgramLearningOutcome::where('program_id', $program_id)->count();
         $msCount = MappingScale::join('mapping_scale_programs', 'mapping_scales.map_scale_id', '=', 'mapping_scale_programs.map_scale_id')
             ->where('mapping_scale_programs.program_id', $program_id)->count();
@@ -414,10 +546,22 @@ class ProgramWizardController extends Controller
             $freqOfMSIds[$programMappingScalesIds[$i]] = [];
             $programMappingScalesColours[$i] = (strtolower(MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first()) == '#ffffff' || strtolower(MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first()) == '#fff' ? '#6c757d' : MappingScale::where('map_scale_id', $programMappingScalesIds[$i])->pluck('colour')->first());
         }
-        // get categorized plo's for the program (ordered by category then outcome id)
-        $plos_order = ProgramLearningOutcome::where('program_id', $program_id)->whereNotNull('plo_category_id')->orderBy('plo_category_id', 'ASC')->orderBy('pl_outcome_id', 'ASC')->get();
+        // get categorized PLOs in the same category/PLO order shown in the program
+        $plos_order = ProgramLearningOutcome::query()
+            ->select('program_learning_outcomes.*')
+            ->join('p_l_o_categories', 'program_learning_outcomes.plo_category_id', '=', 'p_l_o_categories.plo_category_id')
+            ->where('program_learning_outcomes.program_id', $program_id)
+            ->whereNotNull('program_learning_outcomes.plo_category_id')
+            ->orderBy('p_l_o_categories.position', 'asc')
+            ->orderBy('program_learning_outcomes.position', 'asc')
+            ->orderBy('program_learning_outcomes.pl_outcome_id', 'asc')
+            ->get();
         // get UnCategorized PLO's
-        $uncatPLOS = ProgramLearningOutcome::where('program_id', $program_id)->whereNull('plo_category_id')->get();
+        $uncatPLOS = ProgramLearningOutcome::where('program_id', $program_id)
+            ->whereNull('plo_category_id')
+            ->orderBy('position', 'asc')
+            ->orderBy('pl_outcome_id', 'asc')
+            ->get();
         // Merge Categorized PLOs and Uncategorized PLOs
         $all_plos = $plos_order->toBase()->merge($uncatPLOS);
         $plosInOrder = $all_plos->pluck('plo_shortphrase')->toArray();
@@ -446,7 +590,7 @@ class ProgramWizardController extends Controller
             $i += 1;
         }
 
-        //get defaultShortForms based on PLO Category, then Creation Order
+        // get defaultShortForms based on PLO Category, then Creation Order
         $defaultShortForms = [];
         $defaultShortFormsIndex = [];
         $plosInOrderCat = [];
@@ -1436,13 +1580,13 @@ class ProgramWizardController extends Controller
 
     public function frequencyDistribution($arr, $store)
     {
-        //Initialize Array for Frequency Distribution
+        // Initialize Array for Frequency Distribution
         $freq = [];
         foreach ($arr as $map) {
             $pl_outcome_id = $map['pl_outcome_id'];
             $course_id = $map['course_id'];
             $map_scale_id = $map['map_scale_id'];
-            //Initialize Array with the value of zero
+            // Initialize Array with the value of zero
             $freq[$pl_outcome_id][$course_id][$map_scale_id] = 0;
         }
         // Store values in the frequency distribution array that was initialized to zero above
@@ -1464,9 +1608,9 @@ class ProgramWizardController extends Controller
                 $weight = 0;
                 $tieResults = [];
                 $id = null;
-                //count the number of times a mapping scales appears for a program learning outcome
+                // count the number of times a mapping scales appears for a program learning outcome
                 foreach ($d as $ms_Id => $mapScaleWeight) {
-                    //check if the current ($mapScaleWeight) > than the previously stored value
+                    // check if the current ($mapScaleWeight) > than the previously stored value
                     if ($weight < $mapScaleWeight) {
                         $weight = $mapScaleWeight;
                         $id = $ms_Id;
@@ -1521,13 +1665,13 @@ class ProgramWizardController extends Controller
 
     public function replaceIdsWithAbv($store, $arr)
     {
-        //Initialize Array for Frequency Distribution
+        // Initialize Array for Frequency Distribution
         $freq = [];
         foreach ($arr as $map) {
             $pl_outcome_id = $map['pl_outcome_id'];
             $course_id = $map['course_id'];
             $map_scale_id = MappingScale::where('map_scale_id', $map['map_scale_id'])->value('abbreviation');
-            //Initialize Array with the value of zero
+            // Initialize Array with the value of zero
             $freq[$pl_outcome_id][$course_id][$map_scale_id] = 0;
         }
         // Store values in the frequency distribution array that was initialized to zero above
@@ -2004,7 +2148,7 @@ class ProgramWizardController extends Controller
                             <th colspan="1" style="background-color: rgba(0, 0, 0, 0.03);"></th>';
 
             if (count($plos) < 7) {
-                //Categorized PLOs
+                // Categorized PLOs
                 foreach ($ploProgramCategories as $index => $plo) {
                     if ($plo->plo_category != null) {
                         if ($plo->plo_shortphrase == '' || $plo->plo_shortphrase == null) {
@@ -2014,7 +2158,7 @@ class ProgramWizardController extends Controller
                         }
                     }
                 }
-                //Uncategorized PLOs
+                // Uncategorized PLOs
                 $uncatIndex = 0;
                 foreach ($plos as $plo) {
                     if ($plo->plo_category == null) {

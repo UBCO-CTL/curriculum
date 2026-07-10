@@ -30,7 +30,6 @@ use App\Mail\Invitation;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +41,6 @@ use Illuminate\Support\Facades\URL;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 
 Route::get('/', function () {
     return view('pages.landing');
@@ -135,7 +133,7 @@ Route::resource('/plo', ProgramLearningOutcomeController::class);
 Route::post('/plo/store', [ProgramLearningOutcomeController::class, 'store'])->name('program.outcomes.store');
 Route::post('/import/plos', [ProgramLearningOutcomeController::class, 'import'])->name('program.outcomes.import');
 Route::delete('/plo/{program}/delete', [ProgramLearningOutcomeController::class, 'destroy'])->name('plo.destroy');
-Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('plo.update');
+Route::post('/plo/{program}/update', [ProgramLearningOutcomeController::class, 'update'])->name('program.outcomes.update');
 Route::delete('/program/{program}/plos/deleteAll', [ProgramLearningOutcomeController::class, 'destroyAll'])->name('program.plo.destroyAll');
 Route::post('/programs/{program}/plo/reorder', [App\Http\Controllers\ProgramLearningOutcomeController::class, 'reorder'])->name('program.plo.reorder');
 
@@ -151,7 +149,7 @@ Route::post('/am/store', [AssessmentMethodController::class, 'store'])->name('am
 
 Route::resource('/outcomeMap', OutcomeMapController::class);
 Route::post('/store/OutcomeMap', [OutcomeMapController::class, 'store'])->name('outcomeMap.store');
-//Route for standards mapping
+// Route for standards mapping
 Route::resource('/standardsOutcomeMap', StandardsOutcomeMapController::class);
 Route::post('/store/standardsOutcomeMap', [StandardsOutcomeMapController::class, 'store'])->name('standardsOutcomeMap.store');
 
@@ -159,13 +157,14 @@ Route::resource('/mappingScale', MappingScaleController::class);
 Route::post('/mappingScale/store', [MappingScaleController::class, 'store'])->name('program.mappingScale.store');
 Route::post('/mappingScale/addDefaultMappingScale', [MappingScaleController::class, 'addDefaultMappingScale'])->name('mappingScale.addDefaultMappingScale');
 Route::delete('/mappingScale/{program}/delete', [MappingScaleController::class, 'destroy'])->name('mappingScale.destroy');
-Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'update'])->name('mappingScale.update');
+Route::post('/mappingScale/{program}/update', [MappingScaleController::class, 'update'])->name('program.mappingScale.update');
 
 Route::resource('/ploCategory', PLOCategoryController::class);
 Route::post('/ploCategory/store', [PLOCategoryController::class, 'store'])->name('program.category.store');
 Route::delete('/ploCategory/{program}/delete', [PLOCategoryController::class, 'destroy'])->name('program.category.destroy');
 Route::delete('/program/{program}/categories/deleteAll', [PLOCategoryController::class, 'destroyAll'])->name('program.category.destroyAll');
 Route::post('/ploCategory/{program}/update', [PLOCategoryController::class, 'update'])->name('program.category.update');
+Route::post('/programs/{program}/ploCategory/reorder', [PLOCategoryController::class, 'reorder'])->name('program.category.reorder');
 
 Route::resource('/programUser', ProgramUserController::class);
 Route::post('/program/{programId}/collaborator/add', [ProgramUserController::class, 'store'])->name('programUser.add');
@@ -262,10 +261,4 @@ Route::middleware('web')->prefix(config('backpack.base.route_prefix'))->group(fu
 Route::get('/accountInformation', [App\Http\Controllers\Auth\AccountInformationController::class, 'index'])->name('accountInformation');
 Route::post('/accountInformation-update', [App\Http\Controllers\Auth\AccountInformationController::class, 'update'])->name('accountInformation.update');
 
-Route::get('/clear-cache', function () {
-    $exitCode = Artisan::call('config:cache');
-    $exitCode = Artisan::call('config:clear');
-    $exitCode = Artisan::call('cache:clear');
 
-    return 'DONE'; //Return anything
-});
