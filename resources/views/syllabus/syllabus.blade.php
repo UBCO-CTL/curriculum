@@ -10,6 +10,7 @@
 
 
 <!-- PDF Download Confirmation Modal -->
+<div class="syllabus-page">
 <div class="modal fade" id="pdfDownloadConfirmation" tabindex="-1" aria-labelledby="pdfDownloadConfirmationLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -93,7 +94,7 @@
             Syllabus Generator
             <span>
                 <a id="syllabusGeneratorHelp" href="#" onclick="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#guideModal">
-                    <i class="bi bi-question-circle-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with the Syllabus Generator"></i>
+                    <i class="bi bi-question-circle-fill" style="color: rgb(64, 180, 229);" data-bs-toggle="tooltip" data-bs-placement="right" title="Click for help with the Syllabus Generator"></i>
                 </a>
             </span>
         </h3>
@@ -1367,6 +1368,7 @@
         </div>
         @endif
     </div>
+</div>
 </div>
 </div>
 

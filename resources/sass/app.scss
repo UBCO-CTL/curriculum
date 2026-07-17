@@ -17,9 +17,19 @@
     color: rgb(0, 33, 69) !important;
 }
 
-.bg-primary * {
-    color: #ffffff !important;
+.btn-primary {
+    background-color: rgb(64, 180, 229) !important;
+    border-color: rgb(64, 180, 229) !important;
+    &:hover {
+        background-color: rgb(0, 167, 225) !important;
+        border-color: rgb(0, 143, 190) !important;
+    }
 }
+
+.requiredField {
+    color: red !important;
+}
+
 
 // ─── Navbar ───────────────────────────────────────────
 .dropdown-menu .dropdown-item {
@@ -34,6 +44,16 @@
     }
 }
 
+// ─── Global Form Controls ───────────────────────────────────────────
+.form-check-input:checked {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+.form-check-input:focus {
+    border-color: rgb(136, 171, 201) !important;
+    box-shadow: 0 0 0 0.25rem #0d6dfd37 !important;
+}
 
 // ─── Landing Page ───────────────────────────────────────────
 
@@ -155,15 +175,15 @@
     }
 }
 
-.faq-page .btn-primary {
-    background-color: rgb(64, 180, 229) !important;
-    border-color: rgb(64, 180, 229) !important;
-    &:hover {
-        background-color: rgb(0, 167, 225) !important;
-        border-color: rgb(0, 143, 190) !important;
+// .faq-page .btn-primary {
+//     background-color: rgb(64, 180, 229) !important;
+//     border-color: rgb(64, 180, 229) !important;
+//     &:hover {
+//         background-color: rgb(0, 167, 225) !important;
+//         border-color: rgb(0, 143, 190) !important;
         
-    }
-}
+//     }
+// }
 
 .faq-page .btn-danger.disabled {
     background-color: red !important;
@@ -172,9 +192,9 @@
     opacity: 1 !important;
 }
 
-.faq-page .requiredField {
-    color: red !important;
-}
+// .faq-page .requiredField {
+//     color: red !important;
+// }
 
 
 
@@ -182,16 +202,28 @@
     color: white !important;
 }
 
-// ─── Register Page ───────────────────────────────────────────
+// ─── Login Page ───────────────────────────────────────────
 
-.register-page .btn-primary {
-    background-color: rgb(64, 180, 229) !important;
-    border-color: rgb(64, 180, 229) !important;
+.login-page .btn-link {
+    color: rgb(64, 180, 229) !important;
+    text-decoration: none;
     &:hover {
-        background-color: rgb(0, 167, 225) !important;
-        border-color: rgb(0, 143, 190) !important;
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
     }
 }
+
+
+// ─── Register Page ───────────────────────────────────────────
+
+// .register-page .btn-primary {
+//     background-color: rgb(64, 180, 229) !important;
+//     border-color: rgb(64, 180, 229) !important;
+//     &:hover {
+//         background-color: rgb(0, 167, 225) !important;
+//         border-color: rgb(0, 143, 190) !important;
+//     }
+// }
 
 .register-page a {
     color: #0055B7 !important;
@@ -208,38 +240,123 @@
     color: #40B4E5 !important;
     text-decoration: none;
     &:hover {
-        color: #0055B7 !important;
+        color: c !important;
         text-decoration: underline;
     }
 }
 
 // ─── Account Information Page ───────────────────────────────────────────
 
-.accountInformation-page .btn-primary {
-    background-color: rgb(64, 180, 229) !important;
-    border-color: rgb(64, 180, 229) !important;
-    &:hover {
-        background-color: rgb(0, 167, 225) !important;
-        border-color: rgb(0, 143, 190) !important;
-    }
-}
+// .accountInformation-page .btn-primary {
+//     background-color: rgb(64, 180, 229) !important;
+//     border-color: rgb(64, 180, 229) !important;
+//     &:hover {
+//         background-color: rgb(0, 167, 225) !important;
+//         border-color: rgb(0, 143, 190) !important;
+//     }
+// }
 
 
 
 // ─── Registration Invite Page ───────────────────────────────────────────
 
-.request-page .btn-primary {
-    background-color: rgb(64, 180, 229) !important;
-    border-color: rgb(64, 180, 229) !important;
-    &:hover {
-        background-color: rgb(0, 167, 225) !important;
-        border-color: rgb(0, 143, 190) !important;
-    }
-}
-
+// .request-page .btn-primary {
+//     background-color: rgb(64, 180, 229) !important;
+//     border-color: rgb(64, 180, 229) !important;
+//     &:hover {
+//         background-color: rgb(0, 167, 225) !important;
+//         border-color: rgb(0, 143, 190) !important;
+//     }
+// }
 
 .request-page .form-control:focus {
     border-color: rgb(161, 203, 239) !important;
     box-shadow: none !important;
     outline: none !important;
+}
+
+
+// ─── Syllabus Generator ───────────────────────────────────────────
+
+#cat-course-basics .nav-link {
+    color: #0d6efd !important;
+    &:hover {
+        color: #0055B7  !important;
+    }
+}
+
+.syllabus-page .alert-primary a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
+    }
+}
+
+.syllabus-page .alert-info a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
+    }
+}
+
+.syllabus-page .link-primary {
+    color: #0d6efd !important;
+    text-decoration: none;
+    &:hover {
+        color: #0055B7 !important;
+        text-decoration: underline;
+    }
+}
+
+.syllabus-page .alert-primary {
+    color: #1b4b72;
+    background-color: #d6e9f8;
+    border-color: #c6e0f5;
+}
+ 
+.syllabus-page .alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+
+.syllabus-page .btn-danger {
+    color: #ffff;
+}
+
+
+.syllabus-page .btn-light.rounded-circle {
+    background-color: #e6ebee68 !important;
+    border-color: #e6ebee68 !important;
+    &:hover {
+        background-color: #d3dfea90 !important;
+    border-color: #cbd8e68f !important;
+    }
+}
+
+.syllabus-page a {
+    color: #0055B7 !important;
+    text-decoration: none;
+    &:hover {
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline;
+    }
+}
+
+#guideModal nav a,
+#guideModal ol a{
+    color: #0055B7 !important;
+    text-decoration: none !important;
+    &:hover {
+        color: rgb(47, 93, 124) !important;
+        text-decoration: underline !important;
+    }
+}
+
+#guideModal a.courses-guide {
+    text-decoration: underline !important;
 }
