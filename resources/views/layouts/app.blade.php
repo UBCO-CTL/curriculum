@@ -21,6 +21,7 @@
         <!-- Styles -->
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
         
     </head>
