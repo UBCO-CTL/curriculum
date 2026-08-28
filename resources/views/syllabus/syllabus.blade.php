@@ -1084,6 +1084,11 @@
 
 <div class="col-12" id="statementStudentSupport"></div>
 
+<!-- Statement on GenAI Use -->
+
+<div class="col-12" id="statementGenAIUse"></div>
+
+
 
 <!-- Optional Statements -->
 <div class="col-12" id="optionalStatements"></div>
@@ -2801,7 +2806,7 @@
 
         var optionalStatements = `
 
-         <h5  class="fw-bold">Additional UBC language regarding academic integrity, academic misconduct, and use of generative artificial intelligence (GenAI)</h5>
+         <h5  class="fw-bold">Additional UBC language regarding academic integrity and academic misconduct.</h5>
                 @if(!empty($syllabus))
                     <div id="optionalSyllabusDesc"></div>
                 @else
@@ -2828,6 +2833,24 @@
             <br>
             <div class="col-12">
                 <blockquote> Visit <a href="https://students.ok.ubc.ca/support/"> the Student Support and Resources page</a> to find one-on-one help or explore resources to support your experience at UBC Okanagan, as well as many other campus services available to all students. </blockquote>
+            </div>
+            `;
+
+        var statementGenAIUse = `
+
+            <label for="statementGenAIUse"><h5 class="fw-bold">Statements on GenAI Usage</h5></label><span class="requiredBySenateOK"></span>
+            <br>
+            <div class="col-12">
+                <blockquote> Policy O-130.1: <a href="https://scs-senate-2021.sites.olt.ubc.ca/files/20260305-O-130-Content-and-Distribution-of-Course-Syllabi.pdf">Content and Distribution of Course Syllabi </a> requires that each course syllabus includes “a
+statement on generative artificial intelligence (GenAI) usage in student-submitted work that clarifies
+how the use of GenAI is permitted or not permitted.” While there is no single approach to GenAI use
+that will work for every course, discipline, assignment, or learning context, an effective statement helps
+students understand both what is permitted and why. It is important to note that the syllabus statement
+establishes overall expectations for GenAI use in the course, and assignment instructions provide more
+specific guidance.<br><br>
+Please review <a href="https://ctl.ok.ubc.ca/wp-content/uploads/sites/186/2026/08/O-130_Implementation_GenAI_Guide_20260819.pdf">this document </a>for examples of syllabus statements that can be adapted to your discipline, course context, assignments, and learning goals.
+
+</blockquote>
             </div>
             `;
 
@@ -2892,6 +2915,7 @@
             $('.requiredBySenateOK').empty();
             $('#statementUBCValues').empty();
             $('#statementStudentSupport').empty();
+            $('#statementGenAIUse').empty();
             $('#policiesAndRegulations').empty();
 
             // Hide prerequisites and corequisites inputs for Vancouver
@@ -2913,6 +2937,7 @@
             $('#courseSectionOK').html(courseSectionOK);
             $('#statementUBCValues').html(statementUBCValues);
             $('#statementStudentSupport').html(statementStudentSupport);
+            $('#statementGenAIUse').html(statementGenAIUse);
             $('#policiesAndRegulations').html(policiesAndRegulations);
             $('.requiredBySenateOK').html(requiredBySenateLabelOK);
 
