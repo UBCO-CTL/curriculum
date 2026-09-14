@@ -191,7 +191,7 @@
             <div class="col-md">
                 <h1><strong>Questions ?</strong></h1>
                 <p class="lead">
-                    If you have questions about the Curriculum MAP, please contact <a href="mailto:kathryn.douglas-campbell@ubc.ca" target="_blank" rel="noopener noreferrer">kathryn.douglas-campbell@ubc.ca</a> at the <a href="https://provost.ok.ubc.ca/" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right"></i> Office of the Provost and Vice-President Academic, UBC Okanagan campus</a>.
+                    If you have questions about the Curriculum MAP, please contact <a href="mailto:ctl.helpdesk@ubc.ca" target="_blank" rel="noopener noreferrer">ctl.helpdesk@ubc.ca</a> at the <a href="https://provost.ok.ubc.ca/" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right"></i> Office of the Provost and Vice-President Academic, UBC Okanagan campus</a>.
                 </p>
 
                 <p class="lead">
